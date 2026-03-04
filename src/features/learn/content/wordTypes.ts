@@ -1,4 +1,4 @@
-export type WordLevel = "A1" | "A2";
+export type WordLevel = "A1" | "A1+" | "A2";
 
 export type WordCategory =
   | "greetings"
@@ -9,7 +9,15 @@ export type WordCategory =
   | "places"
   | "adjectives"
   | "time"
-  | "travel";
+  | "travel"
+  | "daily"
+  | "nature"
+  | "body"
+  | "emotions"
+  | "shopping"
+  | "weather"
+  | "clothing"
+  | "work";
 
 export type Word = {
   id: string;

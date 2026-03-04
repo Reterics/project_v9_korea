@@ -1,4 +1,4 @@
-﻿import { useMemo } from "react";
+﻿import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import type { GameId } from "./games/_core/gameTypes";
 import { useProfile } from "./profile/useProfile";
+import { listWords } from "./content/contentRepo";
+import { loadMastery } from "./profile/masteryRepo";
 
 type GameCardDef = {
   id: GameId;
@@ -178,13 +180,7 @@ export function LearnHubPage() {
         </div>
 
         {/* Mastery preview */}
-        <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
-          <div className="text-sm font-semibold">Mastery preview</div>
-          <div className="mt-2 text-xs text-hanji-500 dark:text-hanji-400">
-            300 words (A1) â€” tiles fill as mastery grows.
-          </div>
-          <MasteryGrid />
-        </div>
+        <MasteryPreview />
       </div>
     </div>
   );
@@ -283,29 +279,58 @@ function MiniRow({
   );
 }
 
-function MasteryGrid() {
+function MasteryPreview() {
+  const words = useMemo(() => listWords(), []);
+  const mastery = useMemo(() => loadMastery(), []);
+
   const tiles = useMemo(() => {
-    const n = 90;
-    return Array.from({ length: n }, (_, i) => {
-      const mastery = Math.max(0, Math.min(1, (Math.sin(i / 6) + 1) / 2));
-      return { filled: mastery > 0.55, strong: mastery > 0.8 };
+    return words.map((w) => {
+      const score = mastery[w.id]?.score ?? 0;
+      return { id: w.id, korean: w.korean, score };
     });
-  }, []);
+  }, [words, mastery]);
+
+  const learned = tiles.filter((t) => t.score > 0).length;
+  const mastered = tiles.filter((t) => t.score >= 0.8).length;
+
+  return (
+    <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+      <div className="text-sm font-semibold">Mastery preview</div>
+      <div className="mt-2 text-xs text-hanji-500 dark:text-hanji-400">
+        {tiles.length} words — {learned} seen, {mastered} mastered
+      </div>
+      <MasteryGrid tiles={tiles} />
+    </div>
+  );
+}
+
+function MasteryGrid({ tiles }: { tiles: { id: string; korean: string; score: number }[] }) {
+  const [tooltip, setTooltip] = useState<string | null>(null);
 
   return (
     <div className="mt-4 grid grid-cols-10 gap-2">
-      {tiles.map((t, i) => (
+      {tiles.map((t) => (
         <div
-          key={i}
+          key={t.id}
           className={
-            "h-4 w-full rounded-lg border " +
-            (t.filled
-              ? t.strong
-                ? "border-cheongja-500 bg-cheongja-500 dark:border-cheongja-400 dark:bg-cheongja-400"
-                : "border-cheongja-300 bg-cheongja-200 dark:border-cheongja-600 dark:bg-cheongja-700"
-              : "border-hanji-200 bg-hanji-100 dark:border-namsaek-700 dark:bg-namsaek-800")
+            "relative h-4 w-full rounded-lg border transition-colors " +
+            (t.score >= 0.8
+              ? "border-cheongja-500 bg-cheongja-500 dark:border-cheongja-400 dark:bg-cheongja-400"
+              : t.score >= 0.4
+                ? "border-cheongja-300 bg-cheongja-200 dark:border-cheongja-600 dark:bg-cheongja-700"
+                : t.score > 0
+                  ? "border-cheongja-200 bg-cheongja-100 dark:border-cheongja-700 dark:bg-cheongja-800"
+                  : "border-hanji-200 bg-hanji-100 dark:border-namsaek-700 dark:bg-namsaek-800")
           }
-        />
+          onMouseEnter={() => setTooltip(t.id)}
+          onMouseLeave={() => setTooltip(null)}
+        >
+          {tooltip === t.id && (
+            <div className="absolute -top-9 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-namsaek-900 px-2 py-1 text-xs text-hanji-50 shadow dark:bg-hanji-100 dark:text-namsaek-900">
+              {t.korean} {Math.round(t.score * 100)}%
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );

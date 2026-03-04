@@ -1,5 +1,6 @@
 import type { UserProfile } from "./profileTypes";
 import type { GameResult } from "@/features/learn/games/_core/gameTypes";
+import { updateMastery } from "./masteryRepo";
 
 const STORAGE_KEY = "korean_profile";
 
@@ -53,6 +54,7 @@ export function awardXp(result: GameResult) {
     profile.streakUpdatedAt = Date.now();
   }
 
+  updateMastery(result.itemOutcomes);
   saveProfile(profile);
   return profile;
 }

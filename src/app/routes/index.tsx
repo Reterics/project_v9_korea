@@ -5,6 +5,7 @@ import { KnowledgeBasePage } from "@/features/learn/KnowledgeBasePage";
 import { GamePlayPage } from "./GamePlayPage";
 import { HangeulPracticePage } from "@/features/hangeul/HangeulPracticePage";
 import { HangeulPracticeGamePage } from "@/features/hangeul/HangeulPracticeGamePage";
+import { DictionaryPage } from "@/features/learn/DictionaryPage";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       { path: "notes", element: <KnowledgeBasePage /> },
       { path: "hangeul-practice", element: <HangeulPracticePage /> },
       { path: "hangeul-practice/game", element: <HangeulPracticeGamePage /> },
+      { path: "dictionary", element: <DictionaryPage /> },
     ],
   },
   {
