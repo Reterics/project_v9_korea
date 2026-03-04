@@ -1,0 +1,37 @@
+[
+  { "id": "w001", "korean": "안녕하세요", "romanization": "annyeonghaseyo", "english": "hello", "category": "greetings", "level": "A1", "example": "안녕하세요! 저는 학생이에요." },
+  { "id": "w002", "korean": "감사합니다", "romanization": "gamsahamnida", "english": "thank you", "category": "greetings", "level": "A1", "example": "도와주셔서 감사합니다." },
+  { "id": "w003", "korean": "네", "romanization": "ne", "english": "yes", "category": "greetings", "level": "A1" },
+  { "id": "w004", "korean": "아니요", "romanization": "aniyo", "english": "no", "category": "greetings", "level": "A1" },
+  { "id": "w005", "korean": "죄송합니다", "romanization": "joesonghamnida", "english": "sorry", "category": "greetings", "level": "A1" },
+
+  { "id": "w006", "korean": "하나", "romanization": "hana", "english": "one", "category": "numbers", "level": "A1" },
+  { "id": "w007", "korean": "둘", "romanization": "dul", "english": "two", "category": "numbers", "level": "A1" },
+  { "id": "w008", "korean": "셋", "romanization": "set", "english": "three", "category": "numbers", "level": "A1" },
+  { "id": "w009", "korean": "넷", "romanization": "net", "english": "four", "category": "numbers", "level": "A1" },
+  { "id": "w010", "korean": "다섯", "romanization": "daseot", "english": "five", "category": "numbers", "level": "A1" },
+
+  { "id": "w011", "korean": "밥", "romanization": "bap", "english": "rice / meal", "category": "food", "level": "A1", "example": "밥을 먹어요." },
+  { "id": "w012", "korean": "물", "romanization": "mul", "english": "water", "category": "food", "level": "A1", "example": "물을 마셔요." },
+  { "id": "w013", "korean": "사과", "romanization": "sagwa", "english": "apple", "category": "food", "level": "A1" },
+  { "id": "w014", "korean": "김치", "romanization": "gimchi", "english": "kimchi", "category": "food", "level": "A1" },
+  { "id": "w015", "korean": "커피", "romanization": "keopi", "english": "coffee", "category": "food", "level": "A1" },
+
+  { "id": "w016", "korean": "먹다", "romanization": "meokda", "english": "to eat", "category": "verbs", "level": "A1", "example": "저는 밥을 먹어요." },
+  { "id": "w017", "korean": "마시다", "romanization": "masida", "english": "to drink", "category": "verbs", "level": "A1", "example": "물을 마셔요." },
+  { "id": "w018", "korean": "가다", "romanization": "gada", "english": "to go", "category": "verbs", "level": "A1", "example": "학교에 가요." },
+  { "id": "w019", "korean": "오다", "romanization": "oda", "english": "to come", "category": "verbs", "level": "A1" },
+  { "id": "w020", "korean": "하다", "romanization": "hada", "english": "to do", "category": "verbs", "level": "A1" },
+  { "id": "w021", "korean": "보다", "romanization": "boda", "english": "to see", "category": "verbs", "level": "A1" },
+  { "id": "w022", "korean": "있다", "romanization": "itda", "english": "to exist / to have", "category": "verbs", "level": "A1" },
+
+  { "id": "w023", "korean": "엄마", "romanization": "eomma", "english": "mom", "category": "family", "level": "A1" },
+  { "id": "w024", "korean": "아빠", "romanization": "appa", "english": "dad", "category": "family", "level": "A1" },
+  { "id": "w025", "korean": "친구", "romanization": "chingu", "english": "friend", "category": "family", "level": "A1", "example": "친구를 만나요." },
+
+  { "id": "w026", "korean": "학교", "romanization": "hakgyo", "english": "school", "category": "places", "level": "A1", "example": "학교에 가요." },
+  { "id": "w027", "korean": "집", "romanization": "jip", "english": "house / home", "category": "places", "level": "A1", "example": "집에 가요." },
+  { "id": "w028", "korean": "사람", "romanization": "saram", "english": "person", "category": "family", "level": "A1" },
+  { "id": "w029", "korean": "학생", "romanization": "haksaeng", "english": "student", "category": "family", "level": "A1", "example": "저는 학생이에요." },
+  { "id": "w030", "korean": "선생님", "romanization": "seonsaengnim", "english": "teacher", "category": "family", "level": "A1" }
+]
