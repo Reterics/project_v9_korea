@@ -2,7 +2,7 @@ import type { GameState, GameAction } from "@/features/learn/games/_core/gameTyp
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
 import { PromptCard } from "@/features/learn/games/_core/ui/PromptCard";
 import { AudioButton } from "@/features/learn/games/_core/ui/AudioButton";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 type Props = {
   state: GameState<FlashcardQuestion>;
@@ -16,16 +16,50 @@ const gradeButtons: { grade: FlashcardGrade; label: string; key: number; color: 
   { grade: "easy", label: "Easy", key: 4, color: "border-namsaek-200 bg-namsaek-50 text-namsaek-700 hover:bg-namsaek-100 dark:border-namsaek-700/40 dark:bg-namsaek-800/30 dark:text-namsaek-300 dark:hover:bg-namsaek-800/50" },
 ];
 
+const gradeByKey: Record<string, FlashcardGrade> = {
+  "1": "again",
+  "2": "hard",
+  "3": "good",
+  "4": "easy",
+};
+
 export function FlashcardsScreen({ state, dispatch }: Props) {
   const [revealed, setRevealed] = useState(false);
   const q = state.question;
 
-  if (!q) return null;
-
-  const handleGrade = (grade: FlashcardGrade) => {
+  const handleGrade = useCallback((grade: FlashcardGrade) => {
     setRevealed(false);
     dispatch({ type: "ANSWER", payload: { grade } });
-  };
+  }, [dispatch]);
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (!revealed && (e.key === " " || e.key === "Enter")) {
+        e.preventDefault();
+        setRevealed(true);
+        return;
+      }
+
+      if (revealed && gradeByKey[e.key]) {
+        e.preventDefault();
+        handleGrade(gradeByKey[e.key]);
+        return;
+      }
+
+      if (e.key === "s" || e.key === "S") {
+        e.preventDefault();
+        dispatch({ type: "SKIP" });
+        setRevealed(false);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [revealed, handleGrade, dispatch]);
+
+  if (!q) return null;
 
   return (
     <div className="mx-auto w-full max-w-lg space-y-4">
@@ -43,7 +77,7 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
           onClick={() => setRevealed(true)}
           className="w-full rounded-2xl bg-namsaek-500 px-4 py-3 text-sm font-semibold text-hanji-50 shadow-sm transition hover:bg-namsaek-600"
         >
-          Show Answer
+          Show Answer <span className="ml-2 text-xs opacity-60">Space</span>
         </button>
       ) : (
         <div className="space-y-4">

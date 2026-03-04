@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type {
   GameEngine,
   GameState,
@@ -18,6 +18,8 @@ export function useGameController(
   const [state, setState] = useState<GameState>({ status: "idle", questionIndex: 0, score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 } });
   const [result, setResult] = useState<GameResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   useEffect(() => {
     let cancelled = false;
@@ -25,6 +27,7 @@ export function useGameController(
     engine.init(ctx, config).then((initialState) => {
       if (!cancelled) {
         setState(initialState);
+        stateRef.current = initialState;
         setIsLoading(false);
       }
     });
@@ -33,25 +36,19 @@ export function useGameController(
 
   const dispatch = useCallback(
     async (action: GameAction) => {
-      setState((prev) => {
-        // Trigger async reduce, then update state
-        engine
-          .reduce(prev, action, {
-            ctx,
-            config,
-            getWord,
-            getPattern,
-            now: () => Date.now(),
-            rng: () => Math.random(),
-          })
-          .then((next) => {
-            setState(next);
-            if (next.status === "finished") {
-              setResult(engine.buildResult(next));
-            }
-          });
-        return prev;
+      const next = await engine.reduce(stateRef.current, action, {
+        ctx,
+        config,
+        getWord,
+        getPattern,
+        now: () => Date.now(),
+        rng: () => Math.random(),
       });
+      stateRef.current = next;
+      setState(next);
+      if (next.status === "finished") {
+        setResult(engine.buildResult(next));
+      }
     },
     [engine, ctx, config]
   );

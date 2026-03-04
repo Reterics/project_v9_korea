@@ -1,5 +1,6 @@
 import type { GameEngine, GameState, GameContext, GameConfig, GameResult, StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
+import { getWord as getWordFromRepo } from "@/features/learn/content/contentRepo";
 
 type FlashcardState = GameState<FlashcardQuestion>;
 
@@ -28,11 +29,15 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
   id: "flashcards",
   title: "Flashcard Sprint",
 
-  async init(_ctx: GameContext, _config: GameConfig): Promise<FlashcardState> {
+  async init(ctx: GameContext, config: GameConfig): Promise<FlashcardState> {
     outcomes.length = 0;
+    const items = ctx.items.slice(0, config.totalQuestions);
+    const firstRef = items[0];
+    const firstQ = firstRef ? buildQuestion(firstRef, getWordFromRepo, Date.now()) : null;
     return {
-      status: "in_progress",
+      status: firstQ ? "in_progress" : "finished",
       questionIndex: 0,
+      question: firstQ ?? undefined,
       score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 },
       startedAt: Date.now(),
     };

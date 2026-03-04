@@ -1,13 +1,30 @@
 {
   "name": "project_v9_korea",
+  "displayName": "Project v9 - Korea",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix ./src",
+    "format": "prettier --check ./src",
+    "format:fix": "prettier --write ./src",
     "preview": "vite preview"
+  },
+  "engines": {
+    "node": "^20.0.0 || ^22.0.0 || >=24.0.0"
+  },
+  "repository": {
+    "url": "https://github.com/Reterics/project_v9_korea",
+    "type": "git"
+  },
+  "author": {
+    "email": "reterics.attila@gmail.com",
+    "url": "https://reterics.com",
+    "name": "Attila Reterics"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
