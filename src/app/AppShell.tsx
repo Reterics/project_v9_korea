@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Sun, Moon } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
 
 export function AppShell() {
@@ -24,7 +24,7 @@ export function AppShell() {
   }, [dark]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
+    <div className="min-h-screen bg-hanji-100 text-namsaek-900 dark:bg-namsaek-950 dark:text-hanji-200">
       <TopNav dark={dark} onToggleDark={() => setDark((v) => !v)} />
       <div className="mx-auto w-full max-w-6xl px-4 pb-12 pt-6">
         <Outlet />
@@ -40,18 +40,18 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
   const xpTarget = 100;
 
   return (
-    <div className="sticky top-0 z-30 border-b border-zinc-200/70 bg-zinc-50/70 backdrop-blur dark:border-zinc-800/60 dark:bg-zinc-950/60">
+    <div className="sticky top-0 z-30 border-b border-hanji-300/70 bg-hanji-100/80 backdrop-blur dark:border-namsaek-800/60 dark:bg-namsaek-950/80">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 no-underline">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-zinc-900 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-namsaek-500 text-hanji-50">
             <Sparkles className="h-5 w-5" />
           </div>
           <div className="leading-tight">
-            <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="text-sm font-semibold text-namsaek-900 dark:text-hanji-100">
               Korean Trainer
             </div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="text-xs text-hanji-500 dark:text-hanji-400">
               A1 Sprint
             </div>
           </div>
@@ -76,9 +76,14 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
           </div>
           <button
             onClick={onToggleDark}
-            className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-medium shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-hanji-300 bg-white shadow-sm hover:bg-hanji-50 dark:border-namsaek-700 dark:bg-namsaek-800 dark:hover:bg-namsaek-700"
+            title={dark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {dark ? "Dark" : "Light"}
+            {dark ? (
+              <Sun className="h-4 w-4 text-geum-400" />
+            ) : (
+              <Moon className="h-4 w-4 text-namsaek-500" />
+            )}
           </button>
         </div>
       </div>
@@ -101,8 +106,8 @@ function NavPill({
       className={
         "rounded-xl px-3 py-2 text-sm font-medium no-underline transition " +
         (active
-          ? "bg-zinc-900 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
-          : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-900")
+          ? "bg-namsaek-500 text-hanji-50"
+          : "text-namsaek-600 hover:bg-hanji-200 dark:text-hanji-300 dark:hover:bg-namsaek-800")
       }
     >
       {children}
@@ -124,24 +129,24 @@ function ProfileMini({
   const pct = Math.min(100, Math.round((xp / xpTarget) * 100));
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white px-3 py-2 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="flex items-center gap-3 rounded-2xl border border-hanji-300 bg-white px-3 py-2 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-800">
+      {/* Streak */}
       <div className="grid">
-        <div className="text-xs text-zinc-500 dark:text-zinc-400">Streak</div>
-        <div className="text-sm font-semibold">
+        <div className="text-xs text-hanji-500 dark:text-hanji-400">Streak</div>
+        <div className="text-sm font-semibold text-geum-500 dark:text-geum-400">
           {streak} {streak === 1 ? "day" : "days"}
         </div>
       </div>
-      <div className="h-9 w-px bg-zinc-200 dark:bg-zinc-800" />
+      <div className="h-9 w-px bg-hanji-300 dark:bg-namsaek-700" />
+      {/* XP bar */}
       <div className="grid min-w-[120px]">
-        <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="flex items-center justify-between text-xs text-hanji-500 dark:text-hanji-400">
           <span>XP</span>
-          <span>
-            {totalXp}
-          </span>
+          <span>{totalXp}</span>
         </div>
-        <div className="mt-1 h-2 rounded-full bg-zinc-200 dark:bg-zinc-800">
+        <div className="mt-1 h-2 rounded-full bg-hanji-200 dark:bg-namsaek-700">
           <div
-            className="h-2 rounded-full bg-zinc-900 transition-all dark:bg-zinc-100"
+            className="h-2 rounded-full bg-cheongja-500 transition-all dark:bg-cheongja-400"
             style={{ width: `${pct}%` }}
           />
         </div>

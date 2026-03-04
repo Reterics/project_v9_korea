@@ -16,10 +16,10 @@ export function AudioButton({ text, lang = "ko-KR" }: AudioButtonProps) {
   return (
     <button
       onClick={speak}
-      className="inline-flex items-center gap-2 rounded-2xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950/30 dark:hover:bg-zinc-800"
+      className="inline-flex items-center gap-2 rounded-2xl border border-hanji-300 bg-white px-3 py-2 text-xs font-semibold shadow-sm hover:bg-hanji-50 dark:border-namsaek-700 dark:bg-namsaek-800 dark:hover:bg-namsaek-700"
       title="Listen"
     >
-      <Play className="h-4 w-4" />
+      <Play className="h-4 w-4 text-namsaek-500 dark:text-cheongja-400" />
       Audio
     </button>
   );

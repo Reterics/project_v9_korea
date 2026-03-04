@@ -10,20 +10,20 @@ export function PromptCard({ text, subtitle, title, rightSlot, className = "" }:
   return (
     <div
       className={
-        "rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-950/40 " +
+        "rounded-3xl border border-hanji-300 bg-hanji-50 p-5 dark:border-namsaek-700 dark:bg-namsaek-950/40 " +
         className
       }
     >
       <div className="flex items-start justify-between gap-3">
         <div>
           {title && (
-            <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400">
               {title}
             </div>
           )}
           <div className="mt-2 text-4xl font-semibold tracking-tight">{text}</div>
           {subtitle && (
-            <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+            <div className="mt-2 text-sm text-namsaek-600 dark:text-hanji-300">
               {subtitle}
             </div>
           )}

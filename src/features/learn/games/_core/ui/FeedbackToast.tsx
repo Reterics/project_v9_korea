@@ -34,21 +34,37 @@ export function FeedbackToast({ type, message, durationMs = 800 }: FeedbackToast
           transition={{ duration: 0.15 }}
           className="pointer-events-none fixed bottom-6 left-1/2 z-50 w-[min(520px,calc(100vw-24px))] -translate-x-1/2"
         >
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+          <div
+            className={
+              "flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 shadow-lg " +
+              (data.ok
+                ? "border-cheongja-200 bg-cheongja-50 dark:border-cheongja-700 dark:bg-cheongja-900/80"
+                : "border-dancheong-200 bg-dancheong-50 dark:border-dancheong-700 dark:bg-dancheong-900/80")
+            }
+          >
             <div className="flex items-center gap-2">
               <div
                 className={
                   "flex h-9 w-9 items-center justify-center rounded-2xl " +
                   (data.ok
-                    ? "bg-zinc-900 text-zinc-50 dark:bg-zinc-100 dark:text-zinc-900"
-                    : "bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100")
+                    ? "bg-cheongja-500 text-white"
+                    : "bg-dancheong-500 text-white")
                 }
               >
                 {data.ok ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
               </div>
-              <div className="text-sm font-semibold">{data.msg}</div>
+              <div
+                className={
+                  "text-sm font-semibold " +
+                  (data.ok
+                    ? "text-cheongja-700 dark:text-cheongja-200"
+                    : "text-dancheong-700 dark:text-dancheong-200")
+                }
+              >
+                {data.msg}
+              </div>
             </div>
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">Auto next</div>
+            <div className="text-xs text-hanji-500 dark:text-hanji-400">Auto next</div>
           </div>
         </motion.div>
       )}

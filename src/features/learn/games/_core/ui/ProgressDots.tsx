@@ -15,14 +15,14 @@ export function ProgressDots({ current, total }: ProgressDotsProps) {
           className={
             "h-2.5 w-2.5 rounded-full transition " +
             (i === current
-              ? "bg-zinc-900 dark:bg-zinc-100"
+              ? "bg-namsaek-500 dark:bg-cheongja-400"
               : i < current
-                ? "bg-zinc-400 dark:bg-zinc-600"
-                : "bg-zinc-200 dark:bg-zinc-800")
+                ? "bg-cheongja-400 dark:bg-cheongja-600"
+                : "bg-hanji-200 dark:bg-namsaek-700")
           }
         />
       ))}
-      <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+      <span className="ml-2 text-xs text-hanji-500 dark:text-hanji-400">
         {current + 1}/{total}
       </span>
     </div>

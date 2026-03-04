@@ -12,11 +12,11 @@ type ChoiceGridProps = {
 
 const variantStyles: Record<string, string> = {
   default:
-    "border-zinc-200 bg-white hover:-translate-y-0.5 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700",
+    "border-hanji-300 bg-white hover:-translate-y-0.5 hover:border-namsaek-300 hover:shadow-md dark:border-namsaek-700 dark:bg-namsaek-900 dark:hover:border-namsaek-600",
   success:
-    "border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900",
+    "border-cheongja-400 bg-cheongja-50 text-cheongja-700 dark:border-cheongja-500 dark:bg-cheongja-900/30 dark:text-cheongja-300",
   danger:
-    "border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800",
+    "border-dancheong-300 bg-dancheong-50 text-dancheong-700 dark:border-dancheong-600 dark:bg-dancheong-900/30 dark:text-dancheong-300",
 };
 
 export function ChoiceGrid({ choices, onSelect, disabled }: ChoiceGridProps) {
@@ -39,7 +39,7 @@ export function ChoiceGrid({ choices, onSelect, disabled }: ChoiceGridProps) {
               <div className="text-2xl font-semibold tracking-tight">
                 {choice.label}
               </div>
-              <div className="rounded-2xl bg-zinc-100 px-2 py-1 text-xs font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+              <div className="rounded-2xl bg-hanji-100 px-2 py-1 text-xs font-semibold text-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-300">
                 {key}
               </div>
             </div>

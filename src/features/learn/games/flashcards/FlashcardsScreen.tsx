@@ -9,11 +9,11 @@ type Props = {
   dispatch: (action: GameAction) => void;
 };
 
-const gradeButtons: { grade: FlashcardGrade; label: string; key: number }[] = [
-  { grade: "again", label: "Again", key: 1 },
-  { grade: "hard", label: "Hard", key: 2 },
-  { grade: "good", label: "Good", key: 3 },
-  { grade: "easy", label: "Easy", key: 4 },
+const gradeButtons: { grade: FlashcardGrade; label: string; key: number; color: string }[] = [
+  { grade: "again", label: "Again", key: 1, color: "border-dancheong-200 bg-dancheong-50 text-dancheong-700 hover:bg-dancheong-100 dark:border-dancheong-800/40 dark:bg-dancheong-900/20 dark:text-dancheong-300 dark:hover:bg-dancheong-900/40" },
+  { grade: "hard", label: "Hard", key: 2, color: "border-geum-200 bg-geum-50 text-geum-700 hover:bg-geum-100 dark:border-geum-800/40 dark:bg-geum-900/20 dark:text-geum-300 dark:hover:bg-geum-900/40" },
+  { grade: "good", label: "Good", key: 3, color: "border-cheongja-200 bg-cheongja-50 text-cheongja-700 hover:bg-cheongja-100 dark:border-cheongja-800/40 dark:bg-cheongja-900/20 dark:text-cheongja-300 dark:hover:bg-cheongja-900/40" },
+  { grade: "easy", label: "Easy", key: 4, color: "border-namsaek-200 bg-namsaek-50 text-namsaek-700 hover:bg-namsaek-100 dark:border-namsaek-700/40 dark:bg-namsaek-800/30 dark:text-namsaek-300 dark:hover:bg-namsaek-800/50" },
 ];
 
 export function FlashcardsScreen({ state, dispatch }: Props) {
@@ -41,21 +41,21 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}
-          className="w-full rounded-2xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-zinc-50 shadow-sm hover:opacity-95 dark:bg-zinc-100 dark:text-zinc-900"
+          className="w-full rounded-2xl bg-namsaek-500 px-4 py-3 text-sm font-semibold text-hanji-50 shadow-sm transition hover:bg-namsaek-600"
         >
           Show Answer
         </button>
       ) : (
         <div className="space-y-4">
           {/* Answer card */}
-          <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
             <div className="text-center">
               <div className="text-2xl font-semibold">{q.english}</div>
-              <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              <div className="mt-1 text-sm text-hanji-500 dark:text-hanji-400">
                 {q.romanization}
               </div>
               {q.example && (
-                <div className="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300">
+                <div className="mt-3 rounded-2xl border border-hanji-200 bg-hanji-50 p-3 text-sm text-namsaek-600 dark:border-namsaek-700 dark:bg-namsaek-950/40 dark:text-hanji-300">
                   {q.example}
                 </div>
               )}
@@ -68,12 +68,13 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
               <button
                 key={btn.grade}
                 onClick={() => handleGrade(btn.grade)}
-                className="group rounded-2xl border border-zinc-200 bg-white px-3 py-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
+                className={
+                  "rounded-2xl border px-3 py-3 text-center shadow-sm transition hover:-translate-y-0.5 " +
+                  btn.color
+                }
               >
                 <div className="text-sm font-semibold">{btn.label}</div>
-                <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                  {btn.key}
-                </div>
+                <div className="mt-1 text-xs opacity-60">{btn.key}</div>
               </button>
             ))}
           </div>

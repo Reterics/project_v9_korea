@@ -3,20 +3,85 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design system: "Modern notebook"
- * - Zinc palette, single accent (teal), muted feedback colors
- * - Dark mode via .dark class on <html>
- * - Korean text larger than English
+ * Design system: "Korean Notebook"
+ * Traditional Korean-inspired palette:
+ *   남색 (Namsaek)  — Korean indigo for primary actions
+ *   청자 (Cheongja) — Celadon green for success / mastery
+ *   단청 (Dancheong)— Warm coral-red for errors
+ *   금색 (Geum)     — Traditional gold for XP / streaks
+ *   한지 (Hanji)    — Warm paper background
  */
 
-/* Base body */
+@theme {
+  /* Korean indigo (남색) — primary */
+  --color-namsaek-50: #EEF2F7;
+  --color-namsaek-100: #D5DEEB;
+  --color-namsaek-200: #ADBDD7;
+  --color-namsaek-300: #7E98BE;
+  --color-namsaek-400: #5576A0;
+  --color-namsaek-500: #2B4C7E;
+  --color-namsaek-600: #223D66;
+  --color-namsaek-700: #1B3050;
+  --color-namsaek-800: #14243C;
+  --color-namsaek-900: #0F1A2B;
+  --color-namsaek-950: #0A1119;
+
+  /* Celadon green (청자) — success / mastery */
+  --color-cheongja-50: #F0F7F5;
+  --color-cheongja-100: #D6EBE6;
+  --color-cheongja-200: #B0D9CF;
+  --color-cheongja-300: #82C2B2;
+  --color-cheongja-400: #5EAD99;
+  --color-cheongja-500: #3D8F7D;
+  --color-cheongja-600: #307263;
+  --color-cheongja-700: #255A4E;
+  --color-cheongja-800: #1B4239;
+  --color-cheongja-900: #112B25;
+
+  /* Dancheong red (단청) — error / wrong */
+  --color-dancheong-50: #FDF3F1;
+  --color-dancheong-100: #F9DDD8;
+  --color-dancheong-200: #F0B5AB;
+  --color-dancheong-300: #E48A7A;
+  --color-dancheong-400: #D66A56;
+  --color-dancheong-500: #C75B4A;
+  --color-dancheong-600: #A14539;
+  --color-dancheong-700: #7D352C;
+  --color-dancheong-800: #5B2720;
+  --color-dancheong-900: #3B1915;
+
+  /* Traditional gold (금색) — XP / streaks / coins */
+  --color-geum-50: #FBF7EE;
+  --color-geum-100: #F3EACD;
+  --color-geum-200: #E5D49E;
+  --color-geum-300: #D4B96C;
+  --color-geum-400: #C4963C;
+  --color-geum-500: #A67D30;
+  --color-geum-600: #856426;
+  --color-geum-700: #654B1D;
+  --color-geum-800: #473515;
+  --color-geum-900: #2D210D;
+
+  /* Hanji paper (한지) — warm neutrals */
+  --color-hanji-50: #FDFBF8;
+  --color-hanji-100: #F8F4EE;
+  --color-hanji-200: #EFE8DE;
+  --color-hanji-300: #E2D8CA;
+  --color-hanji-400: #C9BBAA;
+  --color-hanji-500: #A89885;
+  --color-hanji-600: #857767;
+  --color-hanji-700: #635A4D;
+  --color-hanji-800: #443E36;
+  --color-hanji-900: #282420;
+}
+
 html {
   font-family: "Inter", "Pretendard", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth transitions when toggling dark mode */
+/* Smooth dark mode transitions */
 html.transitioning,
 html.transitioning * {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;

@@ -32,8 +32,8 @@ export function GameHost({ gameId, ctx, config, onExit }: GameHostProps) {
 
   if (!engine) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="flex min-h-screen items-center justify-center bg-hanji-100 dark:bg-namsaek-950">
+        <div className="text-sm text-hanji-500 dark:text-hanji-400">
           Game not found
         </div>
       </div>
@@ -42,8 +42,8 @@ export function GameHost({ gameId, ctx, config, onExit }: GameHostProps) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="flex min-h-screen items-center justify-center bg-hanji-100 dark:bg-namsaek-950">
+        <div className="text-sm text-hanji-500 dark:text-hanji-400">
           Loading...
         </div>
       </div>
