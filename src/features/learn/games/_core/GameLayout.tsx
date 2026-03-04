@@ -8,9 +8,9 @@ type GameLayoutProps = {
 
 export function GameLayout({ header, footer, children }: GameLayoutProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
       <div className="shrink-0">{header}</div>
-      <main className="flex-1 flex items-center justify-center p-4">
+      <main className="flex flex-1 items-center justify-center p-4">
         {children}
       </main>
       <div className="shrink-0">{footer}</div>

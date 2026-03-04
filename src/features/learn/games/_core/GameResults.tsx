@@ -1,3 +1,4 @@
+import { Sparkles, Target, Timer } from "lucide-react";
 import type { GameResult } from "./gameTypes";
 
 type GameResultsProps = {
@@ -11,35 +12,99 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
   const accuracy = total > 0 ? Math.round((result.correct / total) * 100) : 0;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">{title}</h2>
-      <p className="text-gray-500 mb-8">Session Complete</p>
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
+      <div className="mx-auto w-full max-w-3xl space-y-4">
+        {/* Summary card */}
+        <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                Session complete
+              </div>
+              <div className="mt-1 text-2xl font-semibold">Nice work.</div>
+              <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
+                {title} — {total} questions answered.
+              </div>
+            </div>
+            <button
+              onClick={onDone}
+              className="rounded-2xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-zinc-50 shadow-sm hover:opacity-95 dark:bg-zinc-100 dark:text-zinc-900"
+            >
+              Back to hub
+            </button>
+          </div>
 
-      <div className="grid grid-cols-2 gap-6 mb-8 w-full max-w-xs">
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-          <div className="text-3xl font-bold text-green-600">{result.correct}</div>
-          <div className="text-sm text-gray-500">Correct</div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
+            <StatChip
+              icon={<Target className="h-4 w-4" />}
+              label="Correct"
+              value={String(result.correct)}
+            />
+            <StatChip
+              icon={<Target className="h-4 w-4" />}
+              label="Wrong"
+              value={String(result.wrong)}
+            />
+            <StatChip
+              icon={<Sparkles className="h-4 w-4" />}
+              label="Accuracy"
+              value={`${accuracy}%`}
+            />
+            <StatChip
+              icon={<Timer className="h-4 w-4" />}
+              label="Best streak"
+              value={String(result.streakMax)}
+            />
+          </div>
         </div>
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-          <div className="text-3xl font-bold text-red-500">{result.wrong}</div>
-          <div className="text-sm text-gray-500">Wrong</div>
-        </div>
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-          <div className="text-3xl font-bold text-blue-600">{accuracy}%</div>
-          <div className="text-sm text-gray-500">Accuracy</div>
-        </div>
-        <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-          <div className="text-3xl font-bold text-amber-500">{result.streakMax}</div>
-          <div className="text-sm text-gray-500">Best Streak</div>
-        </div>
+
+        {/* Mistakes list */}
+        {result.itemOutcomes.some((o) => o.grade === "fail") && (
+          <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="text-sm font-semibold">Mistakes to review</div>
+            <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              Focus on these next session.
+            </div>
+            <div className="mt-4 grid gap-3">
+              {result.itemOutcomes
+                .filter((o) => o.grade === "fail")
+                .map((o, i) => (
+                  <div
+                    key={`${o.ref.kind}-${o.ref.id}-${i}`}
+                    className="flex items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-950/40"
+                  >
+                    <div className="text-sm font-semibold">{o.ref.id}</div>
+                    <div className="rounded-xl bg-white px-3 py-2 text-xs font-semibold shadow-sm dark:bg-zinc-900">
+                      Review
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
 
-      <button
-        onClick={onDone}
-        className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-      >
-        Done
-      </button>
+function StatChip({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-950/40">
+      <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white shadow-sm dark:bg-zinc-900">
+        {icon}
+      </div>
+      <div className="leading-tight">
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">{label}</div>
+        <div className="text-sm font-semibold">{value}</div>
+      </div>
     </div>
   );
 }

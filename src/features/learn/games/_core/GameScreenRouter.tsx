@@ -16,7 +16,7 @@ export function GameScreenRouter({ gameId, state, dispatch }: GameScreenRouterPr
     case "particles":
     case "listening":
       return (
-        <div className="text-center text-gray-400 text-lg">
+        <div className="text-center text-sm text-zinc-500 dark:text-zinc-400">
           Coming soon
         </div>
       );

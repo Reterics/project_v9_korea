@@ -9,11 +9,11 @@ type Props = {
   dispatch: (action: GameAction) => void;
 };
 
-const gradeButtons: { grade: FlashcardGrade; label: string; color: string }[] = [
-  { grade: "again", label: "Again", color: "bg-red-100 text-red-700 border-red-300" },
-  { grade: "hard", label: "Hard", color: "bg-orange-100 text-orange-700 border-orange-300" },
-  { grade: "good", label: "Good", color: "bg-green-100 text-green-700 border-green-300" },
-  { grade: "easy", label: "Easy", color: "bg-blue-100 text-blue-700 border-blue-300" },
+const gradeButtons: { grade: FlashcardGrade; label: string; key: number }[] = [
+  { grade: "again", label: "Again", key: 1 },
+  { grade: "hard", label: "Hard", key: 2 },
+  { grade: "good", label: "Good", key: 3 },
+  { grade: "easy", label: "Easy", key: 4 },
 ];
 
 export function FlashcardsScreen({ state, dispatch }: Props) {
@@ -28,39 +28,52 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+    <div className="mx-auto w-full max-w-lg space-y-4">
+      {/* Prompt */}
       <PromptCard
         text={q.korean}
+        title="Flashcard"
         subtitle={revealed ? undefined : "Tap to reveal"}
+        rightSlot={<AudioButton text={q.korean} />}
       />
 
-      <AudioButton text={q.korean} />
-
+      {/* Reveal / Answer area */}
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}
-          className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors w-full"
+          className="w-full rounded-2xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-zinc-50 shadow-sm hover:opacity-95 dark:bg-zinc-100 dark:text-zinc-900"
         >
           Show Answer
         </button>
       ) : (
-        <div className="flex flex-col items-center gap-4 w-full">
-          <div className="bg-white rounded-xl shadow-sm p-4 text-center w-full">
-            <div className="text-2xl font-bold text-gray-800">{q.english}</div>
-            <div className="text-sm text-gray-400 mt-1">{q.romanization}</div>
-            {q.example && (
-              <div className="text-sm text-gray-500 mt-2 italic">{q.example}</div>
-            )}
+        <div className="space-y-4">
+          {/* Answer card */}
+          <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="text-center">
+              <div className="text-2xl font-semibold">{q.english}</div>
+              <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                {q.romanization}
+              </div>
+              {q.example && (
+                <div className="mt-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-3 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950/40 dark:text-zinc-300">
+                  {q.example}
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 w-full">
+          {/* Grade buttons */}
+          <div className="grid grid-cols-4 gap-2">
             {gradeButtons.map((btn) => (
               <button
                 key={btn.grade}
                 onClick={() => handleGrade(btn.grade)}
-                className={`rounded-lg border-2 py-2 text-sm font-medium transition-colors ${btn.color}`}
+                className="group rounded-2xl border border-zinc-200 bg-white px-3 py-3 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
               >
-                {btn.label}
+                <div className="text-sm font-semibold">{btn.label}</div>
+                <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  {btn.key}
+                </div>
               </button>
             ))}
           </div>

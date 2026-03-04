@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design system: "Modern notebook"
+ * - Zinc palette, single accent (teal), muted feedback colors
+ * - Dark mode via .dark class on <html>
+ * - Korean text larger than English
+ */
+
+/* Base body */
+html {
+  font-family: "Inter", "Pretendard", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth transitions when toggling dark mode */
+html.transitioning,
+html.transitioning * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
+}

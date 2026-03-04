@@ -31,13 +31,21 @@ export function GameHost({ gameId, ctx, config, onExit }: GameHostProps) {
   }, [result]);
 
   if (!engine) {
-    return <div className="p-8 text-center text-gray-500">Game not found</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+          Game not found
+        </div>
+      </div>
+    );
   }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-gray-400">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+          Loading...
+        </div>
       </div>
     );
   }

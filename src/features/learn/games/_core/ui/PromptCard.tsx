@@ -1,14 +1,35 @@
 type PromptCardProps = {
   text: string;
   subtitle?: string;
+  title?: string;
+  rightSlot?: React.ReactNode;
   className?: string;
 };
 
-export function PromptCard({ text, subtitle, className = "" }: PromptCardProps) {
+export function PromptCard({ text, subtitle, title, rightSlot, className = "" }: PromptCardProps) {
   return (
-    <div className={`bg-white rounded-2xl shadow-md p-8 text-center max-w-sm w-full ${className}`}>
-      <div className="text-4xl font-bold text-gray-800 mb-2">{text}</div>
-      {subtitle && <div className="text-sm text-gray-400">{subtitle}</div>}
+    <div
+      className={
+        "rounded-3xl border border-zinc-200 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-950/40 " +
+        className
+      }
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          {title && (
+            <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+              {title}
+            </div>
+          )}
+          <div className="mt-2 text-4xl font-semibold tracking-tight">{text}</div>
+          {subtitle && (
+            <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+              {subtitle}
+            </div>
+          )}
+        </div>
+        {rightSlot && <div className="shrink-0">{rightSlot}</div>}
+      </div>
     </div>
   );
 }
