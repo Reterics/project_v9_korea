@@ -2,13 +2,15 @@ import type { GameEngine, GameState, GameContext, GameConfig, GameResult, StudyI
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
 import { getWord as getWordFromRepo } from "@/features/learn/content/contentRepo";
 
-type FlashcardState = GameState<FlashcardQuestion>;
+type OutcomeEntry = { ref: StudyItemRef; grade: FlashcardGrade; latencyMs: number };
 
-const outcomes: Array<{ ref: StudyItemRef; grade: FlashcardGrade; latencyMs: number }> = [];
+type FlashcardState = GameState<FlashcardQuestion> & {
+  _outcomes: OutcomeEntry[];
+};
 
 function buildQuestion(
   ref: StudyItemRef,
-  getWord: (id: string) => any,
+  getWord: (id: string) => { korean: string; romanization: string; english: string; example?: string } | undefined,
   now: number
 ): FlashcardQuestion | null {
   if (ref.kind !== "word") return null;
@@ -25,111 +27,114 @@ function buildQuestion(
   };
 }
 
+function advanceToNextQuestion(
+  items: StudyItemRef[],
+  fromIndex: number,
+  getWord: (id: string) => { korean: string; romanization: string; english: string; example?: string } | undefined,
+  now: number
+): { question: FlashcardQuestion; questionIndex: number } | null {
+  for (let i = fromIndex; i < items.length; i++) {
+    const q = buildQuestion(items[i], getWord, now);
+    if (q) return { question: q, questionIndex: i };
+  }
+  return null;
+}
+
 export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
   id: "flashcards",
   title: "Flashcard Sprint",
 
   async init(ctx: GameContext, config: GameConfig): Promise<FlashcardState> {
-    outcomes.length = 0;
     const items = ctx.items.slice(0, config.totalQuestions);
-    const firstRef = items[0];
-    const firstQ = firstRef ? buildQuestion(firstRef, getWordFromRepo, Date.now()) : null;
+    const first = advanceToNextQuestion(items, 0, getWordFromRepo, Date.now());
     return {
-      status: firstQ ? "in_progress" : "finished",
-      questionIndex: 0,
-      question: firstQ ?? undefined,
+      status: first ? "in_progress" : "finished",
+      questionIndex: first?.questionIndex ?? 0,
+      question: first?.question,
       score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 },
       startedAt: Date.now(),
+      _outcomes: [],
     };
   },
 
   async reduce(state, action, deps): Promise<FlashcardState> {
+    const s = state as FlashcardState;
     const { ctx, config, getWord, now } = deps;
     const items = ctx.items.slice(0, config.totalQuestions);
-
-    // Lazily build current question if missing
-    if (!state.question && state.status === "in_progress") {
-      const ref = items[state.questionIndex];
-      if (!ref) return { ...state, status: "finished", finishedAt: now() };
-      const q = buildQuestion(ref, getWord, now());
-      if (!q) return { ...state, status: "finished", finishedAt: now() };
-      return { ...state, question: q };
-    }
+    const outcomes = s._outcomes ?? [];
 
     switch (action.type) {
       case "START":
-        return state;
+        return s;
 
       case "ANSWER": {
         const grade = (action.payload as { grade: FlashcardGrade }).grade;
-        const q = state.question!;
+        const q = s.question;
+        if (!q) return s;
+
         const latencyMs = now() - q.shownAt;
         const isCorrect = grade === "easy" || grade === "good";
+        const newOutcomes = [...outcomes, { ref: q.ref, grade, latencyMs }];
 
-        outcomes.push({ ref: q.ref, grade, latencyMs });
-
-        const newStreak = isCorrect ? state.score.streak + 1 : 0;
+        const newStreak = isCorrect ? s.score.streak + 1 : 0;
         const score = {
-          correct: state.score.correct + (isCorrect ? 1 : 0),
-          wrong: state.score.wrong + (isCorrect ? 0 : 1),
+          correct: s.score.correct + (isCorrect ? 1 : 0),
+          wrong: s.score.wrong + (isCorrect ? 0 : 1),
           streak: newStreak,
-          streakMax: Math.max(state.score.streakMax, newStreak),
+          streakMax: Math.max(s.score.streakMax, newStreak),
         };
 
-        const nextIndex = state.questionIndex + 1;
-        if (nextIndex >= items.length) {
-          return { ...state, score, status: "finished", finishedAt: now(), question: undefined };
+        const next = advanceToNextQuestion(items, s.questionIndex + 1, getWord, now());
+        if (!next) {
+          return { ...s, score, status: "finished", finishedAt: now(), question: undefined, _outcomes: newOutcomes };
         }
 
-        const nextRef = items[nextIndex];
-        const nextQ = buildQuestion(nextRef, getWord, now());
         return {
-          ...state,
+          ...s,
           score,
-          questionIndex: nextIndex,
-          question: nextQ ?? undefined,
+          questionIndex: next.questionIndex,
+          question: next.question,
+          _outcomes: newOutcomes,
         };
       }
 
       case "SKIP": {
-        const q = state.question;
-        if (q) {
-          outcomes.push({ ref: q.ref, grade: "again", latencyMs: now() - q.shownAt });
+        const q = s.question;
+        const newOutcomes = q
+          ? [...outcomes, { ref: q.ref, grade: "again" as FlashcardGrade, latencyMs: now() - q.shownAt }]
+          : outcomes;
+
+        const score = { ...s.score, wrong: s.score.wrong + 1, streak: 0 };
+        const next = advanceToNextQuestion(items, s.questionIndex + 1, getWord, now());
+        if (!next) {
+          return { ...s, score, status: "finished", finishedAt: now(), question: undefined, _outcomes: newOutcomes };
         }
-        const nextIndex = state.questionIndex + 1;
-        if (nextIndex >= items.length) {
-          return {
-            ...state,
-            score: { ...state.score, wrong: state.score.wrong + 1, streak: 0 },
-            status: "finished",
-            finishedAt: now(),
-            question: undefined,
-          };
-        }
-        const nextRef = items[nextIndex];
-        const nextQ = buildQuestion(nextRef, getWord, now());
+
         return {
-          ...state,
-          score: { ...state.score, wrong: state.score.wrong + 1, streak: 0 },
-          questionIndex: nextIndex,
-          question: nextQ ?? undefined,
+          ...s,
+          score,
+          questionIndex: next.questionIndex,
+          question: next.question,
+          _outcomes: newOutcomes,
         };
       }
 
       case "FINISH":
-        return { ...state, status: "finished", finishedAt: now() };
+        return { ...s, status: "finished", finishedAt: now() };
 
       default:
-        return state;
+        return s;
     }
   },
 
   buildResult(state): GameResult {
+    const s = state as FlashcardState;
+    const outcomes = s._outcomes ?? [];
     return {
-      correct: state.score.correct,
-      wrong: state.score.wrong,
-      streakMax: state.score.streakMax,
-      durationMs: (state.finishedAt ?? Date.now()) - (state.startedAt ?? Date.now()),
+      correct: s.score.correct,
+      wrong: s.score.wrong,
+      streakMax: s.score.streakMax,
+      durationMs: (s.finishedAt ?? Date.now()) - (s.startedAt ?? Date.now()),
       itemOutcomes: outcomes.map((o) => ({
         ref: o.ref,
         grade: o.grade === "again" ? "fail" : o.grade,

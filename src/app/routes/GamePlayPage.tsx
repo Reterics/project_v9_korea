@@ -7,7 +7,7 @@ import { useMemo } from "react";
 export function GamePlayPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
-  const { items, config } = useStudySession(5);
+  const { items, config } = useStudySession(10);
 
   const ctx = useMemo<GameContext>(() => ({
     items,

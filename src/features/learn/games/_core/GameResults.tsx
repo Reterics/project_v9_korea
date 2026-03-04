@@ -1,5 +1,6 @@
 import { CheckCircle, XCircle, Sparkles, Timer } from "lucide-react";
-import type { GameResult } from "./gameTypes";
+import type { GameResult, StudyItemRef } from "./gameTypes";
+import { getWord } from "@/features/learn/content/contentRepo";
 
 type GameResultsProps = {
   title: string;
@@ -73,7 +74,9 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
                     key={`${o.ref.kind}-${o.ref.id}-${i}`}
                     className="flex items-center justify-between gap-3 rounded-2xl border border-dancheong-100 bg-dancheong-50 px-4 py-3 dark:border-dancheong-800/30 dark:bg-dancheong-900/20"
                   >
-                    <div className="text-sm font-semibold">{o.ref.id}</div>
+                    <div className="text-sm font-semibold">
+                      <RefLabel ref={o.ref} />
+                    </div>
                     <div className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-dancheong-600 shadow-sm dark:bg-namsaek-800 dark:text-dancheong-300">
                       Review
                     </div>
@@ -85,6 +88,14 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
       </div>
     </div>
   );
+}
+
+function RefLabel({ ref }: { ref: StudyItemRef }) {
+  if (ref.kind === "word") {
+    const w = getWord(ref.id);
+    if (w) return <>{w.korean} — {w.english}</>;
+  }
+  return <>{ref.id}</>;
 }
 
 function StatChip({

@@ -67,18 +67,23 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
       <PromptCard
         text={q.korean}
         title="Flashcard"
-        subtitle={revealed ? undefined : "Tap to reveal"}
+        subtitle={revealed ? undefined : "What does this word mean?"}
         rightSlot={<AudioButton text={q.korean} />}
       />
 
       {/* Reveal / Answer area */}
       {!revealed ? (
-        <button
-          onClick={() => setRevealed(true)}
-          className="w-full rounded-2xl bg-namsaek-500 px-4 py-3 text-sm font-semibold text-hanji-50 shadow-sm transition hover:bg-namsaek-600"
-        >
-          Show Answer <span className="ml-2 text-xs opacity-60">Space</span>
-        </button>
+        <div className="space-y-3">
+          <div className="rounded-2xl border border-hanji-200 bg-hanji-50 px-4 py-3 text-center text-sm text-namsaek-600 dark:border-namsaek-700 dark:bg-namsaek-950/40 dark:text-hanji-300">
+            Think of the meaning, then reveal to check yourself
+          </div>
+          <button
+            onClick={() => setRevealed(true)}
+            className="w-full rounded-2xl bg-namsaek-500 px-4 py-3 text-sm font-semibold text-hanji-50 shadow-sm transition hover:bg-namsaek-600"
+          >
+            Show Answer <span className="ml-2 text-xs opacity-60">Space</span>
+          </button>
+        </div>
       ) : (
         <div className="space-y-4">
           {/* Answer card */}
@@ -97,6 +102,9 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
           </div>
 
           {/* Grade buttons */}
+          <div className="text-center text-xs text-hanji-500 dark:text-hanji-400">
+            How well did you know it?
+          </div>
           <div className="grid grid-cols-4 gap-2">
             {gradeButtons.map((btn) => (
               <button

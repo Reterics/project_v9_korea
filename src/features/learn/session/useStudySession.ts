@@ -41,7 +41,7 @@ export function useStudySession(totalQuestions: number = 5) {
     return selected;
   }, [totalQuestions]);
 
-  const config: GameConfig = { totalQuestions };
+  const config = useMemo<GameConfig>(() => ({ totalQuestions }), [totalQuestions]);
 
   return { items, config };
 }

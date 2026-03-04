@@ -1,0 +1,122 @@
+[
+  {
+    "id": "s001",
+    "tokens": ["저는", "밥을", "먹어요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "I eat rice.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s002",
+    "tokens": ["저는", "물을", "마셔요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "I drink water.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s003",
+    "tokens": ["저는", "학교에", "가요"],
+    "roles": ["subject", "location", "verb"],
+    "english": "I go to school.",
+    "hint": "Subject + Location + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s004",
+    "tokens": ["저는", "집에", "가요"],
+    "roles": ["subject", "location", "verb"],
+    "english": "I go home.",
+    "hint": "Subject + Location + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s005",
+    "tokens": ["저는", "학생이에요"],
+    "roles": ["subject", "verb"],
+    "english": "I am a student.",
+    "hint": "Subject + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s006",
+    "tokens": ["저는", "사과를", "먹어요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "I eat an apple.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s007",
+    "tokens": ["친구가", "집에", "와요"],
+    "roles": ["subject", "location", "verb"],
+    "english": "A friend comes home.",
+    "hint": "Subject + Location + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s008",
+    "tokens": ["엄마가", "커피를", "마셔요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "Mom drinks coffee.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s009",
+    "tokens": ["아빠가", "밥을", "먹어요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "Dad eats rice.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s010",
+    "tokens": ["선생님이", "학교에", "가요"],
+    "roles": ["subject", "location", "verb"],
+    "english": "The teacher goes to school.",
+    "hint": "Subject + Location + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s011",
+    "tokens": ["저는", "김치를", "먹어요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "I eat kimchi.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s012",
+    "tokens": ["학생이", "물을", "마셔요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "The student drinks water.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s013",
+    "tokens": ["친구를", "만나요"],
+    "roles": ["object", "verb"],
+    "english": "I meet a friend.",
+    "hint": "Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s014",
+    "tokens": ["저는", "친구를", "만나요"],
+    "roles": ["subject", "object", "verb"],
+    "english": "I meet a friend.",
+    "hint": "Subject + Object + Verb",
+    "level": "A1"
+  },
+  {
+    "id": "s015",
+    "tokens": ["사람이", "집에", "있어요"],
+    "roles": ["subject", "location", "verb"],
+    "english": "A person is at home.",
+    "hint": "Subject + Location + Verb",
+    "level": "A1"
+  }
+]

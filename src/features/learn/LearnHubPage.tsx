@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
@@ -6,6 +6,7 @@ import {
   Flame,
   Headphones,
   Keyboard,
+  Languages,
   Layers,
   Target,
   Trophy,
@@ -35,10 +36,10 @@ const games: GameCardDef[] = [
   {
     id: "sentence_builder",
     title: "Sentence Builder",
-    desc: "Drag tokens to build Korean word order patterns.",
+    desc: "Tap tokens to build Korean word order patterns.",
     meta: "3-6 min",
     icon: <Layers className="h-5 w-5" />,
-    available: false,
+    available: true,
   },
   {
     id: "particles",
@@ -46,7 +47,7 @@ const games: GameCardDef[] = [
     desc: "Fill the correct particle with instant explanations.",
     meta: "2-5 min",
     icon: <Target className="h-5 w-5" />,
-    available: false,
+    available: true,
   },
   {
     id: "listening",
@@ -111,6 +112,28 @@ export function LearnHubPage() {
 
         {/* Game cards */}
         <div className="grid gap-4 sm:grid-cols-2">
+          <button
+            onClick={() => navigate("/hangeul-practice/game")}
+            className="group rounded-3xl border border-hanji-300 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-namsaek-300 hover:shadow-md dark:border-namsaek-700 dark:bg-namsaek-900 dark:hover:border-namsaek-600"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-namsaek-50 text-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-200">
+                  <Languages className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm font-semibold">Hangeul Practice</div>
+                  <div className="mt-1 text-xs text-hanji-500 dark:text-hanji-400">
+                    Dictionary + game
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="mt-1 h-4 w-4 text-hanji-400 transition group-hover:translate-x-0.5 dark:text-hanji-500" />
+            </div>
+            <div className="mt-3 text-sm text-namsaek-600 dark:text-hanji-300">
+              Browse Hangeul letters, then open the dedicated pronunciation game.
+            </div>
+          </button>
           {games.map((game) => (
             <GameCard
               key={game.id}
@@ -158,7 +181,7 @@ export function LearnHubPage() {
         <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
           <div className="text-sm font-semibold">Mastery preview</div>
           <div className="mt-2 text-xs text-hanji-500 dark:text-hanji-400">
-            300 words (A1) — tiles fill as mastery grows.
+            300 words (A1) â€” tiles fill as mastery grows.
           </div>
           <MasteryGrid />
         </div>
@@ -287,3 +310,5 @@ function MasteryGrid() {
     </div>
   );
 }
+
+

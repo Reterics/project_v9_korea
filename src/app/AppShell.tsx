@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Sparkles, Sun, Moon } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
@@ -57,10 +57,16 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
           </div>
         </Link>
 
-        {/* Nav pills — desktop only */}
+        {/* Nav pills â€” desktop only */}
         <div className="hidden items-center gap-2 md:flex">
           <NavPill to="/" active={location.pathname === "/"}>
             Hub
+          </NavPill>
+          <NavPill to="/hangeul-practice" active={location.pathname.startsWith("/hangeul-practice")}>
+            Hangeul
+          </NavPill>
+          <NavPill to="/notes" active={location.pathname === "/notes"}>
+            Notes
           </NavPill>
         </div>
 
@@ -154,3 +160,4 @@ function ProfileMini({
     </div>
   );
 }
+
