@@ -65,6 +65,9 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
           <NavPill to="/hangeul-practice" active={location.pathname.startsWith("/hangeul-practice")}>
             Hangeul
           </NavPill>
+          <NavPill to="/grammar" active={location.pathname.startsWith("/grammar")}>
+            Grammar
+          </NavPill>
           <NavPill to="/dictionary" active={location.pathname === "/dictionary"}>
             Dictionary
           </NavPill>

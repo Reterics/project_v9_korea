@@ -4,6 +4,7 @@ import {
   BookOpen,
   ChevronRight,
   Flame,
+  GraduationCap,
   Headphones,
   Keyboard,
   Languages,
@@ -16,6 +17,7 @@ import type { GameId } from "./games/_core/gameTypes";
 import { useProfile } from "./profile/useProfile";
 import { listWords } from "./content/contentRepo";
 import { loadMastery } from "./profile/masteryRepo";
+import { getCurrentLesson, loadLessonProgress } from "./content/lessonRepo";
 
 type GameCardDef = {
   id: GameId;
@@ -30,7 +32,7 @@ const games: GameCardDef[] = [
   {
     id: "flashcards",
     title: "Flashcards",
-    desc: "Recall 300 core words with spaced repetition.",
+    desc: "Review words from your lessons with spaced repetition.",
     meta: "2-4 min",
     icon: <BookOpen className="h-5 w-5" />,
     available: true,
@@ -38,7 +40,7 @@ const games: GameCardDef[] = [
   {
     id: "sentence_builder",
     title: "Sentence Builder",
-    desc: "Tap tokens to build Korean word order patterns.",
+    desc: "Practice word order — put tokens in the right Korean sequence.",
     meta: "3-6 min",
     icon: <Layers className="h-5 w-5" />,
     available: true,
@@ -46,7 +48,7 @@ const games: GameCardDef[] = [
   {
     id: "particles",
     title: "Particles",
-    desc: "Fill the correct particle with instant explanations.",
+    desc: "Practice markers — fill 은/는, 이/가, 을/를 in context.",
     meta: "2-5 min",
     icon: <Target className="h-5 w-5" />,
     available: true,
@@ -65,11 +67,52 @@ export function LearnHubPage() {
   const navigate = useNavigate();
   const { profile } = useProfile();
   const startGame = (id: GameId) => navigate(`/play/${id}`);
+  const currentLesson = useMemo(() => getCurrentLesson(), []);
+  const lessonProgress = useMemo(() => (currentLesson ? loadLessonProgress()[currentLesson.id] : undefined), [currentLesson]);
 
   return (
     <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
       {/* Left column */}
       <div className="space-y-6">
+        {/* Current lesson block */}
+        {currentLesson && (
+          <div className="rounded-3xl border border-namsaek-200 bg-namsaek-50 p-5 dark:border-namsaek-700/50 dark:bg-namsaek-900/60">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="h-4 w-4 text-namsaek-500 dark:text-namsaek-400" />
+                  <div className="text-xs font-medium text-namsaek-600 dark:text-namsaek-400">
+                    {lessonProgress?.status === "in_progress" ? "Continue lesson" : "Start lesson"}
+                  </div>
+                </div>
+                <div className="mt-1 text-base font-semibold text-namsaek-900 dark:text-hanji-100">
+                  {currentLesson.title}
+                </div>
+                <div className="mt-0.5 text-sm text-namsaek-600 dark:text-hanji-300">
+                  {currentLesson.summary}
+                </div>
+              </div>
+              <div className="flex shrink-0 flex-col gap-2">
+                <button
+                  onClick={() => navigate(`/grammar/${currentLesson.id}`)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-namsaek-500 px-3 py-2 text-xs font-semibold text-hanji-50 transition hover:bg-namsaek-600"
+                >
+                  Open lesson
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+                {lessonProgress?.status === "in_progress" && currentLesson.practiceModes[0] && (
+                  <button
+                    onClick={() => navigate(`/play/${currentLesson.practiceModes[0]}?lessonId=${currentLesson.id}`)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-namsaek-300 bg-white px-3 py-2 text-xs font-semibold text-namsaek-700 transition hover:bg-namsaek-50 dark:border-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-200 dark:hover:bg-namsaek-700"
+                  >
+                    Practice now
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Session banner */}
         <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
           <div className="flex flex-wrap items-start justify-between gap-4">

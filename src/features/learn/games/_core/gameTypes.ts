@@ -14,6 +14,8 @@ export type GameConfig = {
   totalQuestions: number;
   timeLimitSec?: number;
   difficulty?: "easy" | "normal" | "hard";
+  lessonSentenceIds?: string[];
+  lessonId?: string;
 };
 
 export type GameContext = {

@@ -16,11 +16,12 @@ type SentenceData = {
   level: string;
 };
 
-const sentences: SentenceData[] = sentencesData as SentenceData[];
+const allSentences: SentenceData[] = sentencesData as SentenceData[];
 
 type SBState = GameState<SentenceBuilderQuestion>;
 
 const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
+let activeSentences: SentenceData[] = allSentences;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -32,8 +33,8 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function buildQuestion(index: number, now: number): SentenceBuilderQuestion | null {
-  if (index >= sentences.length) return null;
-  const s = sentences[index];
+  if (index >= activeSentences.length) return null;
+  const s = activeSentences[index];
   const tokens = s.tokens.map((text, i) => ({ text, role: s.roles[i] }));
   // Shuffle until order differs from correct (if more than 1 token)
   let shuffled = shuffle(s.tokens);
@@ -58,8 +59,11 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
   id: "sentence_builder",
   title: "Sentence Builder",
 
-  async init(): Promise<SBState> {
+  async init(_ctx, config): Promise<SBState> {
     outcomes.length = 0;
+    activeSentences = config.lessonSentenceIds?.length
+      ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
+      : allSentences;
     const firstQ = buildQuestion(0, Date.now());
     return {
       status: firstQ ? "in_progress" : "finished",
@@ -72,7 +76,7 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
 
   async reduce(state, action, deps): Promise<SBState> {
     const { config, now } = deps;
-    const totalQ = Math.min(config.totalQuestions, sentences.length);
+    const totalQ = Math.min(config.totalQuestions, activeSentences.length);
 
     switch (action.type) {
       case "START":

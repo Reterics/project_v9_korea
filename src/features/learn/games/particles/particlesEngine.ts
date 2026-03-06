@@ -20,9 +20,10 @@ type ParticleCandidate = Omit<ParticleQuestion, "shownAt">;
 
 type ParticlesState = GameState<ParticleQuestion>;
 
-const sentences = sentencesData as SentenceData[];
+const allSentences = sentencesData as SentenceData[];
 
 const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
+let particleBank: ParticleCandidate[] = [];
 
 const particleChoicesByRole: Record<ParticleRole, string[]> = {
   topic: ["은", "는", "이", "가"],
@@ -54,7 +55,7 @@ function explanationFor(stem: string, role: ParticleRole, correctParticle: strin
   return `을/를 marks the object. Use 을 after batchim and 를 after a vowel. Correct here: ${stem}${correctParticle}.`;
 }
 
-function buildCandidates(): ParticleCandidate[] {
+function buildCandidates(sentences: SentenceData[]): ParticleCandidate[] {
   const candidates: ParticleCandidate[] = [];
 
   for (const sentence of sentences) {
@@ -94,7 +95,7 @@ function buildCandidates(): ParticleCandidate[] {
   return candidates;
 }
 
-const particleBank = buildCandidates();
+particleBank = buildCandidates(allSentences);
 
 function pickQuestion(index: number, now: number): ParticleQuestion | null {
   if (index >= particleBank.length) return null;
@@ -108,6 +109,10 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
 
   async init(_ctx: GameContext, config: GameConfig): Promise<ParticlesState> {
     outcomes.length = 0;
+    const sentences = config.lessonSentenceIds?.length
+      ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
+      : allSentences;
+    particleBank = buildCandidates(sentences);
     const total = Math.min(config.totalQuestions, particleBank.length);
     const first = total > 0 ? pickQuestion(0, Date.now()) : null;
 

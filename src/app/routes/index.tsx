@@ -6,6 +6,8 @@ import { GamePlayPage } from "./GamePlayPage";
 import { HangeulPracticePage } from "@/features/hangeul/HangeulPracticePage";
 import { HangeulPracticeGamePage } from "@/features/hangeul/HangeulPracticeGamePage";
 import { DictionaryPage } from "@/features/learn/DictionaryPage";
+import { GrammarPage } from "@/features/learn/grammar/GrammarPage";
+import { GrammarLessonPage } from "@/features/learn/grammar/GrammarLessonPage";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +19,8 @@ export const router = createBrowserRouter([
       { path: "hangeul-practice", element: <HangeulPracticePage /> },
       { path: "hangeul-practice/game", element: <HangeulPracticeGamePage /> },
       { path: "dictionary", element: <DictionaryPage /> },
+      { path: "grammar", element: <GrammarPage /> },
+      { path: "grammar/:lessonId", element: <GrammarLessonPage /> },
     ],
   },
   {

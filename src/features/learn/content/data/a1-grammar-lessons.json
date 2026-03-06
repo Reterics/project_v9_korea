@@ -1,0 +1,196 @@
+[
+  {
+    "id": "lesson-sov",
+    "slug": "subject-object-verb",
+    "title": "Subject + Object + Verb",
+    "category": "sentence-pattern",
+    "level": "A1",
+    "summary": "In Korean, the verb always comes last. Learn the basic SOV word order.",
+    "pattern": {
+      "englishOrder": ["Subject", "Verb", "Object"],
+      "koreanOrder": ["Subject", "Object", "Verb"]
+    },
+    "examples": [
+      {
+        "id": "ex-sov-1",
+        "english": "I drink water.",
+        "korean": "저는 물을 마셔요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["subject", "object", "verb"],
+        "notes": ["저는 = I (topic marker 는)", "물을 = water (object marker 을)", "마셔요 = drink"]
+      },
+      {
+        "id": "ex-sov-2",
+        "english": "I eat rice.",
+        "korean": "저는 밥을 먹어요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["subject", "object", "verb"],
+        "notes": ["밥을 = rice (object marker 을)", "먹어요 = eat"]
+      },
+      {
+        "id": "ex-sov-3",
+        "english": "I drink coffee.",
+        "korean": "저는 커피를 마셔요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["subject", "object", "verb"],
+        "notes": ["커피를 = coffee (object marker 를)"]
+      },
+      {
+        "id": "ex-sov-4",
+        "english": "Mom drinks coffee.",
+        "korean": "엄마가 커피를 마셔요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["subject", "object", "verb"],
+        "notes": ["엄마가 = mom (subject marker 가)"]
+      }
+    ],
+    "explanationBlocks": [
+      {
+        "id": "exp-sov-1",
+        "type": "text",
+        "content": "In Korean, the verb always comes at the end of the sentence."
+      },
+      {
+        "id": "exp-sov-2",
+        "type": "text",
+        "content": "The object (what you act on) comes before the verb, not after."
+      },
+      {
+        "id": "exp-sov-3",
+        "type": "tip",
+        "title": "Quick rule",
+        "content": "English: I drink water. Korean: I water drink. Just move the verb to the end."
+      }
+    ],
+    "relatedSentenceIds": ["s001", "s002", "s006", "s008", "s009", "s011", "s012", "s014"],
+    "practiceModes": ["sentence_builder", "particles", "flashcards"],
+    "nextLessonId": "lesson-slv"
+  },
+  {
+    "id": "lesson-slv",
+    "slug": "subject-location-verb",
+    "title": "Subject + Location + Verb",
+    "category": "sentence-pattern",
+    "level": "A1",
+    "summary": "Learn how to express going to or being at a location in Korean.",
+    "pattern": {
+      "englishOrder": ["Subject", "Verb", "Location"],
+      "koreanOrder": ["Subject", "Location", "Verb"]
+    },
+    "examples": [
+      {
+        "id": "ex-slv-1",
+        "english": "I go to school.",
+        "korean": "저는 학교에 가요.",
+        "englishBreakdown": ["subject", "verb", "location"],
+        "koreanBreakdown": ["subject", "location", "verb"],
+        "notes": ["학교에 = to school (에 = destination marker)", "가요 = go"]
+      },
+      {
+        "id": "ex-slv-2",
+        "english": "I go home.",
+        "korean": "저는 집에 가요.",
+        "englishBreakdown": ["subject", "verb", "location"],
+        "koreanBreakdown": ["subject", "location", "verb"],
+        "notes": ["집에 = home/to home"]
+      },
+      {
+        "id": "ex-slv-3",
+        "english": "A friend comes home.",
+        "korean": "친구가 집에 와요.",
+        "englishBreakdown": ["subject", "verb", "location"],
+        "koreanBreakdown": ["subject", "location", "verb"],
+        "notes": ["와요 = come (opposite of 가요)"]
+      },
+      {
+        "id": "ex-slv-4",
+        "english": "A person is at home.",
+        "korean": "사람이 집에 있어요.",
+        "englishBreakdown": ["subject", "verb", "location"],
+        "koreanBreakdown": ["subject", "location", "verb"],
+        "notes": ["있어요 = to be / to exist"]
+      }
+    ],
+    "explanationBlocks": [
+      {
+        "id": "exp-slv-1",
+        "type": "text",
+        "content": "Locations use the particle 에 to show direction or destination."
+      },
+      {
+        "id": "exp-slv-2",
+        "type": "text",
+        "content": "Like with objects, the location comes before the verb."
+      },
+      {
+        "id": "exp-slv-3",
+        "type": "tip",
+        "title": "에 particle",
+        "content": "에 after a location means 'to' or 'at'. 학교에 가요 = go to school. 집에 있어요 = be at home."
+      }
+    ],
+    "relatedSentenceIds": ["s003", "s004", "s007", "s010", "s015"],
+    "practiceModes": ["sentence_builder", "particles"],
+    "nextLessonId": "lesson-particles"
+  },
+  {
+    "id": "lesson-particles",
+    "slug": "basic-particles",
+    "title": "Basic Particles",
+    "category": "particles",
+    "level": "A1",
+    "summary": "Learn the three most important particles: 은/는 (topic), 이/가 (subject), 을/를 (object).",
+    "examples": [
+      {
+        "id": "ex-ptcl-1",
+        "english": "I eat rice.",
+        "korean": "저는 밥을 먹어요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["topic", "object", "verb"],
+        "notes": ["저는 → 저 ends in vowel → use 는", "밥을 → 밥 ends in consonant (ㅂ) → use 을"]
+      },
+      {
+        "id": "ex-ptcl-2",
+        "english": "A friend comes.",
+        "korean": "친구가 와요.",
+        "englishBreakdown": ["subject", "verb"],
+        "koreanBreakdown": ["subject", "verb"],
+        "notes": ["친구가 → 친구 ends in vowel → use 가"]
+      },
+      {
+        "id": "ex-ptcl-3",
+        "english": "I drink water.",
+        "korean": "저는 물을 마셔요.",
+        "englishBreakdown": ["subject", "verb", "object"],
+        "koreanBreakdown": ["topic", "object", "verb"],
+        "notes": ["물을 → 물 ends in consonant (ㄹ) → use 을"]
+      }
+    ],
+    "explanationBlocks": [
+      {
+        "id": "exp-ptcl-1",
+        "type": "text",
+        "content": "은/는 marks the topic. Use 은 after a syllable ending in a consonant, 는 after a vowel."
+      },
+      {
+        "id": "exp-ptcl-2",
+        "type": "text",
+        "content": "이/가 marks the subject. Use 이 after a consonant, 가 after a vowel."
+      },
+      {
+        "id": "exp-ptcl-3",
+        "type": "text",
+        "content": "을/를 marks the object. Use 을 after a consonant, 를 after a vowel."
+      },
+      {
+        "id": "exp-ptcl-4",
+        "type": "tip",
+        "title": "The batchim rule",
+        "content": "Batchim = a final consonant under the vowel in a syllable. 밥 (bap) has batchim → use 을/이/은. 저 (jeo) has no batchim → use 를/가/는."
+      }
+    ],
+    "relatedSentenceIds": ["s001", "s002", "s003", "s004", "s006", "s007", "s008", "s009", "s010", "s011", "s012", "s014", "s015"],
+    "practiceModes": ["particles", "sentence_builder"],
+    "nextLessonId": null
+  }
+]
