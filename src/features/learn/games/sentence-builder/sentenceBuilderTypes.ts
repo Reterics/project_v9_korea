@@ -15,5 +15,7 @@ export type SentenceBuilderQuestion = {
   shuffled: string[];
   english: string;
   hint: string;
+  /** Optional learner help: Korean token -> English gloss */
+  translationHint?: string;
   shownAt: number;
 };

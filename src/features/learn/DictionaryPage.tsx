@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { listWords } from "./content/contentRepo";
 import type { WordLevel } from "./content/wordTypes";
 import { BrandLogo } from "@/components/BrandLogo";
+import { loadMastery } from "./profile/masteryRepo";
 
 const TABS: { level: WordLevel; label: string }[] = [
   { level: "A1", label: "A1" },
@@ -35,6 +36,7 @@ export function DictionaryPage() {
   const [search, setSearch] = useState("");
 
   const words = useMemo(() => listWords(activeTab), [activeTab]);
+  const mastery = useMemo(() => loadMastery(), []);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return words;
@@ -102,37 +104,53 @@ export function DictionaryPage() {
           </div>
         ) : (
           <div className="divide-y divide-hanji-200 dark:divide-namsaek-700">
-            {filtered.map((word) => (
-              <div
-                key={word.id}
-                className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:gap-4"
-              >
-                <div className="min-w-[120px]">
-                  <div className="text-lg font-semibold">{word.korean}</div>
-                  <div className="text-xs text-hanji-500 dark:text-hanji-400">
-                    {word.romanization}
+            {filtered.map((word) => {
+              const score = mastery[word.id]?.score ?? 0;
+              const masteryLabel =
+                score >= 0.8 ? "Mastered" : score >= 0.4 ? "Learning" : score > 0 ? "Seen" : "New";
+              const masteryColor =
+                score >= 0.8
+                  ? "bg-cheongja-500 text-white dark:bg-cheongja-400"
+                  : score >= 0.4
+                    ? "bg-cheongja-200 text-cheongja-700 dark:bg-cheongja-700 dark:text-cheongja-200"
+                    : score > 0
+                      ? "bg-cheongja-100 text-cheongja-600 dark:bg-cheongja-800 dark:text-cheongja-300"
+                      : "bg-hanji-100 text-hanji-500 dark:bg-namsaek-800 dark:text-hanji-500";
+              return (
+                <div
+                  key={word.id}
+                  className="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-center sm:gap-4"
+                >
+                  <div className="min-w-[120px]">
+                    <div className="text-lg font-semibold">{word.korean}</div>
+                    <div className="text-xs text-hanji-500 dark:text-hanji-400">
+                      {word.romanization}
+                    </div>
                   </div>
-                </div>
-                <div className="flex-1 text-sm text-namsaek-700 dark:text-hanji-300">
-                  {word.english}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span
-                    className={
-                      "rounded-lg px-2 py-1 text-xs font-medium " +
-                      (CATEGORY_COLORS[word.category] ?? "bg-hanji-100 text-hanji-600 dark:bg-namsaek-800 dark:text-hanji-400")
-                    }
-                  >
-                    {word.category}
-                  </span>
-                </div>
-                {word.example && (
-                  <div className="mt-1 text-xs text-hanji-500 italic dark:text-hanji-400 sm:mt-0 sm:min-w-[180px] sm:text-right">
-                    {word.example}
+                  <div className="flex-1 text-sm text-namsaek-700 dark:text-hanji-300">
+                    {word.english}
                   </div>
-                )}
-              </div>
-            ))}
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={
+                        "rounded-lg px-2 py-1 text-xs font-medium " +
+                        (CATEGORY_COLORS[word.category] ?? "bg-hanji-100 text-hanji-600 dark:bg-namsaek-800 dark:text-hanji-400")
+                      }
+                    >
+                      {word.category}
+                    </span>
+                    <span className={`rounded-lg px-2 py-1 text-xs font-medium ${masteryColor}`}>
+                      {masteryLabel}
+                    </span>
+                  </div>
+                  {word.example && (
+                    <div className="mt-1 text-xs text-hanji-500 italic dark:text-hanji-400 sm:mt-0 sm:min-w-[180px] sm:text-right">
+                      {word.example}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

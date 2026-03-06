@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Home, BookOpen, BookText, Search, FileText } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
 import { BrandLogo } from "@/components/BrandLogo";
 
@@ -27,9 +27,10 @@ export function AppShell() {
   return (
     <div className="min-h-screen bg-hanji-100 text-namsaek-900 dark:bg-namsaek-950 dark:text-hanji-200">
       <TopNav dark={dark} onToggleDark={() => setDark((v) => !v)} />
-      <div className="mx-auto w-full max-w-6xl px-4 pb-12 pt-6">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 md:pb-12">
         <Outlet />
       </div>
+      <BottomNav />
     </div>
   );
 }
@@ -91,6 +92,43 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
         </div>
       </div>
     </div>
+  );
+}
+
+function BottomNav() {
+  const location = useLocation();
+
+  const items = [
+    { to: "/", label: "Hub", icon: Home, exact: true },
+    { to: "/hangeul-practice", label: "Hangeul", icon: BookOpen, exact: false },
+    { to: "/grammar", label: "Grammar", icon: BookText, exact: false },
+    { to: "/dictionary", label: "Dictionary", icon: Search, exact: true },
+    { to: "/notes", label: "Notes", icon: FileText, exact: true },
+  ];
+
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-hanji-300/70 bg-hanji-100/95 backdrop-blur md:hidden dark:border-namsaek-800/60 dark:bg-namsaek-950/95">
+      <div className="flex items-stretch">
+        {items.map(({ to, label, icon: Icon, exact }) => {
+          const active = exact ? location.pathname === to : location.pathname.startsWith(to);
+          return (
+            <Link
+              key={to}
+              to={to}
+              className={
+                "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium no-underline transition " +
+                (active
+                  ? "text-namsaek-600 dark:text-namsaek-300"
+                  : "text-hanji-500 hover:text-namsaek-500 dark:text-hanji-500 dark:hover:text-hanji-300")
+              }
+            >
+              <Icon className={`h-5 w-5 ${active ? "stroke-[2.5]" : "stroke-[1.5]"}`} />
+              {label}
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
   );
 }
 

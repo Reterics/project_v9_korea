@@ -1,20 +1,16 @@
-﻿import { useMemo, useState } from "react";
+﻿import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
   ChevronRight,
-  Flame,
   GraduationCap,
   Headphones,
   Keyboard,
   Languages,
   Layers,
   Target,
-  Trophy,
-  Zap,
 } from "lucide-react";
 import type { GameId } from "./games/_core/gameTypes";
-import { useProfile } from "./profile/useProfile";
 import { BrandLogo } from "@/components/BrandLogo";
 import { listWords } from "./content/contentRepo";
 import { loadMastery } from "./profile/masteryRepo";
@@ -66,7 +62,6 @@ const games: GameCardDef[] = [
 
 export function LearnHubPage() {
   const navigate = useNavigate();
-  const { profile } = useProfile();
   const startGame = (id: GameId) => navigate(`/play/${id}`);
   const currentLesson = useMemo(() => getCurrentLesson(), []);
   const lessonProgress = useMemo(() => (currentLesson ? loadLessonProgress()[currentLesson.id] : undefined), [currentLesson]);
@@ -91,83 +86,37 @@ export function LearnHubPage() {
         )}
         {currentLesson && (
           <div className="rounded-3xl border border-namsaek-200 bg-namsaek-50 p-5 dark:border-namsaek-700/50 dark:bg-namsaek-900/60">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="h-4 w-4 text-namsaek-500 dark:text-namsaek-400" />
-                  <div className="text-xs font-medium text-namsaek-600 dark:text-namsaek-400">
-                    {lessonProgress?.status === "in_progress" ? "Continue lesson" : "Start lesson"}
-                  </div>
-                </div>
-                <div className="mt-1 text-base font-semibold text-namsaek-900 dark:text-hanji-100">
-                  {currentLesson.title}
-                </div>
-                <div className="mt-0.5 text-sm text-namsaek-600 dark:text-hanji-300">
-                  {currentLesson.summary}
-                </div>
+            <div className="flex items-center gap-2">
+              <GraduationCap className="h-4 w-4 text-namsaek-500 dark:text-namsaek-400" />
+              <div className="text-xs font-medium text-namsaek-600 dark:text-namsaek-400">
+                {lessonProgress?.status === "in_progress" ? "Continue lesson" : "Start lesson"}
               </div>
-              <div className="flex shrink-0 flex-col gap-2">
+            </div>
+            <div className="mt-1 text-base font-semibold text-namsaek-900 dark:text-hanji-100">
+              {currentLesson.title}
+            </div>
+            <div className="mt-0.5 text-sm text-namsaek-600 dark:text-hanji-300">
+              {currentLesson.summary}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => navigate(`/grammar/${currentLesson.id}`)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-namsaek-500 px-4 py-2 text-xs font-semibold text-hanji-50 transition hover:bg-namsaek-600"
+              >
+                {lessonProgress?.status === "in_progress" ? "Continue lesson" : "Open lesson"}
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+              {currentLesson.practiceModes[0] && (
                 <button
-                  onClick={() => navigate(`/grammar/${currentLesson.id}`)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-namsaek-500 px-3 py-2 text-xs font-semibold text-hanji-50 transition hover:bg-namsaek-600"
+                  onClick={() => navigate(`/play/${currentLesson.practiceModes[0]}?lessonId=${currentLesson.id}`)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-namsaek-300 bg-white px-4 py-2 text-xs font-semibold text-namsaek-700 transition hover:bg-namsaek-50 dark:border-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-200 dark:hover:bg-namsaek-700"
                 >
-                  Open lesson
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  Practice
                 </button>
-                {lessonProgress?.status === "in_progress" && currentLesson.practiceModes[0] && (
-                  <button
-                    onClick={() => navigate(`/play/${currentLesson.practiceModes[0]}?lessonId=${currentLesson.id}`)}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-namsaek-300 bg-white px-3 py-2 text-xs font-semibold text-namsaek-700 transition hover:bg-namsaek-50 dark:border-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-200 dark:hover:bg-namsaek-700"
-                  >
-                    Practice now
-                  </button>
-                )}
-              </div>
+              )}
             </div>
           </div>
         )}
-
-        {/* Session banner */}
-        <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <div className="text-xs font-medium text-hanji-500 dark:text-hanji-400">
-                Today
-              </div>
-              <div className="mt-1 text-xl font-semibold">
-                Continue your A1 sprint
-              </div>
-              <div className="mt-1 text-sm text-namsaek-600 dark:text-hanji-300">
-                5-7 minutes. Focus: core vocab + particles.
-              </div>
-            </div>
-            <button
-              onClick={() => startGame("flashcards")}
-              className="group inline-flex items-center gap-2 rounded-2xl bg-namsaek-500 px-4 py-3 text-sm font-semibold text-hanji-50 shadow-sm transition hover:bg-namsaek-600"
-            >
-              Start session
-              <ChevronRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </button>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <StatChip
-              icon={<Trophy className="h-4 w-4 text-geum-500" />}
-              label="Level"
-              value={String(profile.level)}
-            />
-            <StatChip
-              icon={<Zap className="h-4 w-4 text-cheongja-500" />}
-              label="XP"
-              value={String(profile.xp)}
-            />
-            <StatChip
-              icon={<Flame className="h-4 w-4 text-dancheong-500" />}
-              label="Coins"
-              value={String(profile.coins)}
-            />
-          </div>
-        </div>
 
         {/* Game cards */}
         <div className="grid gap-4 sm:grid-cols-2">
@@ -215,7 +164,7 @@ export function LearnHubPage() {
             <div>
               <div className="text-sm font-semibold">Weak area</div>
               <div className="text-xs text-hanji-500 dark:text-hanji-400">
-                Based on recent sessions
+                Based on recent mistakes
               </div>
             </div>
             <div className="rounded-xl bg-dancheong-50 px-3 py-2 text-xs font-semibold text-dancheong-600 dark:bg-dancheong-900/40 dark:text-dancheong-300">
@@ -236,34 +185,13 @@ export function LearnHubPage() {
           </div>
         </div>
 
-        {/* Mastery preview */}
-        <MasteryPreview />
+        {/* Vocab Progress */}
+        <VocabProgressCard />
       </div>
     </div>
   );
 }
 
-function StatChip({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-hanji-200 bg-hanji-50 px-3 py-3 dark:border-namsaek-700 dark:bg-namsaek-950/40">
-      <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white shadow-sm dark:bg-namsaek-800">
-        {icon}
-      </div>
-      <div className="leading-tight">
-        <div className="text-xs text-hanji-500 dark:text-hanji-400">{label}</div>
-        <div className="text-sm font-semibold">{value}</div>
-      </div>
-    </div>
-  );
-}
 
 function GameCard({
   icon,
@@ -336,59 +264,44 @@ function MiniRow({
   );
 }
 
-function MasteryPreview() {
+function VocabProgressCard() {
   const words = useMemo(() => listWords(), []);
   const mastery = useMemo(() => loadMastery(), []);
 
-  const tiles = useMemo(() => {
-    return words.map((w) => {
-      const score = mastery[w.id]?.score ?? 0;
-      return { id: w.id, korean: w.korean, score };
-    });
-  }, [words, mastery]);
-
+  const tiles = useMemo(
+    () => words.map((w) => ({ id: w.id, score: mastery[w.id]?.score ?? 0 })),
+    [words, mastery],
+  );
   const learned = tiles.filter((t) => t.score > 0).length;
   const mastered = tiles.filter((t) => t.score >= 0.8).length;
 
   return (
     <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
-      <div className="text-sm font-semibold">Mastery preview</div>
-      <div className="mt-2 text-xs text-hanji-500 dark:text-hanji-400">
-        {tiles.length} words — {learned} seen, {mastered} mastered
-      </div>
-      <MasteryGrid tiles={tiles} />
-    </div>
-  );
-}
-
-function MasteryGrid({ tiles }: { tiles: { id: string; korean: string; score: number }[] }) {
-  const [tooltip, setTooltip] = useState<string | null>(null);
-
-  return (
-    <div className="mt-4 grid grid-cols-10 gap-2">
-      {tiles.map((t) => (
-        <div
-          key={t.id}
-          className={
-            "relative h-4 w-full rounded-lg border transition-colors " +
-            (t.score >= 0.8
-              ? "border-cheongja-500 bg-cheongja-500 dark:border-cheongja-400 dark:bg-cheongja-400"
-              : t.score >= 0.4
-                ? "border-cheongja-300 bg-cheongja-200 dark:border-cheongja-600 dark:bg-cheongja-700"
-                : t.score > 0
-                  ? "border-cheongja-200 bg-cheongja-100 dark:border-cheongja-700 dark:bg-cheongja-800"
-                  : "border-hanji-200 bg-hanji-100 dark:border-namsaek-700 dark:bg-namsaek-800")
-          }
-          onMouseEnter={() => setTooltip(t.id)}
-          onMouseLeave={() => setTooltip(null)}
-        >
-          {tooltip === t.id && (
-            <div className="absolute -top-9 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-lg bg-namsaek-900 px-2 py-1 text-xs text-hanji-50 shadow dark:bg-hanji-100 dark:text-namsaek-900">
-              {t.korean} {Math.round(t.score * 100)}%
-            </div>
-          )}
+      <div className="flex items-baseline justify-between gap-2">
+        <div className="text-sm font-semibold">Vocabulary</div>
+        <div className="text-sm font-bold text-namsaek-700 dark:text-hanji-100">
+          {learned}
+          <span className="text-xs font-normal text-hanji-400 dark:text-hanji-500"> / {tiles.length}</span>
         </div>
-      ))}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-1">
+        {tiles.map((t) => (
+          <div
+            key={t.id}
+            className={
+              "h-2.5 w-2.5 rounded-sm " +
+              (t.score >= 0.8
+                ? "bg-cheongja-500 dark:bg-cheongja-400"
+                : t.score >= 0.4
+                  ? "bg-cheongja-300 dark:bg-cheongja-600"
+                  : t.score > 0
+                    ? "bg-cheongja-100 dark:bg-cheongja-800"
+                    : "bg-hanji-200 dark:bg-namsaek-700")
+            }
+          />
+        ))}
+      </div>
+      <div className="mt-2 text-xs text-hanji-500 dark:text-hanji-400">{mastered} mastered</div>
     </div>
   );
 }

@@ -57,7 +57,7 @@ export function GameHost({ gameId, ctx, config, onExit }: GameHostProps) {
   return (
     <GameLayout
       header={<GameHeader title={engine.title} state={state} onExit={onExit} />}
-      footer={<GameFooter state={state} dispatch={dispatch} />}
+      footer={<GameFooter gameId={gameId} state={state} dispatch={dispatch} />}
     >
       <GameScreenRouter gameId={gameId} state={state} dispatch={dispatch} />
     </GameLayout>

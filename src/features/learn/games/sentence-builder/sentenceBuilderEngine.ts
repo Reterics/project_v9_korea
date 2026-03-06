@@ -4,6 +4,7 @@ import type {
   GameResult,
   StudyItemRef,
 } from "@/features/learn/games/_core/gameTypes";
+import { listWords } from "@/features/learn/content/contentRepo";
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
 import sentencesData from "@/features/learn/content/data/a1-sentences.json";
 
@@ -17,6 +18,7 @@ type SentenceData = {
 };
 
 const allSentences: SentenceData[] = sentencesData as SentenceData[];
+const wordGlossByKorean = new Map(listWords().map((w) => [w.korean, w.english]));
 
 type SBState = GameState<SentenceBuilderQuestion>;
 
@@ -30,6 +32,48 @@ function shuffle<T>(arr: T[]): T[] {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function buildCandidates(token: string, role: GrammarRole): string[] {
+  const candidates = [token];
+
+  // Common polite/particle endings in beginner content.
+  if (token.length > 1) {
+    candidates.push(token.slice(0, -1));
+  }
+  if (token.length > 2) {
+    candidates.push(token.slice(0, -2));
+  }
+
+  if (token.endsWith("요")) {
+    candidates.push(`${token.slice(0, -1)}다`);
+  }
+
+  if (role === "verb" && token.length > 1) {
+    candidates.push(`${token.slice(0, -1)}다`);
+  }
+
+  return Array.from(new Set(candidates.filter(Boolean)));
+}
+
+function buildTranslationHint(tokens: Array<{ text: string; role: GrammarRole }>): string {
+  const lines: string[] = [];
+
+  for (const t of tokens) {
+    const gloss = buildCandidates(t.text, t.role)
+      .map((c) => wordGlossByKorean.get(c))
+      .find(Boolean);
+
+    if (gloss) {
+      lines.push(`${t.text} = ${gloss}`);
+    }
+  }
+
+  if (lines.length === 0) {
+    return "";
+  }
+
+  return lines.join("\n");
 }
 
 function buildQuestion(index: number, now: number): SentenceBuilderQuestion | null {
@@ -51,6 +95,7 @@ function buildQuestion(index: number, now: number): SentenceBuilderQuestion | nu
     shuffled,
     english: s.english,
     hint: s.hint,
+    translationHint: buildTranslationHint(tokens),
     shownAt: now,
   };
 }
