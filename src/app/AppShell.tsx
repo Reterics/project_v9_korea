@@ -1,7 +1,8 @@
 ﻿import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Sparkles, Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
+import { BrandLogo } from "@/components/BrandLogo";
 
 export function AppShell() {
   const [dark, setDark] = useState(() => {
@@ -43,18 +44,8 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
     <div className="sticky top-0 z-30 border-b border-hanji-300/70 bg-hanji-100/80 backdrop-blur dark:border-namsaek-800/60 dark:bg-namsaek-950/80">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 no-underline">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-namsaek-500 text-hanji-50">
-            <Sparkles className="h-5 w-5" />
-          </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold text-namsaek-900 dark:text-hanji-100">
-              Korean Trainer
-            </div>
-            <div className="text-xs text-hanji-500 dark:text-hanji-400">
-              A1 Sprint
-            </div>
-          </div>
+        <Link to="/" className="no-underline">
+          <BrandLogo variant="primary" size={30} />
         </Link>
 
         {/* Nav pills â€” desktop only */}

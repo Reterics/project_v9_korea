@@ -1,8 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronRight, Layers, Target, BookOpen, Lightbulb, AlertTriangle, Info } from "lucide-react";
+import { ChevronRight, Layers, Target, BookOpen, AlertTriangle, Info } from "lucide-react";
 import { getLesson, markLessonViewed, loadLessonProgress } from "@/features/learn/content/lessonRepo";
 import type { LessonExample, LessonExplanationBlock } from "@/features/learn/content/lessonTypes";
+import { MagpieTip } from "@/components/MagpieTip";
 
 const roleColors: Record<string, string> = {
   subject: "bg-namsaek-50 text-namsaek-700 border-namsaek-200 dark:bg-namsaek-800/50 dark:text-namsaek-200 dark:border-namsaek-700",
@@ -237,17 +238,9 @@ function ExampleCard({ example, featured }: { example: LessonExample; featured?:
 function ExplanationBlock({ block }: { block: LessonExplanationBlock }) {
   if (block.type === "tip") {
     return (
-      <div className="flex gap-3 rounded-2xl border border-cheongja-200 bg-cheongja-50 p-3 dark:border-cheongja-700/50 dark:bg-cheongja-900/20">
-        <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-cheongja-500 dark:text-cheongja-400" />
-        <div>
-          {block.title && (
-            <div className="text-xs font-semibold text-cheongja-700 dark:text-cheongja-300 mb-0.5">
-              {block.title}
-            </div>
-          )}
-          <div className="text-sm text-cheongja-700 dark:text-cheongja-200">{block.content}</div>
-        </div>
-      </div>
+      <MagpieTip title={block.title ?? "Birdie Tip"}>
+        {block.content}
+      </MagpieTip>
     );
   }
 

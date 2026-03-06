@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import type { GameId } from "./games/_core/gameTypes";
 import { useProfile } from "./profile/useProfile";
+import { BrandLogo } from "@/components/BrandLogo";
 import { listWords } from "./content/contentRepo";
 import { loadMastery } from "./profile/masteryRepo";
 import { getCurrentLesson, loadLessonProgress } from "./content/lessonRepo";
@@ -75,6 +76,19 @@ export function LearnHubPage() {
       {/* Left column */}
       <div className="space-y-6">
         {/* Current lesson block */}
+        {!currentLesson && (
+          <div className="flex flex-col items-center gap-3 rounded-3xl border border-hanji-300 bg-white p-6 text-center shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+            <BrandLogo variant="icon" size={40} />
+            <div>
+              <div className="text-sm font-semibold text-namsaek-900 dark:text-hanji-100">
+                All lessons complete!
+              </div>
+              <div className="mt-1 text-xs text-hanji-500 dark:text-hanji-400">
+                Your Korean Birdie is proud. Keep practising to build mastery.
+              </div>
+            </div>
+          </div>
+        )}
         {currentLesson && (
           <div className="rounded-3xl border border-namsaek-200 bg-namsaek-50 p-5 dark:border-namsaek-700/50 dark:bg-namsaek-900/60">
             <div className="flex items-start justify-between gap-4">

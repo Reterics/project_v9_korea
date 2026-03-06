@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { listWords } from "./content/contentRepo";
 import type { WordLevel } from "./content/wordTypes";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const TABS: { level: WordLevel; label: string }[] = [
   { level: "A1", label: "A1" },
@@ -93,8 +94,11 @@ export function DictionaryPage() {
       {/* Word list */}
       <div className="rounded-3xl border border-hanji-300 bg-white shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
         {filtered.length === 0 ? (
-          <div className="p-8 text-center text-sm text-hanji-500 dark:text-hanji-400">
-            No words found matching "{search}"
+          <div className="flex flex-col items-center gap-3 p-10 text-center">
+            <BrandLogo variant="icon" size={36} />
+            <div className="text-sm text-hanji-500 dark:text-hanji-400">
+              No words found matching <span className="font-medium">"{search}"</span>
+            </div>
           </div>
         ) : (
           <div className="divide-y divide-hanji-200 dark:divide-namsaek-700">

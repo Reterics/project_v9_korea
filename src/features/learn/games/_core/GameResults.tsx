@@ -1,6 +1,7 @@
-import { CheckCircle, XCircle, Sparkles, Timer } from "lucide-react";
+import { CheckCircle, XCircle, Timer } from "lucide-react";
 import type { GameResult, StudyItemRef } from "./gameTypes";
 import { getWord } from "@/features/learn/content/contentRepo";
+import { BrandLogo } from "@/components/BrandLogo";
 
 type GameResultsProps = {
   title: string;
@@ -19,7 +20,8 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
         <div className="rounded-3xl border border-hanji-300 bg-white p-6 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="text-xs font-medium text-hanji-500 dark:text-hanji-400">
+              <div className="flex items-center gap-2 text-xs font-medium text-hanji-500 dark:text-hanji-400">
+                <BrandLogo variant="icon" size={16} />
                 Session complete
               </div>
               <div className="mt-1 text-2xl font-semibold">Nice work.</div>
@@ -47,7 +49,7 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
               value={String(result.wrong)}
             />
             <StatChip
-              icon={<Sparkles className="h-4 w-4 text-geum-500" />}
+              icon={<CheckCircle className="h-4 w-4 text-geum-500" />}
               label="Accuracy"
               value={`${accuracy}%`}
             />
