@@ -1,0 +1,43 @@
+{
+  "name": "@birdie/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles": "./src/styles/globals.css"
+  },
+  "dependencies": {
+    "@storybook/react-vite": "^10.2.16",
+    "@tailwindcss/vite": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^5.0.1",
+    "@storybook/addon-a11y": "^10.2.16",
+    "@storybook/addon-docs": "^10.2.16",
+    "@storybook/addon-onboarding": "^10.2.16",
+    "@storybook/addon-vitest": "^10.2.16",
+    "@types/node": "^22.19.15",
+    "@types/react": "^19.2.7",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
+    "playwright": "^1.58.2",
+    "storybook": "^10.2.16",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.400.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

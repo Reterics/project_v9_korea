@@ -23,3 +23,29 @@ dist-ssr
 *.sln
 *.sw?
 .claude
+
+# -----------------------------
+# Jest
+# -----------------------------
+coverage/
+jest-cache/
+.nyc_output/
+
+# Jest snapshot artifacts (optional if auto-generated)
+__snapshots__/
+
+# -----------------------------
+# Storybook
+# -----------------------------
+storybook-static/
+.out/
+storybook-build/
+
+# Storybook cache
+node_modules/.cache/storybook
+
+# -----------------------------
+# Testing libraries
+# -----------------------------
+playwright-report/
+test-results/

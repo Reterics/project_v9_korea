@@ -1,0 +1,32 @@
+{
+  "name": "my-korean-birdie-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "lint": "npm run lint -w apps/web",
+    "format": "npm run format -w apps/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "storybook": "npm run storybook -w packages/design-system",
+    "build-storybook": "npm run build-storybook -w packages/design-system"
+  },
+  "engines": {
+    "node": "^20.0.0 || ^22.0.0 || >=24.0.0"
+  },
+  "repository": {
+    "url": "https://github.com/Reterics/project_v9_korea",
+    "type": "git"
+  },
+  "author": {
+    "name": "Attila Reterics",
+    "email": "reterics.attila@gmail.com",
+    "url": "https://reterics.com"
+  },
+  "license": "MIT"
+}
