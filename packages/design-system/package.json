@@ -17,6 +17,7 @@
       "import": "./dist/index.js"
     },
     "./theme": "./src/styles/theme.css",
+    "./assets/*": "./public/*",
     "./package.json": "./package.json"
   },
   "dependencies": {

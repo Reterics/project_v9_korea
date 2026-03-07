@@ -18,6 +18,7 @@ export { Card } from "./primitives/Card.tsx";
 export { Icon } from "./primitives/Icon.tsx";
 export { Container } from "./primitives/Container.tsx";
 export { StatChip } from "./primitives/StatChip.tsx";
+export { Skeleton } from "./primitives/Skeleton.tsx";
 
 // Components
 export { LessonCard } from "./components/LessonCard.tsx";
@@ -31,6 +32,11 @@ export { ChoiceGrid } from "./components/ChoiceGrid.tsx";
 export { FeedbackToast } from "./components/FeedbackToast.tsx";
 export { ProgressDots } from "./components/ProgressDots.tsx";
 export { AudioButton } from "./components/AudioButton.tsx";
+export { PageHeader } from "./components/PageHeader.tsx";
+export { StatsCard } from "./components/StatsCard.tsx";
+export { Tabs } from "./components/Tabs.tsx";
+export { DataTable } from "./components/DataTable.tsx";
+export { CardSkeleton } from "./components/CardSkeleton.tsx";
 
 // Forms
 export { Input } from "./forms/Input.tsx";
@@ -52,6 +58,12 @@ export { SettingsRow } from "./forms/SettingsRow.tsx";
 export { DatePicker } from "./forms/DatePicker.tsx";
 export { Autocomplete } from "./forms/Autocomplete.tsx";
 export { MultiSelect } from "./forms/MultiSelect.tsx";
+
+// Navigation
+export { NavigationItem } from "./navigation/NavigationItem.tsx";
+export { Sidebar } from "./navigation/Sidebar.tsx";
+export { Topbar } from "./navigation/Topbar.tsx";
+export { Drawer } from "./navigation/Drawer.tsx";
 
 // Patterns
 export { DashboardLayout } from "./patterns/DashboardLayout.tsx";

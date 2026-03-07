@@ -16,6 +16,7 @@ const config: StorybookConfig = {
   "stories": [
     "../src/**/*.stories.@(ts|tsx)"
   ],
+  "staticDirs": ["../public"],
   "addons": [
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/addon-vitest'),
