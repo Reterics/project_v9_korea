@@ -1,7 +1,6 @@
 import type { GameState, GameAction } from "@/features/learn/games/_core/gameTypes";
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
-import { PromptCard } from "@/features/learn/games/_core/ui/PromptCard";
-import { AudioButton } from "@/features/learn/games/_core/ui/AudioButton";
+import { PromptCard, AudioButton } from "@birdie/ui";
 import { useState, useEffect, useCallback } from "react";
 
 type Props = {

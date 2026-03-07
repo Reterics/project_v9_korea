@@ -1,7 +1,7 @@
 import type { GameId, GameContext, GameConfig } from "./gameTypes";
 import { GameRegistry } from "./GameRegistry";
 import { useGameController } from "./useGameController";
-import { GameLayout } from "./GameLayout";
+import { GameLayout } from "@birdie/ui";
 import { GameHeader } from "./GameHeader";
 import { GameFooter } from "./GameFooter";
 import { GameResults } from "./GameResults";

@@ -2,7 +2,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Sun, Moon, Home, BookOpen, BookText, Search, FileText } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
-import { BrandLogo } from "@/components/BrandLogo";
+import { BrandLogo } from "@birdie/ui";
 
 export function AppShell() {
   const [dark, setDark] = useState(() => {

@@ -8,7 +8,7 @@ import { getDueItems, getAllProgress } from "@/features/learn/progress/progressR
  */
 export function useStudySession(totalQuestions: number = 5) {
   const items = useMemo(() => {
-    const now = Date.now();
+    const now = new Date().getTime();
     const allRefs = getAllWordRefs();
     const due = getDueItems(now);
     const progress = getAllProgress();

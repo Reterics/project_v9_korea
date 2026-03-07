@@ -4,15 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "vite build",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./styles": "./src/styles/globals.css"
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme": "./src/styles/theme.css",
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "@storybook/react-vite": "^10.2.16",
@@ -27,11 +32,13 @@
     "@storybook/addon-vitest": "^10.2.16",
     "@types/node": "^22.19.15",
     "@types/react": "^19.2.7",
+    "@vitejs/plugin-react": "^5.1.4",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
     "playwright": "^1.58.2",
     "storybook": "^10.2.16",
     "typescript": "~5.9.3",
+    "vite": "^7.3.1",
     "vitest": "^4.0.18"
   },
   "peerDependencies": {

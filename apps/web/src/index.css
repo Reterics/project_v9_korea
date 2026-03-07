@@ -1,1 +1,2 @@
-@import "@birdie/ui/styles";
+@import "tailwindcss";
+@import "@birdie/ui/theme";

@@ -1,6 +1,5 @@
 ﻿import { useCallback, useEffect, useState } from "react";
-import { ChoiceGrid } from "@/features/learn/games/_core/ui/ChoiceGrid";
-import { PromptCard } from "@/features/learn/games/_core/ui/PromptCard";
+import { ChoiceGrid, PromptCard } from "@birdie/ui";
 import { hangeulEntries, speakKorean, type HangeulEntry } from "./hangeulData";
 
 type PracticeMode = "sound_from_char" | "char_from_sound";

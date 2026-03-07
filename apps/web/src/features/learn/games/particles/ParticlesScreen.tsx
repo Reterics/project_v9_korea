@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { GameAction, GameState } from "@/features/learn/games/_core/gameTypes";
-import { ChoiceGrid } from "@/features/learn/games/_core/ui/ChoiceGrid";
-import { FeedbackToast } from "@/features/learn/games/_core/ui/FeedbackToast";
-import { PromptCard } from "@/features/learn/games/_core/ui/PromptCard";
+import { ChoiceGrid, FeedbackToast, PromptCard } from "@birdie/ui";
 import type { ParticleQuestion } from "./particlesTypes";
 
 type Props = {

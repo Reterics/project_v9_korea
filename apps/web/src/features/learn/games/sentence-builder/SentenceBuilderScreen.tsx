@@ -1,7 +1,7 @@
 ﻿import type { GameState, GameAction } from "@/features/learn/games/_core/gameTypes";
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
-import { FeedbackToast } from "@/features/learn/games/_core/ui/FeedbackToast";
-import { useState, useEffect, useCallback } from "react";
+import { FeedbackToast } from "@birdie/ui";
+import {useState, useEffect, useCallback, useMemo} from "react";
 
 type Props = {
   state: GameState<SentenceBuilderQuestion>;
@@ -39,13 +39,13 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
     setPendingWrongAnswer(null);
   }, [state.questionIndex]);
 
-  const available = q
-    ? q.shuffled.filter((token) => {
+  const available = useMemo(() => q
+      ? q.shuffled.filter((token) => {
         const placedCount = placed.filter((p) => p === token).length;
         const totalCount = q.shuffled.filter((s) => s === token).length;
         return placedCount < totalCount;
       })
-    : [];
+      : [], [placed, q]);
 
   const addToken = useCallback(
     (token: string) => {

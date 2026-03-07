@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { listWords } from "./content/contentRepo";
 import type { WordLevel } from "./content/wordTypes";
-import { BrandLogo } from "@/components/BrandLogo";
+import { BrandLogo } from "@birdie/ui";
 import { loadMastery } from "./profile/masteryRepo";
 
 const TABS: { level: WordLevel; label: string }[] = [
