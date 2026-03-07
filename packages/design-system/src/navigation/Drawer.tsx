@@ -6,10 +6,18 @@ type DrawerProps = {
   onClose: () => void;
   header?: ReactNode;
   children: ReactNode;
+  hideOnDesktop?: boolean;
   className?: string;
 };
 
-export function Drawer({ open, onClose, header, children, className = "" }: DrawerProps) {
+export function Drawer({
+  open,
+  onClose,
+  header,
+  children,
+  hideOnDesktop = true,
+  className = "",
+}: DrawerProps) {
   useEffect(() => {
     if (!open) return;
     function handleKey(e: KeyboardEvent) {
@@ -33,7 +41,8 @@ export function Drawer({ open, onClose, header, children, className = "" }: Draw
   return (
     <div
       className={
-        "fixed inset-0 z-40 lg:hidden" +
+        "fixed inset-0 z-40" +
+        (hideOnDesktop ? " lg:hidden" : "") +
         (open ? "" : " pointer-events-none")
       }
     >

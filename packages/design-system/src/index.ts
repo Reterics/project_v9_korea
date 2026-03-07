@@ -64,6 +64,8 @@ export { NavigationItem } from "./navigation/NavigationItem.tsx";
 export { Sidebar } from "./navigation/Sidebar.tsx";
 export { Topbar } from "./navigation/Topbar.tsx";
 export { Drawer } from "./navigation/Drawer.tsx";
+export { BottomNav } from "./navigation/BottomNav.tsx";
+export { BottomNavItem } from "./navigation/BottomNavItem.tsx";
 
 // Patterns
 export { DashboardLayout } from "./patterns/DashboardLayout.tsx";

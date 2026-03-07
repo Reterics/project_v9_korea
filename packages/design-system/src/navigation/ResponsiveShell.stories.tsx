@@ -122,7 +122,7 @@ function AppShellDemo() {
     <div className="flex h-screen flex-col bg-hanji-50 dark:bg-namsaek-950">
       {/* Topbar — logo shows only on mobile (lg:hidden inside Topbar) */}
       <Topbar
-        logo={<BrandLogo size={26} />}
+        logo={<BrandLogo size={32} />}
         onMenuClick={() => setDrawerOpen(true)}
         actions={<Avatar />}
       />

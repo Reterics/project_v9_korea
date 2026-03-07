@@ -28,7 +28,10 @@ const GearIcon = () => (
 const meta: Meta<typeof Drawer> = {
   title: 'Navigation/Drawer',
   component: Drawer,
-  parameters: { layout: 'fullscreen' },
+  parameters: {
+    layout: 'fullscreen',
+    viewport: { defaultViewport: 'mobile1' },
+  },
 };
 export default meta;
 
@@ -48,6 +51,7 @@ export const Interactive: Story = {
         <Drawer
           open={open}
           onClose={() => setOpen(false)}
+          hideOnDesktop={false}
           header={<BrandLogo size={26} />}
         >
           <NavigationItem label="Dashboard" icon={<HomeIcon />} active />

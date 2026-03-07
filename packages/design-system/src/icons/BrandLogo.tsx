@@ -5,10 +5,14 @@ type BrandLogoProps = {
 };
 
 export function BrandLogo({ variant = "primary", size = 30, className = "" }: BrandLogoProps) {
+  const textSize = Math.max(12, Math.round(size * 0.47));
+  const gap = Math.max(6, Math.round(size * 0.33));
+  const brandLogoSrc = "/brand/logo-primary.svg";
+
   if (variant === "icon") {
     return (
       <img
-        src="/brand/logo-icon.svg"
+        src={brandLogoSrc}
         alt="My Korean Birdie"
         style={{ height: size, width: "auto" }}
         className={className}
@@ -17,13 +21,16 @@ export function BrandLogo({ variant = "primary", size = 30, className = "" }: Br
   }
 
   return (
-    <div className={"flex items-center gap-2.5 " + className}>
+    <div className={"flex items-center " + className} style={{ gap }}>
       <img
-        src="/brand/logo-primary.svg"
+        src={brandLogoSrc}
         alt="My Korean Birdie"
         style={{ height: size, width: "auto" }}
       />
-      <span className="text-sm font-semibold text-namsaek-900 dark:text-hanji-100">
+      <span
+        className="font-semibold text-namsaek-900 dark:text-hanji-100"
+        style={{ fontSize: textSize, lineHeight: 1.2 }}
+      >
         My Korean Birdie
       </span>
     </div>
