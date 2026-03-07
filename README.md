@@ -9,7 +9,7 @@ Korean A1 learning web app focused on short sessions, vocabulary recall, and gam
 
 | Light | Dark |
 |---|---|
-| ![Light preview](public/light.png) | ![Dark preview](public/dark.png) |
+| ![Light preview](apps/web/public/light.png) | ![Dark preview](apps/web/public/dark.png) |
 
 ## Tech Stack
 
