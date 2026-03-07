@@ -214,7 +214,7 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
             </span>
           ))}
         </div>
-        <div className="mt-3 flex justify-end">
+        <div className="flex justify-end">
           <button
             onClick={continueAfterWrong}
             className="rounded-2xl border border-cheongja-300 bg-white px-3 py-2 text-xs font-semibold shadow-sm hover:bg-cheongja-50 dark:border-cheongja-700 dark:bg-namsaek-800 dark:hover:bg-namsaek-700"
