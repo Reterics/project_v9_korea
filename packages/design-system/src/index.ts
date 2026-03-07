@@ -32,6 +32,27 @@ export { FeedbackToast } from "./components/FeedbackToast.tsx";
 export { ProgressDots } from "./components/ProgressDots.tsx";
 export { AudioButton } from "./components/AudioButton.tsx";
 
+// Forms
+export { Input } from "./forms/Input.tsx";
+export { Textarea } from "./forms/Textarea.tsx";
+export { Select } from "./forms/Select.tsx";
+export { Checkbox } from "./forms/Checkbox.tsx";
+export { Radio } from "./forms/Radio.tsx";
+export { Switch } from "./forms/Switch.tsx";
+export { Label } from "./forms/Label.tsx";
+export { FieldError } from "./forms/FieldError.tsx";
+export { HelperText } from "./forms/HelperText.tsx";
+export { FormField } from "./forms/FormField.tsx";
+export { FieldGroup } from "./forms/FieldGroup.tsx";
+export { FormSection } from "./forms/FormSection.tsx";
+export { SearchInput } from "./forms/SearchInput.tsx";
+export { NumberInput } from "./forms/NumberInput.tsx";
+export { InlineField } from "./forms/InlineField.tsx";
+export { SettingsRow } from "./forms/SettingsRow.tsx";
+export { DatePicker } from "./forms/DatePicker.tsx";
+export { Autocomplete } from "./forms/Autocomplete.tsx";
+export { MultiSelect } from "./forms/MultiSelect.tsx";
+
 // Patterns
 export { DashboardLayout } from "./patterns/DashboardLayout.tsx";
 export { ActivityGrid } from "./patterns/ActivityGrid.tsx";
