@@ -5,23 +5,16 @@ import { useProfile } from "@/features/learn/profile/useProfile";
 import { BrandLogo, BottomNav, BottomNavItem } from "@birdie/ui";
 
 export function AppShell() {
-  const [dark, setDark] = useState(() => {
-    const saved = localStorage.getItem("theme");
-    if (saved) return saved === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add("transitioning");
-    if (dark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", dark);
     localStorage.setItem("theme", dark ? "dark" : "light");
-    const t = setTimeout(() => root.classList.remove("transitioning"), 250);
-    return () => clearTimeout(t);
+
+    root.classList.add("transitioning");
+    const timer = window.setTimeout(() => root.classList.remove("transitioning"), 250);
+    return () => window.clearTimeout(timer);
   }, [dark]);
 
   return (
@@ -187,4 +180,5 @@ function ProfileMini({
     </div>
   );
 }
+
 

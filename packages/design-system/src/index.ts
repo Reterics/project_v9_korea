@@ -72,3 +72,4 @@ export { DashboardLayout } from "./patterns/DashboardLayout.tsx";
 export { ActivityGrid } from "./patterns/ActivityGrid.tsx";
 export { LessonList } from "./patterns/LessonList.tsx";
 export { GameLayout } from "./patterns/GameLayout.tsx";
+export { SplashScreen } from "./patterns/SplashScreen.tsx";

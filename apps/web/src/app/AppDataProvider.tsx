@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { SplashScreen } from "./SplashScreen";
+﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { SplashScreen } from "@birdie/ui";
 
 interface AppDataContextValue {
   isReady: boolean;
@@ -22,8 +22,12 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   return (
     <AppDataContext.Provider value={{ isReady }}>
-      <SplashScreen visible={isReady} />
+      {!isReady && <SplashScreen />}
+
+
       {isReady && children}
+
     </AppDataContext.Provider>
   );
 }
+
