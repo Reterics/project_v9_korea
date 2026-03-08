@@ -1,4 +1,4 @@
-import { PageHeader, Card, Badge, MagpieTip } from "@birdie/ui";
+import { PageHeader, Card, Badge, MagpieTip } from "@reterics/birdie-ui";
 import { Package, FileCode, Palette, Terminal } from "lucide-react";
 
 const resources = [
@@ -7,7 +7,7 @@ const resources = [
     title: "Install the package",
     content: (
       <code className="block rounded-xl bg-namsaek-50 px-4 py-2.5 text-sm font-mono text-namsaek-700 dark:bg-namsaek-800 dark:text-hanji-200">
-        {'"@birdie/ui": "*"'}
+        {'"@reterics/birdie-ui": "*"'}
       </code>
     ),
     desc: "Add to your package.json dependencies. The monorepo workspace resolves it automatically.",
@@ -18,7 +18,7 @@ const resources = [
     content: (
       <code className="block rounded-xl bg-namsaek-50 px-4 py-2.5 text-sm font-mono text-namsaek-700 dark:bg-namsaek-800 dark:text-hanji-200">
         {'@import "tailwindcss";'}<br />
-        {'@import "@birdie/ui/theme";'}
+        {'@import "@reterics/birdie-ui/theme";'}
       </code>
     ),
     desc: "In your main CSS file, import Tailwind and the Birdie theme. This provides all color tokens and Tailwind source scanning.",
@@ -28,7 +28,7 @@ const resources = [
     title: "Use components",
     content: (
       <code className="block rounded-xl bg-namsaek-50 px-4 py-2.5 text-sm font-mono text-namsaek-700 dark:bg-namsaek-800 dark:text-hanji-200">
-        {'import { Button, Card } from "@birdie/ui";'}
+        {'import { Button, Card } from "@reterics/birdie-ui";'}
       </code>
     ),
     desc: "Import any component directly from the package.",
@@ -41,7 +41,7 @@ const resources = [
         npm run build -w packages/design-system
       </code>
     ),
-    desc: "The design system must be built before consumer apps can use it. Run this after changes to @birdie/ui.",
+    desc: "The design system must be built before consumer apps can use it. Run this after changes to @reterics/birdie-ui.",
   },
 ];
 
@@ -78,7 +78,7 @@ export function ResourcesPage() {
 │   ├── web/                 # Main learning app
 │   └── design-system-site/  # This documentation site
 └── packages/
-    └── design-system/       # @birdie/ui package
+    └── design-system/       # @reterics/birdie-ui package
         ├── src/
         │   ├── tokens/      # colors, typography, spacing...
         │   ├── primitives/  # Button, Card, Badge...

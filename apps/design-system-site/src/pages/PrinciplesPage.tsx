@@ -1,4 +1,4 @@
-import { Card, PageHeader, MagpieTip } from "@birdie/ui";
+import { Card, PageHeader, MagpieTip } from "@reterics/birdie-ui";
 import { Heart, Eye, Zap, Accessibility, Smartphone } from "lucide-react";
 
 const principles = [

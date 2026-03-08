@@ -1,6 +1,6 @@
 ﻿import type { GameState, GameAction } from "@/features/learn/games/_core/gameTypes";
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
-import { FeedbackToast } from "@birdie/ui";
+import { FeedbackToast } from "@reterics/birdie-ui";
 import {useState, useEffect, useCallback, useMemo} from "react";
 
 type Props = {
@@ -153,7 +153,7 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
         <div className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">{q.english}</div>
       </div>
 
-      {/* Sentence bar â€” placed tokens */}
+      {/* Sentence bar — placed tokens */}
       <div
         className={
           "flex min-h-[84px] max-h-[132px] flex-wrap content-start items-start gap-2 overflow-y-auto rounded-2xl border-2 border-dashed p-3 transition " +

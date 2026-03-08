@@ -8,7 +8,7 @@ import {
   ActivityCard,
   ProgressCard,
   MagpieTip,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import { ShowcaseCard } from "../components/ShowcaseCard.tsx";
 import {
   Star,

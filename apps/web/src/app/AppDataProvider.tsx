@@ -1,5 +1,5 @@
 ﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { SplashScreen } from "@birdie/ui";
+import { SplashScreen } from "@reterics/birdie-ui";
 
 interface AppDataContextValue {
   isReady: boolean;

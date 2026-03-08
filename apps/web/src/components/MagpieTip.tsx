@@ -1,1 +1,1 @@
-export { MagpieTip } from "@birdie/ui";
+export { MagpieTip } from "@reterics/birdie-ui";

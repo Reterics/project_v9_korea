@@ -1,5 +1,5 @@
-import lightLogoSrc from "@birdie/ui/assets/brand/logo-primary.svg";
-import darkLogoSrc from "@birdie/ui/assets/brand/logo-primary-dark.svg";
+import lightLogoSrc from "@reterics/birdie-ui/assets/brand/logo-primary.svg";
+import darkLogoSrc from "@reterics/birdie-ui/assets/brand/logo-primary-dark.svg";
 
 type BrandLogoProps = {
   variant?: "primary" | "icon";

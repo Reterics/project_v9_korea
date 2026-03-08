@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChevronRight, Layers, Target, BookOpen, AlertTriangle, Info } from "lucide-react";
 import { getLesson, markLessonViewed, loadLessonProgress } from "@/features/learn/content/lessonRepo";
 import type { LessonExample, LessonExplanationBlock } from "@/features/learn/content/lessonTypes";
-import { MagpieTip } from "@birdie/ui";
+import { MagpieTip } from "@reterics/birdie-ui";
 
 const roleColors: Record<string, string> = {
   subject: "bg-namsaek-50 text-namsaek-700 border-namsaek-200 dark:bg-namsaek-800/50 dark:text-namsaek-200 dark:border-namsaek-700",

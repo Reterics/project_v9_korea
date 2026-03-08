@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Card } from "@birdie/ui";
+import { Card } from "@reterics/birdie-ui";
 
 type ShowcaseCardProps = {
   title: string;

@@ -6,7 +6,7 @@ import {
   Button,
   MagpieTip,
   PageHeader,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import {
   Palette,
   LayoutGrid,
@@ -116,7 +116,7 @@ export function OverviewPage() {
 
       <MagpieTip>
         This documentation site is built entirely with{" "}
-        <span className="font-semibold">@birdie/ui</span> components,
+        <span className="font-semibold">@reterics/birdie-ui</span> components,
         demonstrating the design system in action.
       </MagpieTip>
     </div>

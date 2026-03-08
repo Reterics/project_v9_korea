@@ -1,1 +1,1 @@
-export { BrandLogo } from "@birdie/ui";
+export { BrandLogo } from "@reterics/birdie-ui";

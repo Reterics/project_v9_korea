@@ -1,24 +1,54 @@
 {
-  "name": "@birdie/ui",
+  "name": "@reterics/birdie-ui",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "Birdie UI design system for My Korean Birdie.",
+  "license": "MIT",
+  "author": {
+    "name": "Attila Reterics",
+    "email": "reterics.attila@gmail.com",
+    "url": "https://reterics.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Reterics/project_v9_korea.git",
+    "directory": "packages/design-system"
+  },
+  "bugs": {
+    "url": "https://github.com/Reterics/project_v9_korea/issues"
+  },
+  "homepage": "https://github.com/Reterics/project_v9_korea/tree/main/packages/design-system",
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "public",
+    "src/styles/theme.css",
+    "src/types/assets.d.ts"
+  ],
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run typecheck",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "main": "./dist/index.js",
-  "types": "./src/index.ts",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
     "./theme": "./src/styles/theme.css",
     "./assets/*": "./public/*",
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@storybook/react-vite": "^10.2.16",

@@ -1,1 +1,1 @@
-export { GameLayout } from "@birdie/ui";
+export { GameLayout } from "@reterics/birdie-ui";

@@ -6,7 +6,7 @@ import {
   MagpieTip,
   Badge,
   colors,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import { ShowcaseCard } from "../components/ShowcaseCard.tsx";
 
 const colorPersonality: { name: string; key: keyof typeof colors; shade: string; role: string; hex: string }[] = [

@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
-import { BrandLogo, Container } from "@birdie/ui";
+import { BrandLogo, Container } from "@reterics/birdie-ui";
 import {
   Home,
   Compass,

@@ -17,7 +17,7 @@ import {
   LessonCard,
   ProgressCard,
   WeakAreaCard,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import type { GameId } from "./games/_core/gameTypes";
 import { listWords } from "./content/contentRepo";
 import { loadMastery } from "./profile/masteryRepo";

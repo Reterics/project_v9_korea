@@ -1,5 +1,5 @@
 import { CheckCircle, XCircle, Timer } from "lucide-react";
-import { BrandLogo, StatChip } from "@birdie/ui";
+import { BrandLogo, StatChip } from "@reterics/birdie-ui";
 import type { GameResult, StudyItemRef } from "./gameTypes";
 import { getWord } from "@/features/learn/content/contentRepo";
 

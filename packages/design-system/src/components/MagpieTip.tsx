@@ -1,4 +1,4 @@
-import birdIconSrc from "@birdie/ui/assets/brand/logo-icon.svg";
+import birdIconSrc from "@reterics/birdie-ui/assets/brand/logo-icon.svg";
 
 type MagpieTipProps = {
   children: React.ReactNode;

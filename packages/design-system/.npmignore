@@ -1,0 +1,8 @@
+# Defense-in-depth publish excludes.
+.storybook/
+storybook-static/
+src/**/*.stories.tsx
+vite.config.ts
+tsconfig.json
+tsconfig.build.json
+*.log

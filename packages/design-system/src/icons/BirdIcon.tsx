@@ -1,5 +1,5 @@
-import lightBirdIconSrc from "@birdie/ui/assets/brand/logo-icon.svg";
-import darkBirdIconSrc from "@birdie/ui/assets/brand/logo-icon-dark.svg";
+import lightBirdIconSrc from "@reterics/birdie-ui/assets/brand/logo-icon.svg";
+import darkBirdIconSrc from "@reterics/birdie-ui/assets/brand/logo-icon-dark.svg";
 
 type BirdIconProps = {
   size?: number;

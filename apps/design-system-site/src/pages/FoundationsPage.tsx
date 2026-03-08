@@ -11,7 +11,7 @@ import {
   spacing,
   radius,
   shadows,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import { ShowcaseCard } from "../components/ShowcaseCard.tsx";
 
 const colorFamilies: { name: string; key: keyof typeof colors; purpose: string }[] = [
@@ -246,7 +246,7 @@ export function FoundationsPage() {
       <MagpieTip>
         Tokens are exported as JavaScript objects from{" "}
         <code className="rounded bg-namsaek-100 px-1 text-xs dark:bg-namsaek-800">
-          @birdie/ui
+          @reterics/birdie-ui
         </code>{" "}
         and as CSS custom properties via the theme stylesheet.
       </MagpieTip>

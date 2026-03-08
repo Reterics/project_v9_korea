@@ -21,7 +21,7 @@ import {
   FeedbackToast,
   ChoiceGrid,
   PromptCard,
-} from "@birdie/ui";
+} from "@reterics/birdie-ui";
 import { ShowcaseCard } from "../components/ShowcaseCard.tsx";
 import {
   Star,
@@ -326,7 +326,7 @@ export function ComponentsPage() {
     <div className="space-y-8">
       <PageHeader
         title="Components"
-        description="Reusable building blocks from @birdie/ui."
+        description="Reusable building blocks from @reterics/birdie-ui."
       />
       <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} />
       <div>{content[activeTab]}</div>

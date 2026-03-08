@@ -24,7 +24,7 @@ A Korean language learning web application targeting A1 to A2 proficiency. Built
 - **Runtime**: React 19, TypeScript 5.9, Vite 7
 - **Styling**: Tailwind CSS 4, Framer Motion
 - **Routing**: React Router 7
-- **UI Library**: `@birdie/ui` (in-repo design system)
+- **UI Library**: `@reterics/birdie-ui` (in-repo design system)
 - **Testing**: Vitest, Playwright, Storybook 10
 - **CI/CD**: GitHub Actions
 
@@ -63,7 +63,7 @@ project_v9_korea/
           hangeul/              # Hangeul practice pages
         components/             # App-specific shared components
   packages/
-    design-system/              # @birdie/ui component library
+    design-system/              # @reterics/birdie-ui component library
       src/
         primitives/             # Button, Card, Badge, Icon, etc.
         components/             # LessonCard, ChoiceGrid, FeedbackToast, etc.
@@ -116,11 +116,11 @@ The application follows a modular feature-based architecture:
 - **State Management** -- `useReducer` with custom hooks (`useProfile`, `useGameController`, `useStudySession`)
 - **Data Layer** -- localStorage-backed repositories for profile, progress, and content
 - **Spaced Repetition** -- scheduling algorithm in `progress/srs.ts` drives review intervals
-- **Design System** -- Vite library build exports components and a Tailwind theme consumed via `@birdie/ui`
+- **Design System** -- Vite library build exports components and a Tailwind theme consumed via `@reterics/birdie-ui`
 
 ## Design System
 
-The `@birdie/ui` package provides a Korean-inspired "Korean Notebook" theme with five semantic color scales:
+The `@reterics/birdie-ui` package provides a Korean-inspired "Korean Notebook" theme with five semantic color scales:
 
 | Token       | Name          | Usage             |
 |-------------|---------------|-------------------|

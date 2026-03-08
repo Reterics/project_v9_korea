@@ -1,4 +1,4 @@
-import { PageHeader, Card, MagpieTip, Badge } from "@birdie/ui";
+import { PageHeader, Card, MagpieTip, Badge } from "@reterics/birdie-ui";
 import { BookOpen, Code, Eye, Puzzle } from "lucide-react";
 
 const features = [

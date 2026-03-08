@@ -1,4 +1,4 @@
-declare module "@birdie/ui/assets/*" {
+declare module "@reterics/birdie-ui/assets/*" {
   const src: string;
   export default src;
 }
