@@ -7,6 +7,8 @@
 <div style="text-align:center">
 
 [![Build](https://github.com/Reterics/project_v9_korea/actions/workflows/build.yml/badge.svg)](https://github.com/Reterics/project_v9_korea/actions/workflows/build.yml)
+[![App](https://img.shields.io/badge/App-Demo-2B4C7E)](https://reterics.github.io/project_v9_korea/app/)
+[![Design System](https://img.shields.io/badge/Design%20System-Live-3D8F7D)](https://reterics.github.io/project_v9_korea/design_system/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 </div>

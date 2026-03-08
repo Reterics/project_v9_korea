@@ -46,6 +46,7 @@ jobs:
           mkdir -p deploy
           cp -r apps/web/dist deploy/app
           cp -r apps/design-system-site/dist deploy/design_system
+          cp -r packages/design-system/public/brand deploy/design_system/brand
           cp .github/pages/index.html .github/pages/404.html deploy/
 
       - name: Upload artifact
