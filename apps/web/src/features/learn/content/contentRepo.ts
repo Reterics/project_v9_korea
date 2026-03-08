@@ -15,8 +15,8 @@ export function getWord(id: string): Word | undefined {
   return words.find((w) => w.id === id);
 }
 
-export function getPattern(_id: string): Pattern | undefined {
-  // TODO: load grammar patterns
+export function getPattern(id: string): Pattern | undefined {
+  void id; // TODO: load grammar patterns
   return undefined;
 }
 

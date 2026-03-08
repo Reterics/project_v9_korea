@@ -116,7 +116,7 @@ export function HangeulPracticeGamePage() {
         setQuestion(buildQuestion(mode));
       }, 700);
     },
-    [feedback, finished, mode, question.correctValue]
+    [feedback, finished, mode, question.correctValue, question.correctChar]
   );
 
   useEffect(() => {

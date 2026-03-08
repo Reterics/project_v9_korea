@@ -77,7 +77,7 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
                     className="flex items-center justify-between gap-3 rounded-2xl border border-dancheong-100 bg-dancheong-50 px-4 py-3 dark:border-dancheong-800/30 dark:bg-dancheong-900/20"
                   >
                     <div className="text-sm font-semibold">
-                      <RefLabel ref={o.ref} />
+                      <RefLabel itemRef={o.ref} />
                     </div>
                     <div className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-dancheong-600 shadow-sm dark:bg-namsaek-800 dark:text-dancheong-300">
                       Review
@@ -92,11 +92,11 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
   );
 }
 
-function RefLabel({ ref }: { ref: StudyItemRef }) {
-  if (ref.kind === "word") {
-    const w = getWord(ref.id);
+function RefLabel({ itemRef }: { itemRef: StudyItemRef }) {
+  if (itemRef.kind === "word") {
+    const w = getWord(itemRef.id);
     if (w) return <>{w.korean} — {w.english}</>;
   }
-  return <>{ref.id}</>;
+  return <>{itemRef.id}</>;
 }
 

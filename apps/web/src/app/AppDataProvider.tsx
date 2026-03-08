@@ -7,6 +7,7 @@ interface AppDataContextValue {
 
 const AppDataContext = createContext<AppDataContextValue>({ isReady: false });
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAppData() {
   return useContext(AppDataContext);
 }

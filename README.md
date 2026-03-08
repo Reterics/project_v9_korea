@@ -1,10 +1,10 @@
-<p align="center">
+<p style="text-align:center">
     <a href="https://github.com/Reterics/project_v9_korea">
-        <img width="128" height="128" src="apps/web/public/brand/logo-primary.svg">
+        <img width="128" height="128" alt="My Korean Birdie" src="apps/web/public/brand/logo-primary.svg">
     </a>
 </p>
-<h1 align="center">My Korean Birdie</h1>
-<div align="center">
+<h1 style="text-align:center">My Korean Birdie</h1>
+<div style="text-align:center">
 
 [![Build](https://github.com/Reterics/project_v9_korea/actions/workflows/build.yml/badge.svg)](https://github.com/Reterics/project_v9_korea/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
