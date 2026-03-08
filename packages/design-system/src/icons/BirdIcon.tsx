@@ -1,4 +1,5 @@
-import birdIconSrc from "@birdie/ui/assets/brand/logo-icon.svg";
+import lightBirdIconSrc from "@birdie/ui/assets/brand/logo-icon.svg";
+import darkBirdIconSrc from "@birdie/ui/assets/brand/logo-icon-dark.svg";
 
 type BirdIconProps = {
   size?: number;
@@ -7,11 +8,19 @@ type BirdIconProps = {
 
 export function BirdIcon({ size = 30, className = "" }: BirdIconProps) {
   return (
-    <img
-      src={birdIconSrc}
-      alt="My Korean Birdie"
-      style={{ height: size, width: "auto" }}
-      className={className}
-    />
+    <>
+      <img
+          src={lightBirdIconSrc}
+          alt="My Korean Birdie"
+          style={{ height: size, width: "auto" }}
+          className={(className ? className + " " : "") + "dark:hidden"}
+      />
+      <img
+          src={darkBirdIconSrc}
+          alt="My Korean Birdie"
+          style={{ height: size, width: "auto" }}
+          className={(className ? className + " " : "") + "hidden dark:block"}
+      />
+    </>
   );
 }
