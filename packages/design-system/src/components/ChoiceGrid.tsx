@@ -35,7 +35,7 @@ export function ChoiceGrid({ choices, onSelect, disabled }: ChoiceGridProps) {
               (disabled ? " opacity-60 cursor-not-allowed" : " cursor-pointer")
             }
           >
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center justify-between gap-3">
               <div className="text-2xl font-semibold tracking-tight">
                 {choice.label}
               </div>

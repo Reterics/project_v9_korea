@@ -25,6 +25,7 @@
   "files": [
     "dist",
     "public",
+    "quiz.png",
     "src/styles/theme.css",
     "src/types/assets.d.ts"
   ],
