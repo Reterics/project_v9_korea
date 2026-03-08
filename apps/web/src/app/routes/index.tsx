@@ -9,6 +9,8 @@ import { DictionaryPage } from "@/features/learn/DictionaryPage";
 import { GrammarPage } from "@/features/learn/grammar/GrammarPage";
 import { GrammarLessonPage } from "@/features/learn/grammar/GrammarLessonPage";
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -27,4 +29,4 @@ export const router = createBrowserRouter([
     path: "/play/:gameId",
     element: <GamePlayPage />,
   },
-]);
+], { basename });

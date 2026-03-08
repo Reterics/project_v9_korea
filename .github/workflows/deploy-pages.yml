@@ -1,0 +1,125 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "What to deploy"
+        required: true
+        type: choice
+        options:
+          - app
+          - design-system
+          - both
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build design-system package
+        run: npm run build -w packages/design-system
+
+      - name: Build app
+        if: inputs.target == 'app' || inputs.target == 'both'
+        run: npm run build -w apps/web
+        env:
+          VITE_BASE: /project_v9_korea/app/
+
+      - name: Build design-system site
+        if: inputs.target == 'design-system' || inputs.target == 'both'
+        run: npm run build -w apps/design-system-site
+        env:
+          VITE_BASE: /project_v9_korea/design_system/
+
+      - name: Prepare deploy directory
+        run: mkdir -p deploy
+
+      - name: Copy app build
+        if: inputs.target == 'app' || inputs.target == 'both'
+        run: cp -r apps/web/dist deploy/app
+
+      - name: Copy design-system site build
+        if: inputs.target == 'design-system' || inputs.target == 'both'
+        run: cp -r apps/design-system-site/dist deploy/design_system
+
+      - name: Create root index.html
+        run: |
+          cat > deploy/index.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Project v9 Korea</title>
+            <style>
+              body { font-family: system-ui, sans-serif; max-width: 480px; margin: 80px auto; text-align: center; }
+              a { display: block; margin: 16px 0; padding: 12px 24px; background: #2c3e8c; color: #fff; text-decoration: none; border-radius: 8px; }
+              a:hover { background: #3b4fa6; }
+            </style>
+          </head>
+          <body>
+            <h1>Project v9 Korea</h1>
+            <a href="./app/">App</a>
+            <a href="./design_system/">Design System</a>
+          </body>
+          </html>
+          HTMLEOF
+
+      - name: Create 404.html for SPA routing
+        run: |
+          cat > deploy/404.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <script>
+              // Redirect all 404s to the correct SPA index.html
+              const path = window.location.pathname;
+              if (path.startsWith('/project_v9_korea/app')) {
+                window.location.replace('/project_v9_korea/app/?' + path);
+              } else if (path.startsWith('/project_v9_korea/design_system')) {
+                window.location.replace('/project_v9_korea/design_system/?' + path);
+              } else {
+                window.location.replace('/project_v9_korea/');
+              }
+            </script>
+          </head>
+          <body></body>
+          </html>
+          HTMLEOF
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: deploy
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
