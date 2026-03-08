@@ -27,5 +27,8 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build
+      - name: Build design-system
+        run: npm run build -w packages/design-system
+
+      - name: Build app
         run: npm run build
