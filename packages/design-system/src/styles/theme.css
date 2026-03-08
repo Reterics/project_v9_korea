@@ -80,6 +80,44 @@ html {
   font-family: "Inter", "Pretendard", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
+}
+
+/* Custom scrollbar — Korean Notebook theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-hanji-400);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-hanji-500);
+}
+
+:where(.dark) ::-webkit-scrollbar-thumb {
+  background: var(--color-namsaek-700);
+}
+
+:where(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-namsaek-600);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hanji-400) transparent;
+}
+
+:where(.dark) * {
+  scrollbar-color: var(--color-namsaek-700) transparent;
 }
 
 /* Smooth dark mode transitions */
