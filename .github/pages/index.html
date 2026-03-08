@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Korean Birdie</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #F8F4EE; color: #0F1A2B;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;
+    }
+    .cards { display: flex; gap: 2rem; }
+    .card {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+      width: 280px; height: 320px; padding: 2rem;
+      background: #FDFBF8; border: 1px solid #E2D8CA; border-radius: 1.25rem;
+      text-decoration: none; color: inherit;
+      transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(15,26,43,0.06);
+    }
+    .card:hover { border-color: #ADBDD7; box-shadow: 0 12px 32px rgba(15,26,43,0.12); transform: translateY(-4px); }
+    .card-brand { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+    .card-brand img { width: 120px; height: 120px; object-fit: contain; }
+    .brand-text { font-size: 1.125rem; font-weight: 700; white-space: nowrap; }
+    .card-label { font-size: 0.8rem; font-weight: 500; color: #5576A0; letter-spacing: 0.05em; text-transform: uppercase; }
+    .logo-dark { display: none; }
+
+    html.dark body { background: #0F1A2B; color: #F8F4EE; }
+    html.dark .card { background: #14243C; border-color: #1B3050; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    html.dark .card:hover { border-color: #2B4C7E; box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+    html.dark .card-label { color: #ADBDD7; }
+    html.dark .logo-dark { display: inline; }
+    html.dark .logo-light { display: none; }
+
+    @media (max-width: 620px) { .cards { flex-direction: column; } .card { width: 260px; height: 280px; } }
+  </style>
+  <script>
+    (function() {
+      var s = localStorage.getItem('theme');
+      if (s === 'dark' || (!s && matchMedia('(prefers-color-scheme: dark)').matches))
+        document.documentElement.classList.add('dark');
+    })();
+  </script>
+</head>
+<body>
+  <div class="cards">
+    <a href="./app/" class="card">
+      <div class="card-brand">
+        <img class="logo-light" src="./design_system/brand/logo-primary.svg" alt="My Korean Birdie" />
+        <img class="logo-dark" src="./design_system/brand/logo-primary-dark.svg" alt="My Korean Birdie" />
+        <span class="brand-text">My Korean Birdie</span>
+      </div>
+      <span class="card-label">Learning App</span>
+    </a>
+    <a href="./design_system/" class="card">
+      <div class="card-brand">
+        <img class="logo-light" src="./design_system/brand/logo-icon.svg" alt="Birdie Design System" />
+        <img class="logo-dark" src="./design_system/brand/logo-icon-dark.svg" alt="Birdie Design System" />
+        <span class="brand-text">Birdie Design System</span>
+      </div>
+      <span class="card-label">Documentation</span>
+    </a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    // SPA redirect for GitHub Pages
+    // Routes sub-app 404s back to the correct index.html with the path preserved
+    var path = window.location.pathname;
+    var repo = '/project_v9_korea';
+    if (path.startsWith(repo + '/app')) {
+      var rest = path.slice((repo + '/app').length);
+      window.location.replace(repo + '/app/?p=' + encodeURIComponent(rest));
+    } else if (path.startsWith(repo + '/design_system')) {
+      var rest = path.slice((repo + '/design_system').length);
+      window.location.replace(repo + '/design_system/?p=' + encodeURIComponent(rest));
+    } else {
+      window.location.replace(repo + '/');
+    }
+  </script>
+</head>
+<body></body>
+</html>
