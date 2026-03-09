@@ -1,8 +1,8 @@
 ﻿import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Sun, Moon, Home, BookOpen, BookText, Search, FileText } from "lucide-react";
 import { useProfile } from "@/features/learn/profile/useProfile";
-import { BrandLogo, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
+import { BrandLogo, Topbar, TopbarMenu, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
 
 export function AppShell() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
@@ -18,50 +18,56 @@ export function AppShell() {
   }, [dark]);
 
   return (
-    <div className="min-h-screen bg-hanji-100 text-namsaek-900 dark:bg-namsaek-950 dark:text-hanji-200">
-      <TopNav dark={dark} onToggleDark={() => setDark((v) => !v)} />
-      <div className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 md:pb-12">
-        <Outlet />
-      </div>
+    <div className="flex h-screen flex-col overflow-hidden text-namsaek-900 dark:text-hanji-200">
+      <AppTopbar dark={dark} onToggleDark={() => setDark((v) => !v)} />
+      <main className="flex-1 overflow-y-auto bg-hanji-100 [scrollbar-gutter:stable] dark:bg-namsaek-950">
+        <div className="mx-auto w-full max-w-6xl px-4 pb-24 pt-6 md:pb-12">
+          <Outlet />
+        </div>
+      </main>
       <AppBottomNav />
     </div>
   );
 }
 
-function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => void }) {
+function AppTopbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => void }) {
   const { profile } = useProfile();
   const location = useLocation();
+  const navigate = useNavigate();
   const xpInLevel = profile.xp % 100;
   const xpTarget = 100;
 
+  const navItems = [
+    { id: "hub", label: "Hub", path: "/", exact: true },
+    { id: "hangeul", label: "Hangeul", path: "/hangeul-practice", exact: false },
+    { id: "grammar", label: "Grammar", path: "/grammar", exact: false },
+    { id: "dictionary", label: "Dictionary", path: "/dictionary", exact: true },
+    { id: "notes", label: "Notes", path: "/notes", exact: true },
+  ];
+
   return (
-    <div className="sticky top-0 z-30 border-b border-hanji-300/70 bg-hanji-100/80 backdrop-blur dark:border-namsaek-800/60 dark:bg-namsaek-950/80">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        {/* Logo */}
+    <Topbar
+      sticky
+      contentClassName="max-w-6xl mx-auto px-4"
+      logo={
         <Link to="/" className="no-underline">
           <BrandLogo variant="primary" size={30} />
         </Link>
-
-        {/* Nav pills â€” desktop only */}
-        <div className="hidden items-center gap-2 md:flex">
-          <NavPill to="/" active={location.pathname === "/"}>
-            Hub
-          </NavPill>
-          <NavPill to="/hangeul-practice" active={location.pathname.startsWith("/hangeul-practice")}>
-            Hangeul
-          </NavPill>
-          <NavPill to="/grammar" active={location.pathname.startsWith("/grammar")}>
-            Grammar
-          </NavPill>
-          <NavPill to="/dictionary" active={location.pathname === "/dictionary"}>
-            Dictionary
-          </NavPill>
-          <NavPill to="/notes" active={location.pathname === "/notes"}>
-            Notes
-          </NavPill>
-        </div>
-
-        {/* Right side: profile + dark toggle */}
+      }
+      nav={
+        <TopbarMenu
+          items={navItems.map(({ id, label, path, exact }) => ({
+            id,
+            label,
+            active: exact
+              ? location.pathname === path
+              : location.pathname.startsWith(path),
+            onClick: () => navigate(path),
+          }))}
+        />
+      }
+      navPosition="center"
+      actions={
         <div className="flex items-center gap-2">
           <div className="hidden md:block">
             <ProfileMini
@@ -83,8 +89,8 @@ function TopNav({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => voi
             )}
           </button>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }
 
@@ -100,7 +106,7 @@ function AppBottomNav() {
   ];
 
   return (
-    <BottomNav className="fixed bottom-0 left-0 right-0 z-30 md:hidden">
+    <BottomNav className="fixed bottom-0 left-0 right-0 z-30 lg:hidden">
       {items.map(({ to, label, icon: Icon, exact }) => {
         const active = exact ? location.pathname === to : location.pathname.startsWith(to);
         return (
@@ -114,30 +120,6 @@ function AppBottomNav() {
         );
       })}
     </BottomNav>
-  );
-}
-
-function NavPill({
-  to,
-  active,
-  children,
-}: {
-  to: string;
-  active?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      to={to}
-      className={
-        "rounded-xl px-3 py-2 text-sm font-medium no-underline transition " +
-        (active
-          ? "bg-namsaek-500 text-hanji-50"
-          : "text-namsaek-600 hover:bg-hanji-200 dark:text-hanji-300 dark:hover:bg-namsaek-800")
-      }
-    >
-      {children}
-    </Link>
   );
 }
 
@@ -155,8 +137,7 @@ function ProfileMini({
   const pct = Math.min(100, Math.round((xp / xpTarget) * 100));
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-hanji-300 bg-white px-3 py-2 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-800">
-      {/* Streak */}
+    <div className="flex items-center gap-3 rounded-2xl border border-hanji-300 bg-white px-3 py-1 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-800">
       <div className="grid">
         <div className="text-xs text-hanji-500 dark:text-hanji-400">Streak</div>
         <div className="text-sm font-semibold text-geum-500 dark:text-geum-400">
@@ -164,8 +145,7 @@ function ProfileMini({
         </div>
       </div>
       <div className="h-9 w-px bg-hanji-300 dark:bg-namsaek-700" />
-      {/* XP bar */}
-      <div className="grid min-w-[120px]">
+      <div className="grid min-w-30">
         <div className="flex items-center justify-between text-xs text-hanji-500 dark:text-hanji-400">
           <span>XP</span>
           <span>{totalXp}</span>
@@ -180,5 +160,4 @@ function ProfileMini({
     </div>
   );
 }
-
 

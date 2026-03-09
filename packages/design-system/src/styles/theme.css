@@ -80,7 +80,7 @@ html {
   font-family: "Inter", "Pretendard", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scrollbar-gutter: stable;
+
 }
 
 /* Custom scrollbar — Korean Notebook theme */

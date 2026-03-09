@@ -1,1 +1,0 @@
-export { MagpieTip } from "@reterics/birdie-ui";
