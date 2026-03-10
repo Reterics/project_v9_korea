@@ -7,7 +7,7 @@ import type {
   GameConfig,
   GameResult,
 } from "./gameTypes";
-import { getWord, getPattern } from "@/features/learn/content/contentRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 
 const INITIAL_STATE: GameState = {
   status: "idle",
@@ -25,6 +25,7 @@ export function useGameController(
     ctx: GameContext,
     config: GameConfig
 ) {
+  const { content } = useData();
   const [state, setState] = useState<GameState>(INITIAL_STATE);
   const [result, setResult] = useState<GameResult | null>(null);
   const isLoading = state.status === "idle";
@@ -54,8 +55,8 @@ export function useGameController(
         const next = await engine.reduce(stateRef.current, action, {
           ctx,
           config,
-          getWord,
-          getPattern,
+          getWord: (id: string) => content.getWord(id),
+          getPattern: (id: string) => content.getPattern(id),
           now: () => Date.now(),
           rng: () => Math.random(),
         });
@@ -67,7 +68,7 @@ export function useGameController(
           setResult(engine.buildResult(next));
         }
       },
-      [engine, ctx, config]
+      [engine, ctx, config, content]
   );
 
   return { state, dispatch, result, isLoading };

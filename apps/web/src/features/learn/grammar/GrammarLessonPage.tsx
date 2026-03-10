@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronRight, Layers, Target, BookOpen, AlertTriangle, Info } from "lucide-react";
-import { getLesson, markLessonViewed, loadLessonProgress } from "@/features/learn/content/lessonRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 import type { LessonExample, LessonExplanationBlock } from "@/features/learn/content/lessonTypes";
 import { MagpieTip } from "@reterics/birdie-ui";
 
@@ -34,12 +34,13 @@ const practiceDesc: Record<string, string> = {
 export function GrammarLessonPage() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
-  const lesson = useMemo(() => (lessonId ? getLesson(lessonId) : undefined), [lessonId]);
-  const progress = useMemo(() => (lessonId ? loadLessonProgress()[lessonId] : undefined), [lessonId]);
+  const { content } = useData();
+  const lesson = useMemo(() => (lessonId ? content.getLesson(lessonId) : undefined), [lessonId, content]);
+  const progress = useMemo(() => (lessonId ? content.loadLessonProgress()[lessonId] : undefined), [lessonId, content]);
 
   useEffect(() => {
-    if (lessonId) markLessonViewed(lessonId);
-  }, [lessonId]);
+    if (lessonId) content.markLessonViewed(lessonId);
+  }, [lessonId, content]);
 
   if (!lesson) {
     return (

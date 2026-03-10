@@ -1,7 +1,7 @@
 import { CheckCircle, XCircle, Timer } from "lucide-react";
 import { BrandLogo, StatChip } from "@reterics/birdie-ui";
 import type { GameResult, StudyItemRef } from "./gameTypes";
-import { getWord } from "@/features/learn/content/contentRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 
 type GameResultsProps = {
   title: string;
@@ -93,8 +93,9 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
 }
 
 function RefLabel({ itemRef }: { itemRef: StudyItemRef }) {
+  const { content } = useData();
   if (itemRef.kind === "word") {
-    const w = getWord(itemRef.id);
+    const w = content.getWord(itemRef.id);
     if (w) return <>{w.korean} — {w.english}</>;
   }
   return <>{itemRef.id}</>;

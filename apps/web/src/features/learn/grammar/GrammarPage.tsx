@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, ChevronRight, CheckCircle2, Circle, Clock } from "lucide-react";
-import { listLessons, loadLessonProgress } from "@/features/learn/content/lessonRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 import type { GrammarLesson, LessonProgress } from "@/features/learn/content/lessonTypes";
 
 const categoryLabels: Record<string, string> = {
@@ -13,8 +13,9 @@ const categoryLabels: Record<string, string> = {
 
 export function GrammarPage() {
   const navigate = useNavigate();
-  const lessons = useMemo(() => listLessons(), []);
-  const progress = useMemo(() => loadLessonProgress(), []);
+  const { content } = useData();
+  const lessons = useMemo(() => content.listLessons(), [content]);
+  const progress = useMemo(() => content.loadLessonProgress(), [content]);
 
   return (
     <div className="space-y-6">

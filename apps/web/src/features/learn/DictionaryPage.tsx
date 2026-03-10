@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
-import { listWords } from "./content/contentRepo";
 import type { WordLevel } from "./content/wordTypes";
 import { BrandLogo } from "@reterics/birdie-ui";
 import { loadMastery } from "./profile/masteryRepo";
+import { useData } from "./data/DataProvider";
 
 const TABS: { level: WordLevel; label: string }[] = [
   { level: "A1", label: "A1" },
@@ -35,7 +35,8 @@ export function DictionaryPage() {
   const [activeTab, setActiveTab] = useState<WordLevel>("A1");
   const [search, setSearch] = useState("");
 
-  const words = useMemo(() => listWords(activeTab), [activeTab]);
+  const { content } = useData();
+  const words = useMemo(() => content.listWords(activeTab), [activeTab, content]);
   const mastery = useMemo(() => loadMastery(), []);
 
   const filtered = useMemo(() => {
@@ -75,7 +76,7 @@ export function DictionaryPage() {
             >
               {tab.label}
               <span className="ml-1.5 text-xs opacity-70">
-                ({listWords(tab.level).length})
+                ({content.listWords(tab.level).length})
               </span>
             </button>
           ))}

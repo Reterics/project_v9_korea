@@ -6,8 +6,7 @@ import { GameHeader } from "./GameHeader";
 import { GameFooter } from "./GameFooter";
 import { GameResults } from "./GameResults";
 import { GameScreenRouter } from "./GameScreenRouter";
-import { applyGameResult } from "@/features/learn/progress/progressRepo";
-import { awardXp } from "@/features/learn/profile/profileRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 import { useEffect, useRef } from "react";
 
 type GameHostProps = {
@@ -20,15 +19,16 @@ type GameHostProps = {
 export function GameHost({ gameId, ctx, config, onExit }: GameHostProps) {
   const engine = GameRegistry[gameId];
   const { state, dispatch, result, isLoading } = useGameController(engine, ctx, config);
+  const { progress, profile } = useData();
   const appliedRef = useRef(false);
 
   useEffect(() => {
     if (result && !appliedRef.current) {
       appliedRef.current = true;
-      applyGameResult(result);
-      awardXp(result);
+      progress.applyGameResult(result);
+      profile.awardXp(result);
     }
-  }, [result]);
+  }, [result, progress, profile]);
 
   if (!engine) {
     return (

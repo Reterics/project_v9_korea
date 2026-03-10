@@ -1,8 +1,11 @@
 ﻿import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Sun, Moon, Home, BookOpen, BookText, Search, FileText } from "lucide-react";
-import { useProfile } from "@/features/learn/profile/useProfile";
-import { BrandLogo, Topbar, TopbarMenu, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
+import { Sun, Moon, Home, BookOpen, BookText, Search, FileText, User, LogOut, Settings, HelpCircle } from "lucide-react";
+import { useData } from "@/features/learn/data/DataProvider";
+import { IS_LIVE } from "@/features/learn/data/types";
+import { BrandLogo, Topbar, TopbarMenu, DropdownMenu, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
+import type { DropdownMenuItem } from "@reterics/birdie-ui";
+import { useAuth } from "@/features/auth/AuthProvider";
 
 export function AppShell() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
@@ -31,7 +34,8 @@ export function AppShell() {
 }
 
 function AppTopbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => void }) {
-  const { profile } = useProfile();
+  const { profile: profileRepo } = useData();
+  const profile = profileRepo.loadProfile();
   const location = useLocation();
   const navigate = useNavigate();
   const xpInLevel = profile.xp % 100;
@@ -88,6 +92,7 @@ function AppTopbar({ dark, onToggleDark }: { dark: boolean; onToggleDark: () => 
               <Moon className="h-4 w-4 text-namsaek-500" />
             )}
           </button>
+          {IS_LIVE && <UserMenu />}
         </div>
       }
     />
@@ -120,6 +125,47 @@ function AppBottomNav() {
         );
       })}
     </BottomNav>
+  );
+}
+
+function UserMenu() {
+  const { auth, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (auth.status !== "authenticated") return null;
+
+  const menuItems: DropdownMenuItem[] = [
+    {
+      id: "settings",
+      label: "Settings",
+      icon: <Settings className="h-4 w-4" />,
+      onClick: () => navigate("/settings"),
+    },
+    {
+      id: "help",
+      label: "Help & Support",
+      icon: <HelpCircle className="h-4 w-4" />,
+      onClick: () => navigate("/help"),
+    },
+    {
+      id: "logout",
+      label: "Log out",
+      icon: <LogOut className="h-4 w-4" />,
+      onClick: logout,
+      variant: "danger",
+      divider: true,
+    },
+  ];
+
+  return (
+    <DropdownMenu
+      items={menuItems}
+      title={auth.user.displayName}
+      trigger={<User className="h-4 w-4 text-namsaek-500 dark:text-hanji-300" />}
+    >
+      <div className="text-sm font-medium truncate">{auth.user.displayName}</div>
+      <div className="text-xs text-hanji-500 dark:text-hanji-400 truncate">{auth.user.email}</div>
+    </DropdownMenu>
   );
 }
 

@@ -3,16 +3,17 @@ import type { GameId, GameContext } from "@/features/learn/games/_core/gameTypes
 import { GameHost } from "@/features/learn/games/_core/GameHost";
 import { useStudySession } from "@/features/learn/session/useStudySession";
 import { useMemo } from "react";
-import { getLesson, markLessonPracticed } from "@/features/learn/content/lessonRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 
 export function GamePlayPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { content } = useData();
   const { items, config } = useStudySession(10);
 
   const lessonId = searchParams.get("lessonId") ?? undefined;
-  const lesson = useMemo(() => (lessonId ? getLesson(lessonId) : undefined), [lessonId]);
+  const lesson = useMemo(() => (lessonId ? content.getLesson(lessonId) : undefined), [lessonId, content]);
 
   const ctx = useMemo<GameContext>(() => ({
     items,
@@ -35,7 +36,7 @@ export function GamePlayPage() {
 
   const handleExit = () => {
     if (lessonId) {
-      markLessonPracticed(lessonId);
+      content.markLessonPracticed(lessonId);
       navigate(`/grammar/${lessonId}`);
     } else {
       navigate("/");

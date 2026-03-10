@@ -1,18 +1,19 @@
 import { useMemo } from "react";
 import type { StudyItemRef, GameConfig } from "@/features/learn/games/_core/gameTypes";
-import { getAllWordRefs } from "@/features/learn/content/contentRepo";
-import { getDueItems, getAllProgress } from "@/features/learn/progress/progressRepo";
+import { useData } from "@/features/learn/data/DataProvider";
 
 /**
  * Smart item selection: due items first, then unseen, then random fill.
  */
 export function useStudySession(totalQuestions: number = 5) {
+  const { content, progress } = useData();
+
   const items = useMemo(() => {
     const now = new Date().getTime();
-    const allRefs = getAllWordRefs();
-    const due = getDueItems(now);
-    const progress = getAllProgress();
-    const seenIds = new Set(progress.map((p) => `${p.ref.kind}_${p.ref.id}`));
+    const allRefs = content.getAllWordRefs();
+    const due = progress.getDueItems(now);
+    const allProgress = progress.getAllProgress();
+    const seenIds = new Set(allProgress.map((p) => `${p.ref.kind}_${p.ref.id}`));
 
     // Due items first
     const selected: StudyItemRef[] = due
@@ -39,7 +40,7 @@ export function useStudySession(totalQuestions: number = 5) {
     }
 
     return selected;
-  }, [totalQuestions]);
+  }, [totalQuestions, content, progress]);
 
   const config = useMemo<GameConfig>(() => ({ totalQuestions }), [totalQuestions]);
 
