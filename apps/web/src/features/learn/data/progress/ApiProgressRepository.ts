@@ -1,4 +1,4 @@
-import type { ProgressRepository } from "./ProgressRepository";
+import type { ProgressRepository, MasteryData } from "./ProgressRepository";
 import type { ItemProgress } from "@/features/learn/progress/progressTypes";
 import type { GameResult, StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import { api } from "../apiClient";
@@ -72,5 +72,16 @@ export class ApiProgressRepository implements ProgressRepository {
         avgLatencyMs: outcome.latencyMs,
       });
     }
+  }
+
+  loadMastery(): MasteryData {
+    const result: MasteryData = {};
+    for (const item of this.cache.values()) {
+      result[item.ref.id] = {
+        score: item.mastery,
+        lastSeen: item.srs.lastReviewedAt ?? 0,
+      };
+    }
+    return result;
   }
 }

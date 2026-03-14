@@ -1,7 +1,8 @@
-import type { ProgressRepository } from "./ProgressRepository";
+import type { ProgressRepository, MasteryData } from "./ProgressRepository";
 import type { ItemProgress } from "@/features/learn/progress/progressTypes";
 import type { GameResult, StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import * as progressRepo from "@/features/learn/progress/progressRepo";
+import { loadMastery } from "@/features/learn/profile/masteryRepo";
 
 /**
  * Demo-mode progress repository.
@@ -22,5 +23,9 @@ export class LocalProgressRepository implements ProgressRepository {
 
   applyGameResult(result: GameResult): void {
     progressRepo.applyGameResult(result);
+  }
+
+  loadMastery(): MasteryData {
+    return loadMastery();
   }
 }

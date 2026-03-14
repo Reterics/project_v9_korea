@@ -19,7 +19,6 @@ import {
   WeakAreaCard,
 } from "@reterics/birdie-ui";
 import type { GameId } from "./games/_core/gameTypes";
-import { loadMastery } from "./profile/masteryRepo";
 import { useData } from "./data/DataProvider";
 
 type GameCardDef = {
@@ -68,16 +67,16 @@ const games: GameCardDef[] = [
 
 export function LearnHubPage() {
   const navigate = useNavigate();
-  const { content } = useData();
+  const { content, progress } = useData();
   const startGame = (id: GameId) => navigate(`/play/${id}`);
   const currentLesson = useMemo(() => content.getCurrentLesson(), [content]);
   const lessonProgress = useMemo(() => (currentLesson ? content.loadLessonProgress()[currentLesson.id] : undefined), [currentLesson, content]);
 
   const vocabTiles = useMemo(() => {
     const words = content.listWords();
-    const mastery = loadMastery();
+    const mastery = progress.loadMastery();
     return words.map((w) => ({ id: w.id, score: mastery[w.id]?.score ?? 0 }));
-  }, [content]);
+  }, [content, progress]);
 
   return (
     <DashboardLayout
