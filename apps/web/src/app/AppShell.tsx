@@ -1,6 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Sun, Moon, Home, BookOpen, BookText, Search, FileText, User, LogOut, Settings, HelpCircle } from "lucide-react";
+import { Sun, Moon, Home, BookOpen, BookText, Search, FileText, User, LogOut, Settings, HelpCircle, ShieldCheck } from "lucide-react";
 import { useData } from "@/features/learn/data/DataProvider";
 import { IS_LIVE } from "@/features/learn/data/types";
 import { BrandLogo, Topbar, TopbarMenu, DropdownMenu, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
@@ -147,12 +147,22 @@ function UserMenu() {
       icon: <HelpCircle className="h-4 w-4" />,
       onClick: () => navigate("/help"),
     },
+    ...(auth.user.role === "admin"
+      ? [
+          {
+            id: "admin",
+            label: "Admin",
+            icon: <ShieldCheck className="h-4 w-4" />,
+            onClick: () => navigate("/admin"),
+          },
+        ]
+      : []),
     {
       id: "logout",
       label: "Log out",
       icon: <LogOut className="h-4 w-4" />,
       onClick: logout,
-      variant: "danger",
+      variant: "danger" as const,
       divider: true,
     },
   ];

@@ -68,6 +68,7 @@ $router->post('/api/v1/lessons/{id}/progress', fn($p) => LessonController::updat
 // Content
 $router->get('/api/v1/content/words', fn() => ContentController::listWords());
 $router->get('/api/v1/content/words/{id}', fn($p) => ContentController::getWord($p));
+$router->get('/api/v1/content/sentences', fn() => ContentController::listSentences());
 
 // Admin
 $router->get('/api/v1/admin/users', fn() => AdminController::listUsers());

@@ -31,6 +31,7 @@ interface AuthContextValue {
     newPassword: string,
     confirmPassword: string,
   ) => Promise<void>;
+  changeDisplayName: (displayName: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -167,6 +168,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const changeDisplayName = useCallback(async (displayName: string) => {
+    const trimmed = displayName.trim();
+    if (!trimmed) throw new Error("Display name cannot be empty");
+    if (trimmed.length > 100) throw new Error("Display name must be 100 characters or fewer");
+
+    await api.put("/api/v1/profile", { displayName: trimmed });
+
+    setAuth((prev) => {
+      if (prev.status !== "authenticated") return prev;
+      return { ...prev, user: { ...prev.user, displayName: trimmed } };
+    });
+  }, []);
+
   const logout = useCallback(() => {
     // Fire-and-forget server logout (revokes refresh tokens)
     api.post("/api/v1/auth/logout").catch(() => {});
@@ -176,7 +190,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, register, changePassword, logout }}
+      value={{ auth, login, register, changePassword, changeDisplayName, logout }}
     >
       {children}
     </AuthContext.Provider>

@@ -57,4 +57,31 @@ class ContentController
             'example' => $row['example'],
         ]);
     }
+
+    public static function listSentences(): void
+    {
+        $db = Database::connection();
+        $level = $_GET['level'] ?? null;
+
+        if ($level) {
+            $stmt = $db->prepare('SELECT * FROM sentences WHERE level = ? ORDER BY id');
+            $stmt->execute([$level]);
+        } else {
+            $stmt = $db->query('SELECT * FROM sentences ORDER BY level, id');
+        }
+
+        $sentences = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $sentences[] = [
+                'id' => $row['id'],
+                'tokens' => json_decode($row['tokens'], true),
+                'roles' => json_decode($row['roles'], true),
+                'english' => $row['english'],
+                'hint' => $row['hint'],
+                'level' => $row['level'],
+            ];
+        }
+
+        Response::json($sentences);
+    }
 }

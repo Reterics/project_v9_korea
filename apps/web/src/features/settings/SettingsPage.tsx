@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from "react";
-import { KeyRound, Trash2 } from "lucide-react";
+import { KeyRound, Trash2, UserPen, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { validatePassword } from "@/features/auth/authTypes";
+import { IS_LIVE } from "@/features/learn/data/types";
 
 export function SettingsPage() {
   return (
@@ -9,9 +10,105 @@ export function SettingsPage() {
       <h1 className="text-2xl font-bold text-namsaek-900 dark:text-hanji-100">
         Settings
       </h1>
-      <ChangePasswordSection />
+      {IS_LIVE && <DisplayNameSection />}
+      <ThemeSection />
+      {IS_LIVE && <ChangePasswordSection />}
       <ClearDataSection />
     </div>
+  );
+}
+
+function DisplayNameSection() {
+  const { auth, changeDisplayName } = useAuth();
+  const currentName = auth.status === "authenticated" ? auth.user.displayName : "";
+  const [name, setName] = useState(currentName);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const changed = name.trim() !== currentName;
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    try {
+      await changeDisplayName(name);
+      setSuccess("Display name updated.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update name");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader icon={<UserPen className="h-5 w-5" />} title="Display Name" />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <InputField
+          label="Display name"
+          type="text"
+          value={name}
+          onChange={setName}
+          autoComplete="name"
+        />
+        {error && <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>}
+        {success && <p className="text-sm text-cheongja-600 dark:text-cheongja-400">{success}</p>}
+        <button
+          type="submit"
+          disabled={loading || !changed || !name.trim()}
+          className="rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-medium text-white hover:bg-namsaek-700 disabled:opacity-50 dark:bg-namsaek-500 dark:hover:bg-namsaek-400"
+        >
+          {loading ? "Saving..." : "Update Name"}
+        </button>
+      </form>
+    </Card>
+  );
+}
+
+function ThemeSection() {
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
+
+  function toggle(value: boolean) {
+    setDark(value);
+    const root = document.documentElement;
+    root.classList.toggle("dark", value);
+    localStorage.setItem("theme", value ? "dark" : "light");
+  }
+
+  return (
+    <Card>
+      <CardHeader
+        icon={dark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        title="Theme"
+      />
+      <div className="flex gap-3">
+        <button
+          onClick={() => toggle(false)}
+          className={
+            "flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition " +
+            (!dark
+              ? "border-namsaek-500 bg-namsaek-50 text-namsaek-700 dark:border-namsaek-400 dark:bg-namsaek-800 dark:text-hanji-100"
+              : "border-hanji-300 text-hanji-600 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-400 dark:hover:bg-namsaek-800")
+          }
+        >
+          <Sun className="h-4 w-4" /> Light
+        </button>
+        <button
+          onClick={() => toggle(true)}
+          className={
+            "flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition " +
+            (dark
+              ? "border-namsaek-500 bg-namsaek-50 text-namsaek-700 dark:border-namsaek-400 dark:bg-namsaek-800 dark:text-hanji-100"
+              : "border-hanji-300 text-hanji-600 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-400 dark:hover:bg-namsaek-800")
+          }
+        >
+          <Moon className="h-4 w-4" /> Dark
+        </button>
+      </div>
+    </Card>
   );
 }
 

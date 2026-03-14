@@ -194,4 +194,67 @@ echo "\nLessons: $totalLessons total";
 if (!$dryRun) echo " ($newLessons new, $updatedLessons updated)";
 echo "\n";
 
+// --- Import Sentences ---
+$sentenceFiles = glob($contentDir . '/*-sentences.json');
+$totalSentences = 0;
+$newSentences = 0;
+$updatedSentences = 0;
+
+foreach ($sentenceFiles as $file) {
+    $filename = basename($file);
+    echo "\nProcessing $filename...\n";
+
+    $data = json_decode(file_get_contents($file), true);
+    if (!is_array($data)) {
+        echo "  WARNING: Invalid JSON in $filename\n";
+        continue;
+    }
+
+    foreach ($data as $sentence) {
+        $totalSentences++;
+
+        $required = ['id', 'tokens', 'english', 'level'];
+        $missing = array_filter($required, fn($f) => empty($sentence[$f]));
+        if (!empty($missing)) {
+            echo "  WARNING: Sentence missing fields [" . implode(', ', $missing) . "]: " . json_encode($sentence) . "\n";
+            continue;
+        }
+
+        if ($verbose) {
+            echo "  Sentence: {$sentence['id']} - {$sentence['english']}\n";
+        }
+
+        if (!$dryRun) {
+            $stmt = $db->prepare('SELECT id FROM sentences WHERE id = ?');
+            $stmt->execute([$sentence['id']]);
+            $exists = $stmt->fetch();
+
+            $tokens = json_encode($sentence['tokens']);
+            $roles = json_encode($sentence['roles'] ?? []);
+
+            if ($exists) {
+                $db->prepare(
+                    'UPDATE sentences SET tokens = ?, roles = ?, english = ?, hint = ?, level = ? WHERE id = ?'
+                )->execute([
+                    $tokens, $roles, $sentence['english'],
+                    $sentence['hint'] ?? null, $sentence['level'], $sentence['id'],
+                ]);
+                $updatedSentences++;
+            } else {
+                $db->prepare(
+                    'INSERT INTO sentences (id, tokens, roles, english, hint, level) VALUES (?, ?, ?, ?, ?, ?)'
+                )->execute([
+                    $sentence['id'], $tokens, $roles, $sentence['english'],
+                    $sentence['hint'] ?? null, $sentence['level'],
+                ]);
+                $newSentences++;
+            }
+        }
+    }
+}
+
+echo "\nSentences: $totalSentences total";
+if (!$dryRun) echo " ($newSentences new, $updatedSentences updated)";
+echo "\n";
+
 echo "\nImport complete.\n";
