@@ -32,21 +32,20 @@ type Repos = {
 };
 
 export function AppDataProvider({ children }: { children: ReactNode }) {
-  const [isReady, setIsReady] = useState(false);
-  const [repos, setRepos] = useState<Repos | null>(null);
+  const [repos, setRepos] = useState<Repos | null>(() => {
+    if (!IS_LIVE) return {
+      mode: "demo",
+      content: new JsonContentRepository(),
+      progress: new LocalProgressRepository(),
+      profile: new LocalProfileRepository(),
+    };
+    return null;
+  });
+  const [isReady, setIsReady] = useState(!IS_LIVE);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!IS_LIVE) {
-      setRepos({
-        mode: "demo",
-        content: new JsonContentRepository(),
-        progress: new LocalProgressRepository(),
-        profile: new LocalProfileRepository(),
-      });
-      setIsReady(true);
-      return;
-    }
+    if (!IS_LIVE) return;
 
     const contentRepo = new ApiContentRepository();
     const progressRepo = new ApiProgressRepository();

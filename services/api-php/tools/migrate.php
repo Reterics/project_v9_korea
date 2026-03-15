@@ -51,10 +51,14 @@ foreach ($files as $file) {
     echo "[apply] $filename ... ";
 
     try {
-        // Split on semicolons, filtering empty statements
+        // Split on semicolons, strip leading comment lines, filter empty statements
         $statements = array_filter(
-            array_map('trim', explode(';', $sql)),
-            fn($s) => $s !== '' && !str_starts_with($s, '--')
+            array_map(function ($s) {
+                // Remove leading -- comment lines before the actual SQL
+                $s = preg_replace('/^(\s*--[^\n]*\n)+/m', '', $s);
+                return trim($s);
+            }, explode(';', $sql)),
+            fn($s) => $s !== ''
         );
 
         foreach ($statements as $stmt) {

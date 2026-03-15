@@ -44,7 +44,9 @@ type TokenResponse = {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [auth, setAuth] = useState<AuthState>({ status: "loading" });
+  const [auth, setAuth] = useState<AuthState>(() =>
+    getAuthToken() || getRefreshToken() ? { status: "loading" } : { status: "unauthenticated" },
+  );
 
   // Listen for auth expiration from the API client (refresh token failed)
   useEffect(() => {
@@ -53,15 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  // Restore session from stored token
+  // Restore session from stored token.
   useEffect(() => {
-    const token = getAuthToken();
-    const refresh = getRefreshToken();
-
-    if (!token && !refresh) {
-      setAuth({ status: "unauthenticated" });
-      return;
-    }
+    if (!getAuthToken() && !getRefreshToken()) return;
 
     api
       .get<AuthUser>("/api/v1/auth/me")

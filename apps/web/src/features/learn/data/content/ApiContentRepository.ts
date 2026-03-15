@@ -33,7 +33,7 @@ export class ApiContentRepository implements ContentRepository {
     return this.words.find((w) => w.id === id);
   }
 
-  getPattern(_id: string): Pattern | undefined {
+  getPattern(_: string): Pattern | undefined {
     // TODO: API endpoint for patterns
     return undefined;
   }

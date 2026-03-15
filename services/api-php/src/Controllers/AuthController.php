@@ -61,17 +61,20 @@ class AuthController
 
         $db->beginTransaction();
 
+        $isFirst = (int) $db->query('SELECT COUNT(*) FROM users')->fetchColumn() === 0;
+        $role = $isFirst ? 'admin' : 'user';
+
         $stmt = $db->prepare(
             'INSERT INTO users (email, password_hash, display_name, role, created_at, last_active_at) VALUES (?, ?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$email, $hash, $displayName, 'user', $now, $now]);
+        $stmt->execute([$email, $hash, $displayName, $role, $now, $now]);
         $userId = (int) $db->lastInsertId();
 
         $db->prepare(
             'INSERT INTO profiles (user_id, xp, level, coins, daily_streak, streak_updated_at) VALUES (?, 0, 1, 0, 0, 0)'
         )->execute([$userId]);
 
-        $tokens = Auth::createTokenPair($userId, 'user');
+        $tokens = Auth::createTokenPair($userId, $role);
 
         $db->commit();
 
@@ -82,7 +85,7 @@ class AuthController
                 'id' => $userId,
                 'email' => $email,
                 'displayName' => $displayName,
-                'role' => 'user',
+                'role' => $role,
             ],
         ], 201);
     }
