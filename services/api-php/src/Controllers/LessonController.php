@@ -12,13 +12,52 @@ class LessonController
     {
         $db = Database::connection();
 
-        $stmt = $db->query(
-            'SELECT id, slug, title, category, level, summary FROM lessons ORDER BY sort_order ASC'
+        $lessonStmt = $db->query('SELECT * FROM lessons ORDER BY sort_order ASC');
+        $lessons    = $lessonStmt->fetchAll();
+
+        if (empty($lessons)) {
+            Response::json([]);
+            return;
+        }
+
+        // Batch-load examples and blocks for all lessons
+        $ids          = array_map(fn($l) => $l['id'], $lessons);
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+        $exStmt = $db->prepare(
+            "SELECT * FROM lesson_examples WHERE lesson_id IN ($placeholders) ORDER BY lesson_id, sort_order"
         );
-        $lessons = $stmt->fetchAll();
+        $exStmt->execute($ids);
+
+        $blStmt = $db->prepare(
+            "SELECT * FROM lesson_explanation_blocks WHERE lesson_id IN ($placeholders) ORDER BY lesson_id, sort_order"
+        );
+        $blStmt->execute($ids);
+
+        $exByLesson = [];
+        foreach ($exStmt->fetchAll() as $ex) {
+            $exByLesson[$ex['lesson_id']][] = [
+                'id'               => $ex['id'],
+                'english'          => $ex['english'],
+                'korean'           => $ex['korean'],
+                'englishBreakdown' => json_decode($ex['english_breakdown'], true) ?? [],
+                'koreanBreakdown'  => json_decode($ex['korean_breakdown'],  true) ?? [],
+                'notes'            => $ex['notes'] ? json_decode($ex['notes'], true) : [],
+            ];
+        }
+
+        $blByLesson = [];
+        foreach ($blStmt->fetchAll() as $bl) {
+            $blByLesson[$bl['lesson_id']][] = [
+                'id'      => $bl['id'],
+                'type'    => $bl['type'],
+                'title'   => $bl['title'],
+                'content' => $bl['content'],
+            ];
+        }
 
         // Optional: include user progress if authenticated
-        $claims = self::optionalAuth();
+        $claims     = self::optionalAuth();
         $progressMap = [];
 
         if ($claims) {
@@ -26,9 +65,9 @@ class LessonController
             $pStmt->execute([$claims['sub']]);
             foreach ($pStmt->fetchAll() as $row) {
                 $progressMap[$row['lesson_id']] = [
-                    'status' => $row['status'],
-                    'viewedAt' => $row['viewed_at'] ? (int) $row['viewed_at'] : null,
-                    'completedAt' => $row['completed_at'] ? (int) $row['completed_at'] : null,
+                    'status'        => $row['status'],
+                    'viewedAt'      => $row['viewed_at']    ? (int) $row['viewed_at']    : null,
+                    'completedAt'   => $row['completed_at'] ? (int) $row['completed_at'] : null,
                     'practiceCount' => (int) $row['practice_count'],
                 ];
             }
@@ -37,12 +76,24 @@ class LessonController
         $result = [];
         foreach ($lessons as $lesson) {
             $item = [
-                'id' => $lesson['id'],
-                'slug' => $lesson['slug'],
-                'title' => $lesson['title'],
-                'category' => $lesson['category'],
-                'level' => $lesson['level'],
-                'summary' => $lesson['summary'],
+                'id'                 => $lesson['id'],
+                'slug'               => $lesson['slug'],
+                'title'              => $lesson['title'],
+                'category'           => $lesson['category'],
+                'level'              => $lesson['level'],
+                'summary'            => $lesson['summary'],
+                'pattern'            => $lesson['pattern_data']
+                    ? json_decode($lesson['pattern_data'], true)
+                    : null,
+                'examples'           => $exByLesson[$lesson['id']] ?? [],
+                'explanationBlocks'  => $blByLesson[$lesson['id']] ?? [],
+                'relatedSentenceIds' => $lesson['related_sentence_ids']
+                    ? json_decode($lesson['related_sentence_ids'], true)
+                    : [],
+                'practiceModes'      => $lesson['practice_modes']
+                    ? json_decode($lesson['practice_modes'], true)
+                    : [],
+                'nextLessonId'       => $lesson['next_lesson_id'],
             ];
 
             if (isset($progressMap[$lesson['id']])) {

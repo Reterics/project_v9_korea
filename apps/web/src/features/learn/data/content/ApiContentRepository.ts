@@ -1,9 +1,13 @@
 import type { ContentRepository } from "./ContentRepository";
 import type { Word, WordLevel } from "@/features/learn/content/wordTypes";
-import type { GrammarLesson, LessonProgress } from "@/features/learn/content/lessonTypes";
+import type { GrammarLesson, LessonProgress, Sentence } from "@/features/learn/content/lessonTypes";
 import type { Pattern } from "@/features/learn/content/grammarTypes";
 import type { StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import { api } from "../apiClient";
+
+type LessonWithProgress = GrammarLesson & {
+  progress?: Omit<LessonProgress, "lessonId">;
+};
 
 /**
  * Live-mode content repository.
@@ -12,6 +16,7 @@ import { api } from "../apiClient";
  */
 export class ApiContentRepository implements ContentRepository {
   private words: Word[] = [];
+  private sentences: Sentence[] = [];
   private lessons: GrammarLesson[] = [];
   private lessonProgress: Record<string, LessonProgress> = {};
   private loaded = false;
@@ -19,13 +24,23 @@ export class ApiContentRepository implements ContentRepository {
   async init(): Promise<void> {
     if (this.loaded) return;
 
-    const [words, lessons] = await Promise.all([
+    const [words, sentences, rawLessons] = await Promise.all([
       api.get<Word[]>("/api/v1/content/words"),
-      api.get<GrammarLesson[]>("/api/v1/lessons"),
+      api.get<Sentence[]>("/api/v1/content/sentences"),
+      api.get<LessonWithProgress[]>("/api/v1/lessons"),
     ]);
 
     this.words = words;
-    this.lessons = lessons;
+    this.sentences = sentences;
+    this.lessons = rawLessons;
+
+    // Extract lesson progress included in the list response (when authenticated)
+    for (const l of rawLessons) {
+      if (l.progress) {
+        this.lessonProgress[l.id] = { lessonId: l.id, ...l.progress };
+      }
+    }
+
     this.loaded = true;
   }
 
@@ -45,6 +60,10 @@ export class ApiContentRepository implements ContentRepository {
 
   getAllWordRefs(): StudyItemRef[] {
     return this.words.map((w) => ({ kind: "word", id: w.id }));
+  }
+
+  listSentences(): Sentence[] {
+    return this.sentences;
   }
 
   listLessons(): GrammarLesson[] {

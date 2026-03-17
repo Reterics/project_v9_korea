@@ -6,8 +6,8 @@ import type {
   GameState,
   StudyItemRef,
 } from "@/features/learn/games/_core/gameTypes";
+import { calcScore, skipScore, ZERO_SCORE } from "@/features/learn/games/_core/scoreUtils";
 import type { ParticleQuestion, ParticleRole } from "./particlesTypes";
-import sentencesData from "@/features/learn/content/data/a1-sentences.json";
 
 type SentenceData = {
   id: string;
@@ -19,8 +19,6 @@ type SentenceData = {
 type ParticleCandidate = Omit<ParticleQuestion, "shownAt">;
 
 type ParticlesState = GameState<ParticleQuestion>;
-
-const allSentences = sentencesData as SentenceData[];
 
 const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
 let particleBank: ParticleCandidate[] = [];
@@ -95,8 +93,6 @@ function buildCandidates(sentences: SentenceData[]): ParticleCandidate[] {
   return candidates;
 }
 
-particleBank = buildCandidates(allSentences);
-
 function pickQuestion(index: number, now: number): ParticleQuestion | null {
   if (index >= particleBank.length) return null;
   const source = particleBank[index];
@@ -107,8 +103,9 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
   id: "particles",
   title: "Missing Particle",
 
-  async init(_ctx: GameContext, config: GameConfig): Promise<ParticlesState> {
+  async init(ctx: GameContext, config: GameConfig): Promise<ParticlesState> {
     outcomes.length = 0;
+    const allSentences = ctx.sentences as SentenceData[];
     const sentences = config.lessonSentenceIds?.length
       ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
       : allSentences;
@@ -120,7 +117,7 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
       status: first ? "in_progress" : "finished",
       questionIndex: 0,
       question: first ?? undefined,
-      score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 },
+      score: ZERO_SCORE,
       startedAt: Date.now(),
     };
   },
@@ -142,13 +139,7 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
         const latencyMs = now() - q.shownAt;
         outcomes.push({ ref: q.ref, correct: isCorrect, latencyMs });
 
-        const streak = isCorrect ? state.score.streak + 1 : 0;
-        const score = {
-          correct: state.score.correct + (isCorrect ? 1 : 0),
-          wrong: state.score.wrong + (isCorrect ? 0 : 1),
-          streak,
-          streakMax: Math.max(state.score.streakMax, streak),
-        };
+        const score = calcScore(state.score, isCorrect);
 
         const nextIndex = state.questionIndex + 1;
         if (nextIndex >= total) {
@@ -176,7 +167,7 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
         }
 
         const nextIndex = state.questionIndex + 1;
-        const score = { ...state.score, wrong: state.score.wrong + 1, streak: 0 };
+        const score = skipScore(state.score);
 
         if (nextIndex >= total) {
           return {

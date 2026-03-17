@@ -1,6 +1,7 @@
 import type { GameEngine, GameState, GameContext, GameConfig, GameResult, StudyItemRef } from "@/features/learn/games/_core/gameTypes";
+import { calcScore, skipScore, ZERO_SCORE } from "@/features/learn/games/_core/scoreUtils";
+import type { Word } from "@/features/learn/content/wordTypes";
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
-import { getWord as getWordFromRepo } from "@/features/learn/content/contentRepo";
 
 type OutcomeEntry = { ref: StudyItemRef; grade: FlashcardGrade; latencyMs: number };
 
@@ -45,13 +46,15 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
   title: "Flashcard Sprint",
 
   async init(ctx: GameContext, config: GameConfig): Promise<FlashcardState> {
+    const wordMap = new Map<string, Word>(ctx.words.map((w) => [w.id, w]));
+    const getWordFromCtx = (id: string) => wordMap.get(id);
     const items = ctx.items.slice(0, config.totalQuestions);
-    const first = advanceToNextQuestion(items, 0, getWordFromRepo, Date.now());
+    const first = advanceToNextQuestion(items, 0, getWordFromCtx, Date.now());
     return {
       status: first ? "in_progress" : "finished",
       questionIndex: first?.questionIndex ?? 0,
       question: first?.question,
-      score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 },
+      score: ZERO_SCORE,
       startedAt: Date.now(),
       _outcomes: [],
     };
@@ -76,13 +79,7 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
         const isCorrect = grade === "easy" || grade === "good";
         const newOutcomes = [...outcomes, { ref: q.ref, grade, latencyMs }];
 
-        const newStreak = isCorrect ? s.score.streak + 1 : 0;
-        const score = {
-          correct: s.score.correct + (isCorrect ? 1 : 0),
-          wrong: s.score.wrong + (isCorrect ? 0 : 1),
-          streak: newStreak,
-          streakMax: Math.max(s.score.streakMax, newStreak),
-        };
+        const score = calcScore(s.score, isCorrect);
 
         const next = advanceToNextQuestion(items, s.questionIndex + 1, getWord, now());
         if (!next) {
@@ -104,7 +101,7 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
           ? [...outcomes, { ref: q.ref, grade: "again" as FlashcardGrade, latencyMs: now() - q.shownAt }]
           : outcomes;
 
-        const score = { ...s.score, wrong: s.score.wrong + 1, streak: 0 };
+        const score = skipScore(s.score);
         const next = advanceToNextQuestion(items, s.questionIndex + 1, getWord, now());
         if (!next) {
           return { ...s, score, status: "finished", finishedAt: now(), question: undefined, _outcomes: newOutcomes };

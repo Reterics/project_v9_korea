@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, Plus, Trash2 } from "lucide-react";
+import { btnPrimaryIcon } from "../components/editorShared";
 import { api } from "@/features/learn/data/apiClient";
 import { adminContentApi } from "../adminContentApi";
 import { WordEditor } from "../components/WordEditor";
@@ -99,7 +100,7 @@ export function WordsTab() {
               className="w-64 rounded-xl border border-hanji-300 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-namsaek-400 dark:border-namsaek-700 dark:bg-namsaek-900 dark:text-hanji-200"
             />
           </div>
-          <button onClick={openNew} className={btnPrimary}>
+          <button onClick={openNew} className={btnPrimaryIcon}>
             <Plus className="h-4 w-4" /> New Word
           </button>
         </div>
@@ -166,5 +167,3 @@ export function WordsTab() {
   );
 }
 
-const btnPrimary =
-  "flex items-center gap-1.5 rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-semibold text-white hover:bg-namsaek-700 dark:bg-namsaek-500 dark:hover:bg-namsaek-400";

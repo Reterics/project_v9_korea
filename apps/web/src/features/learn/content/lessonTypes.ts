@@ -2,6 +2,15 @@ import type { ContentLevel } from "./wordTypes";
 
 export type LessonCategory = "sentence-pattern" | "particles" | "question-form" | "negative-form";
 
+export type Sentence = {
+  id: string;
+  tokens: string[];
+  roles: string[];
+  english: string;
+  hint?: string | null;
+  level: ContentLevel;
+};
+
 export type LessonLevel = ContentLevel;
 
 export type LessonExample = {

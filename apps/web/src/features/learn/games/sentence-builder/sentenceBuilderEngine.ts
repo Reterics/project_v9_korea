@@ -1,12 +1,12 @@
 import type {
   GameEngine,
+  GameContext,
   GameState,
   GameResult,
   StudyItemRef,
 } from "@/features/learn/games/_core/gameTypes";
-import { listWords } from "@/features/learn/content/contentRepo";
+import { calcScore, skipScore, ZERO_SCORE } from "@/features/learn/games/_core/scoreUtils";
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
-import sentencesData from "@/features/learn/content/data/a1-sentences.json";
 
 type SentenceData = {
   id: string;
@@ -17,13 +17,11 @@ type SentenceData = {
   level: string;
 };
 
-const allSentences: SentenceData[] = sentencesData as SentenceData[];
-const wordGlossByKorean = new Map(listWords().map((w) => [w.korean, w.english]));
-
 type SBState = GameState<SentenceBuilderQuestion>;
 
 const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
-let activeSentences: SentenceData[] = allSentences;
+let activeSentences: SentenceData[] = [];
+let wordGlossByKorean = new Map<string, string>();
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -104,8 +102,10 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
   id: "sentence_builder",
   title: "Sentence Builder",
 
-  async init(_ctx, config): Promise<SBState> {
+  async init(ctx: GameContext, config): Promise<SBState> {
     outcomes.length = 0;
+    wordGlossByKorean = new Map(ctx.words.map((w) => [w.korean, w.english]));
+    const allSentences = ctx.sentences as SentenceData[];
     activeSentences = config.lessonSentenceIds?.length
       ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
       : allSentences;
@@ -114,7 +114,7 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
       status: firstQ ? "in_progress" : "finished",
       questionIndex: 0,
       question: firstQ ?? undefined,
-      score: { correct: 0, wrong: 0, streak: 0, streakMax: 0 },
+      score: ZERO_SCORE,
       startedAt: Date.now(),
     };
   },
@@ -136,13 +136,7 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
 
         outcomes.push({ ref: q.ref, correct: isCorrect, latencyMs });
 
-        const newStreak = isCorrect ? state.score.streak + 1 : 0;
-        const score = {
-          correct: state.score.correct + (isCorrect ? 1 : 0),
-          wrong: state.score.wrong + (isCorrect ? 0 : 1),
-          streak: newStreak,
-          streakMax: Math.max(state.score.streakMax, newStreak),
-        };
+        const score = calcScore(state.score, isCorrect);
 
         const nextIndex = state.questionIndex + 1;
         if (nextIndex >= totalQ) {
@@ -167,7 +161,7 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
         if (nextIndex >= totalQ) {
           return {
             ...state,
-            score: { ...state.score, wrong: state.score.wrong + 1, streak: 0 },
+            score: skipScore(state.score),
             status: "finished",
             finishedAt: now(),
             question: undefined,
@@ -176,7 +170,7 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
         const nextQ = buildQuestion(nextIndex, now());
         return {
           ...state,
-          score: { ...state.score, wrong: state.score.wrong + 1, streak: 0 },
+          score: skipScore(state.score),
           questionIndex: nextIndex,
           question: nextQ ?? undefined,
         };

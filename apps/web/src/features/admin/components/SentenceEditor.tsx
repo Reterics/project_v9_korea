@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import type { Sentence } from "../adminContentApi";
 import type { ContentLevel } from "@/features/learn/content/wordTypes";
-
-const LEVELS: ContentLevel[] = ["A1", "A1+", "A2", "A2+", "B1"];
+import { LEVELS, Field, EditorError, inp, btnPrimary, btnGhost } from "./editorShared";
 
 const ROLE_OPTIONS = [
   "subject", "topic", "object", "verb", "adjective",
@@ -75,7 +74,7 @@ export function SentenceEditor({ sentence, isNew, onSave, onCancel }: Props) {
         {isNew ? "New Sentence" : "Edit Sentence"}
       </h3>
 
-      {error && <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>}
+      <EditorError message={error} />
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="ID">
@@ -83,27 +82,27 @@ export function SentenceEditor({ sentence, isNew, onSave, onCancel }: Props) {
             value={draft.id}
             onChange={(e) => setField("id", e.target.value)}
             disabled={!isNew}
-            className={input}
+            className={inp}
             placeholder="e.g. s-001"
           />
         </Field>
 
         <Field label="Level">
-          <select value={draft.level} onChange={(e) => setField("level", e.target.value as ContentLevel)} className={input}>
+          <select value={draft.level} onChange={(e) => setField("level", e.target.value as ContentLevel)} className={inp}>
             {LEVELS.map((l) => <option key={l}>{l}</option>)}
           </select>
         </Field>
       </div>
 
       <Field label="English">
-        <input value={draft.english} onChange={(e) => setField("english", e.target.value)} className={input} />
+        <input value={draft.english} onChange={(e) => setField("english", e.target.value)} className={inp} />
       </Field>
 
       <Field label="Hint (optional)">
         <input
           value={draft.hint ?? ""}
           onChange={(e) => setField("hint", e.target.value)}
-          className={input}
+          className={inp}
           placeholder="Grammar or context hint"
         />
       </Field>
@@ -173,20 +172,3 @@ export function SentenceEditor({ sentence, isNew, onSave, onCancel }: Props) {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs font-medium text-hanji-600 dark:text-hanji-400">{label}</label>
-      {children}
-    </div>
-  );
-}
-
-const input =
-  "w-full rounded-lg border border-hanji-300 bg-white px-3 py-1.5 text-sm outline-none focus:border-namsaek-400 focus:ring-1 focus:ring-namsaek-400 dark:border-namsaek-700 dark:bg-namsaek-900 dark:text-hanji-200";
-
-const btnPrimary =
-  "rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-semibold text-white hover:bg-namsaek-700 dark:bg-namsaek-500 dark:hover:bg-namsaek-400";
-
-const btnGhost =
-  "rounded-xl border border-hanji-300 px-4 py-2 text-sm font-semibold text-hanji-700 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-300 dark:hover:bg-namsaek-800";

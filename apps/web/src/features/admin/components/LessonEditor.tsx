@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Plus, Trash2, ChevronDown, ChevronUp, Check } from "lucide-react";
 import type { LessonCategory, LessonLevel } from "@/features/learn/content/lessonTypes";
-import type { ContentLevel } from "@/features/learn/content/wordTypes";
 import type { AdminLesson, Sentence } from "../adminContentApi";
+import { LEVELS, Field, EditorError, inp, btnPrimary, btnGhost, addBtn } from "./editorShared";
 
 const CATEGORIES: LessonCategory[] = [
   "sentence-pattern", "particles", "question-form", "negative-form",
 ];
-const LEVELS: ContentLevel[] = ["A1", "A1+", "A2", "A2+", "B1"];
 const PRACTICE_MODES = ["sentence_builder", "particles", "flashcards"] as const;
 const BLOCK_TYPES = ["text", "tip", "warning"] as const;
 
@@ -149,7 +148,7 @@ export function LessonEditor({ lesson, isNew, allLessons, allSentences, onSave, 
         {isNew ? "New Lesson" : "Edit Lesson"}
       </h3>
 
-      {error && <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>}
+      <EditorError message={error} />
 
       {/* Basic */}
       <section className="space-y-3">
@@ -461,23 +460,3 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return <p className="text-xs font-semibold uppercase tracking-wide text-hanji-500 dark:text-hanji-400">{children}</p>;
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs font-medium text-hanji-600 dark:text-hanji-400">{label}</label>
-      {children}
-    </div>
-  );
-}
-
-const inp =
-  "w-full rounded-lg border border-hanji-300 bg-white px-3 py-1.5 text-sm outline-none focus:border-namsaek-400 focus:ring-1 focus:ring-namsaek-400 dark:border-namsaek-700 dark:bg-namsaek-900 dark:text-hanji-200";
-
-const btnPrimary =
-  "rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-semibold text-white hover:bg-namsaek-700 dark:bg-namsaek-500 dark:hover:bg-namsaek-400";
-
-const btnGhost =
-  "rounded-xl border border-hanji-300 px-4 py-2 text-sm font-semibold text-hanji-700 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-300 dark:hover:bg-namsaek-800";
-
-const addBtn =
-  "flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-namsaek-600 hover:bg-namsaek-50 dark:text-namsaek-400 dark:hover:bg-namsaek-900";

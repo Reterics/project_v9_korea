@@ -31,8 +31,10 @@ export function GamePlayPage() {
 
   const ctx = useMemo<GameContext>(() => ({
     items,
+    words: content.listWords(),
+    sentences: content.listSentences(),
     locale: "en",
-  }), [items]);
+  }), [items, content]);
 
   const mergedConfig = useMemo<GameConfig>(() => {
     const dbCfg = dbConfigs.find((c) => c.gameId === gameId);

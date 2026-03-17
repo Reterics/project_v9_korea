@@ -1,6 +1,6 @@
 import type { ContentRepository } from "./ContentRepository";
 import type { Word, WordLevel } from "@/features/learn/content/wordTypes";
-import type { GrammarLesson, LessonProgress } from "@/features/learn/content/lessonTypes";
+import type { GrammarLesson, LessonProgress, Sentence } from "@/features/learn/content/lessonTypes";
 import type { Pattern } from "@/features/learn/content/grammarTypes";
 import type { StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import * as contentRepo from "@/features/learn/content/contentRepo";
@@ -25,6 +25,10 @@ export class JsonContentRepository implements ContentRepository {
 
   getAllWordRefs(): StudyItemRef[] {
     return contentRepo.getAllWordRefs();
+  }
+
+  listSentences(): Sentence[] {
+    return contentRepo.listSentences();
   }
 
   listLessons(): GrammarLesson[] {

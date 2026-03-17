@@ -362,35 +362,8 @@ class ContentAdminController
                 $body['sortOrder'] ?? 0,
             ]);
 
-            $exStmt = $db->prepare(
-                'INSERT INTO lesson_examples (id, lesson_id, english, korean, english_breakdown, korean_breakdown, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-            );
-            foreach (($body['examples'] ?? []) as $i => $ex) {
-                $exStmt->execute([
-                    $ex['id'],
-                    $body['id'],
-                    $ex['english'],
-                    $ex['korean'],
-                    json_encode($ex['englishBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
-                    json_encode($ex['koreanBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
-                    json_encode($ex['notes'] ?? [], JSON_UNESCAPED_UNICODE),
-                    $i,
-                ]);
-            }
-
-            $blStmt = $db->prepare(
-                'INSERT INTO lesson_explanation_blocks (id, lesson_id, type, title, content, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
-            );
-            foreach (($body['explanationBlocks'] ?? []) as $i => $bl) {
-                $blStmt->execute([
-                    $bl['id'],
-                    $body['id'],
-                    $bl['type'] ?? 'text',
-                    $bl['title'] ?? null,
-                    $bl['content'],
-                    $i,
-                ]);
-            }
+            self::insertExamples($db, $body['id'], $body['examples'] ?? []);
+            self::insertBlocks($db, $body['id'], $body['explanationBlocks'] ?? []);
 
             $db->commit();
             Response::json(['id' => $body['id']], 201);
@@ -440,36 +413,10 @@ class ContentAdminController
             ]);
 
             $db->prepare('DELETE FROM lesson_examples WHERE lesson_id = ?')->execute([$params['id']]);
-            $exStmt = $db->prepare(
-                'INSERT INTO lesson_examples (id, lesson_id, english, korean, english_breakdown, korean_breakdown, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-            );
-            foreach (($body['examples'] ?? []) as $i => $ex) {
-                $exStmt->execute([
-                    $ex['id'],
-                    $params['id'],
-                    $ex['english'],
-                    $ex['korean'],
-                    json_encode($ex['englishBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
-                    json_encode($ex['koreanBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
-                    json_encode($ex['notes'] ?? [], JSON_UNESCAPED_UNICODE),
-                    $i,
-                ]);
-            }
+            self::insertExamples($db, $params['id'], $body['examples'] ?? []);
 
             $db->prepare('DELETE FROM lesson_explanation_blocks WHERE lesson_id = ?')->execute([$params['id']]);
-            $blStmt = $db->prepare(
-                'INSERT INTO lesson_explanation_blocks (id, lesson_id, type, title, content, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
-            );
-            foreach (($body['explanationBlocks'] ?? []) as $i => $bl) {
-                $blStmt->execute([
-                    $bl['id'],
-                    $params['id'],
-                    $bl['type'] ?? 'text',
-                    $bl['title'] ?? null,
-                    $bl['content'],
-                    $i,
-                ]);
-            }
+            self::insertBlocks($db, $params['id'], $body['explanationBlocks'] ?? []);
 
             $db->commit();
             Response::json(['ok' => true]);
@@ -646,37 +593,9 @@ class ContentAdminController
                     $counts['lessons'] += $lStmt->rowCount();
 
                     // Insert child records only when the lesson row was written
-                    $lessonWasInserted = $lStmt->rowCount() > 0;
-                    if ($lessonWasInserted) {
-                        $exStmt = $db->prepare(
-                            'INSERT IGNORE INTO lesson_examples (id, lesson_id, english, korean, english_breakdown, korean_breakdown, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-                        );
-                        foreach (($lesson['examples'] ?? []) as $j => $ex) {
-                            $exStmt->execute([
-                                $ex['id'],
-                                $lesson['id'],
-                                $ex['english'],
-                                $ex['korean'],
-                                json_encode($ex['englishBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
-                                json_encode($ex['koreanBreakdown']  ?? [], JSON_UNESCAPED_UNICODE),
-                                json_encode($ex['notes']            ?? [], JSON_UNESCAPED_UNICODE),
-                                $j,
-                            ]);
-                        }
-
-                        $blStmt = $db->prepare(
-                            'INSERT IGNORE INTO lesson_explanation_blocks (id, lesson_id, type, title, content, sort_order) VALUES (?, ?, ?, ?, ?, ?)'
-                        );
-                        foreach (($lesson['explanationBlocks'] ?? []) as $j => $bl) {
-                            $blStmt->execute([
-                                $bl['id'],
-                                $lesson['id'],
-                                $bl['type']  ?? 'text',
-                                $bl['title'] ?? null,
-                                $bl['content'],
-                                $j,
-                            ]);
-                        }
+                    if ($lStmt->rowCount() > 0) {
+                        self::insertExamples($db, $lesson['id'], $lesson['examples'] ?? [], true);
+                        self::insertBlocks($db, $lesson['id'], $lesson['explanationBlocks'] ?? [], true);
                     }
                 }
             }
@@ -686,6 +605,44 @@ class ContentAdminController
         } catch (\Exception $e) {
             $db->rollBack();
             throw $e;
+        }
+    }
+
+    private static function insertExamples(\PDO $db, string $lessonId, array $examples, bool $ignore = false): void
+    {
+        $keyword = $ignore ? 'INSERT IGNORE' : 'INSERT';
+        $stmt = $db->prepare(
+            "$keyword INTO lesson_examples (id, lesson_id, english, korean, english_breakdown, korean_breakdown, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        foreach ($examples as $i => $ex) {
+            $stmt->execute([
+                $ex['id'],
+                $lessonId,
+                $ex['english'],
+                $ex['korean'],
+                json_encode($ex['englishBreakdown'] ?? [], JSON_UNESCAPED_UNICODE),
+                json_encode($ex['koreanBreakdown']  ?? [], JSON_UNESCAPED_UNICODE),
+                json_encode($ex['notes']            ?? [], JSON_UNESCAPED_UNICODE),
+                $i,
+            ]);
+        }
+    }
+
+    private static function insertBlocks(\PDO $db, string $lessonId, array $blocks, bool $ignore = false): void
+    {
+        $keyword = $ignore ? 'INSERT IGNORE' : 'INSERT';
+        $stmt = $db->prepare(
+            "$keyword INTO lesson_explanation_blocks (id, lesson_id, type, title, content, sort_order) VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        foreach ($blocks as $i => $bl) {
+            $stmt->execute([
+                $bl['id'],
+                $lessonId,
+                $bl['type']  ?? 'text',
+                $bl['title'] ?? null,
+                $bl['content'],
+                $i,
+            ]);
         }
     }
 

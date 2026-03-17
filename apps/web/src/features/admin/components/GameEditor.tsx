@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { DbGameConfig } from "../adminContentApi";
+import { Field, inp, btnPrimary } from "./editorShared";
 
 type Props = {
   config: DbGameConfig;
@@ -57,7 +58,7 @@ export function GameEditor({ config, onSave }: Props) {
               max={50}
               value={draft.totalQuestions}
               onChange={(e) => setField("totalQuestions", +e.target.value)}
-              className={input}
+              className={inp}
             />
           </Field>
 
@@ -69,7 +70,7 @@ export function GameEditor({ config, onSave }: Props) {
               onChange={(e) =>
                 setField("timeLimitSec", e.target.value === "" ? null : +e.target.value)
               }
-              className={input}
+              className={inp}
               placeholder="none"
             />
           </Field>
@@ -78,7 +79,7 @@ export function GameEditor({ config, onSave }: Props) {
             <select
               value={draft.difficulty}
               onChange={(e) => setField("difficulty", e.target.value as DbGameConfig["difficulty"])}
-              className={input}
+              className={inp}
             >
               <option value="easy">Easy</option>
               <option value="normal">Normal</option>
@@ -108,7 +109,7 @@ export function GameEditor({ config, onSave }: Props) {
               min={0}
               value={(engineVal("autoAdvanceMs") as number) ?? 0}
               onChange={(e) => setEngine("autoAdvanceMs", +e.target.value)}
-              className={input}
+              className={inp}
             />
           </Field>
         </section>
@@ -149,7 +150,7 @@ export function GameEditor({ config, onSave }: Props) {
             <select
               value={(engineVal("numChoices") as number) ?? 4}
               onChange={(e) => setEngine("numChoices", +e.target.value)}
-              className={input}
+              className={inp}
             >
               <option value={2}>2</option>
               <option value={4}>4</option>
@@ -182,20 +183,5 @@ export function GameEditor({ config, onSave }: Props) {
     </div>
   );
 }
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs font-medium text-hanji-600 dark:text-hanji-400">{label}</label>
-      {children}
-    </div>
-  );
-}
-
-const input =
-  "w-full rounded-lg border border-hanji-300 bg-white px-3 py-1.5 text-sm outline-none focus:border-namsaek-400 focus:ring-1 focus:ring-namsaek-400 dark:border-namsaek-700 dark:bg-namsaek-900 dark:text-hanji-200";
-
-const btnPrimary =
-  "rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-semibold text-white hover:bg-namsaek-700 disabled:opacity-50 dark:bg-namsaek-500 dark:hover:bg-namsaek-400";
 
 const checkRow = "flex cursor-pointer items-center gap-2 text-sm text-namsaek-800 dark:text-hanji-200";

@@ -21,6 +21,8 @@ export type GameConfig = {
 
 export type GameContext = {
   items: StudyItemRef[];
+  words: import("@/features/learn/content/wordTypes").Word[];
+  sentences: import("@/features/learn/content/lessonTypes").Sentence[];
   locale: "en";
 };
 

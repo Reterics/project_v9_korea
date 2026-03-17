@@ -1,15 +1,8 @@
 import { api } from "@/features/learn/data/apiClient";
-import type { Word, ContentLevel } from "@/features/learn/content/wordTypes";
-import type { GrammarLesson } from "@/features/learn/content/lessonTypes";
+import type { Word } from "@/features/learn/content/wordTypes";
+import type { GrammarLesson, Sentence } from "@/features/learn/content/lessonTypes";
 
-export type Sentence = {
-  id: string;
-  tokens: string[];
-  roles: string[];
-  english: string;
-  hint?: string | null;
-  level: ContentLevel;
-};
+export type { Sentence };
 
 export type DbGameConfig = {
   gameId: string;
