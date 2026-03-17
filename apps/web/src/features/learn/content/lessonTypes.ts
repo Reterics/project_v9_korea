@@ -1,6 +1,8 @@
+import type { ContentLevel } from "./wordTypes";
+
 export type LessonCategory = "sentence-pattern" | "particles" | "question-form" | "negative-form";
 
-export type LessonLevel = "A1";
+export type LessonLevel = ContentLevel;
 
 export type LessonExample = {
   id: string;

@@ -1,6 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, Shield, ShieldCheck, ChevronDown, ChevronUp } from "lucide-react";
 import { api } from "@/features/learn/data/apiClient";
+import { WordsTab } from "./tabs/WordsTab";
+import { SentencesTab } from "./tabs/SentencesTab";
+import { LessonsTab } from "./tabs/LessonsTab";
+import { GamesTab } from "./tabs/GamesTab";
+import { SeedDemoPanel } from "./components/SeedDemoPanel";
+
+type Tab = "users" | "lessons" | "sentences" | "words" | "games";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "users", label: "Users" },
+  { id: "lessons", label: "Lessons" },
+  { id: "sentences", label: "Sentences" },
+  { id: "words", label: "Words" },
+  { id: "games", label: "Games" },
+];
 
 type AdminUser = {
   id: number;
@@ -26,6 +41,47 @@ type UserStats = {
 };
 
 export function AdminPage() {
+  const [activeTab, setActiveTab] = useState<Tab>("users");
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-namsaek-900 dark:text-hanji-100">Admin</h1>
+        <p className="mt-1 text-sm text-hanji-500 dark:text-hanji-400">Content &amp; user management</p>
+      </div>
+
+      <SeedDemoPanel />
+
+      {/* Tab bar */}
+      <div className="flex gap-1 rounded-2xl border border-hanji-200 bg-hanji-50 p-1 dark:border-namsaek-700 dark:bg-namsaek-950">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+              activeTab === tab.id
+                ? "bg-namsaek-600 text-white shadow-sm dark:bg-namsaek-500"
+                : "text-hanji-600 hover:bg-hanji-100 dark:text-hanji-400 dark:hover:bg-namsaek-800"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      {activeTab === "users" && <UsersPanel />}
+      {activeTab === "lessons" && <LessonsTab />}
+      {activeTab === "sentences" && <SentencesTab />}
+      {activeTab === "words" && <WordsTab />}
+      {activeTab === "games" && <GamesTab />}
+    </div>
+  );
+}
+
+// ─── Users panel ────────────────────────────────────────────────────────────
+
+function UsersPanel() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -59,28 +115,20 @@ export function AdminPage() {
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to update role"));
   }, []);
 
-  if (loading) {
-    return <p className="text-sm text-hanji-500">Loading users...</p>;
-  }
-
-  if (error) {
-    return <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>;
-  }
+  if (loading) return <p className="text-sm text-hanji-500">Loading users…</p>;
+  if (error) return <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-namsaek-900 dark:text-hanji-100">Admin</h1>
-        <p className="mt-1 text-sm text-hanji-500 dark:text-hanji-400">
-          {users.length} registered {users.length === 1 ? "user" : "users"}
-        </p>
-      </div>
+    <div className="space-y-4">
+      <p className="text-sm text-hanji-500 dark:text-hanji-400">
+        {users.length} registered {users.length === 1 ? "user" : "users"}
+      </p>
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-hanji-400" />
         <input
           type="text"
-          placeholder="Search users..."
+          placeholder="Search users…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full rounded-xl border border-hanji-300 bg-white py-2 pl-9 pr-3 text-sm shadow-sm outline-none focus:border-namsaek-400 focus:ring-1 focus:ring-namsaek-400 dark:border-namsaek-700 dark:bg-namsaek-900 dark:text-hanji-200 dark:focus:border-namsaek-500 sm:w-80"
@@ -92,9 +140,7 @@ export function AdminPage() {
           <UserRow key={user.id} user={user} onRoleChange={handleRoleChange} />
         ))}
         {filtered.length === 0 && (
-          <p className="py-8 text-center text-sm text-hanji-500 dark:text-hanji-400">
-            No users found.
-          </p>
+          <p className="py-8 text-center text-sm text-hanji-500 dark:text-hanji-400">No users found.</p>
         )}
       </div>
     </div>
@@ -163,9 +209,7 @@ function UserRow({
               <Row label="Last active" value={formatDate(user.lastActiveAt)} />
             </div>
 
-            {statsLoading && (
-              <p className="text-xs text-hanji-500">Loading stats...</p>
-            )}
+            {statsLoading && <p className="text-xs text-hanji-500">Loading stats…</p>}
             {stats && (
               <div className="space-y-2 text-sm">
                 <Row label="Items studied" value={String(stats.progress.totalItems)} />
@@ -219,7 +263,6 @@ function Row({ label, value }: { label: string; value: string }) {
 
 function formatDate(ts: number): string {
   if (!ts) return "—";
-  // Backend stores unix seconds, not milliseconds
   const ms = ts < 1e12 ? ts * 1000 : ts;
   return new Date(ms).toLocaleDateString(undefined, {
     year: "numeric",

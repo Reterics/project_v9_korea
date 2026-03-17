@@ -1,4 +1,6 @@
-export type WordLevel = "A1" | "A1+" | "A2";
+export type ContentLevel = "A1" | "A1+" | "A2" | "A2+" | "B1";
+
+export type WordLevel = ContentLevel;
 
 export type WordCategory =
   | "greetings"

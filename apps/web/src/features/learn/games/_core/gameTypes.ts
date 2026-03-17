@@ -16,6 +16,7 @@ export type GameConfig = {
   difficulty?: "easy" | "normal" | "hard";
   lessonSentenceIds?: string[];
   lessonId?: string;
+  engineConfig?: Record<string, unknown>;
 };
 
 export type GameContext = {

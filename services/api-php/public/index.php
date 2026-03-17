@@ -12,6 +12,7 @@ use App\Controllers\ProgressController;
 use App\Controllers\LessonController;
 use App\Controllers\ContentController;
 use App\Controllers\AdminController;
+use App\Controllers\ContentAdminController;
 
 // Global error handler — always return JSON
 set_exception_handler(function (\Throwable $e) {
@@ -70,10 +71,38 @@ $router->get('/api/v1/content/words', fn() => ContentController::listWords());
 $router->get('/api/v1/content/words/{id}', fn($p) => ContentController::getWord($p));
 $router->get('/api/v1/content/sentences', fn() => ContentController::listSentences());
 
-// Admin
+// Admin – users
 $router->get('/api/v1/admin/users', fn() => AdminController::listUsers());
 $router->get('/api/v1/admin/users/{id}/stats', fn($p) => AdminController::getUserStats($p));
 $router->put('/api/v1/admin/users/{id}/role', fn($p) => AdminController::updateUserRole($p));
+
+// Admin – words
+$router->get('/api/v1/admin/content/words', fn() => ContentAdminController::listWords());
+$router->post('/api/v1/admin/content/words', fn() => ContentAdminController::createWord());
+$router->put('/api/v1/admin/content/words/{id}', fn($p) => ContentAdminController::updateWord($p));
+$router->delete('/api/v1/admin/content/words/{id}', fn($p) => ContentAdminController::deleteWord($p));
+
+// Admin – sentences
+$router->get('/api/v1/admin/content/sentences', fn() => ContentAdminController::listSentences());
+$router->post('/api/v1/admin/content/sentences', fn() => ContentAdminController::createSentence());
+$router->put('/api/v1/admin/content/sentences/{id}', fn($p) => ContentAdminController::updateSentence($p));
+$router->delete('/api/v1/admin/content/sentences/{id}', fn($p) => ContentAdminController::deleteSentence($p));
+
+// Admin – lessons
+$router->get('/api/v1/admin/content/lessons', fn() => ContentAdminController::listLessons());
+$router->post('/api/v1/admin/content/lessons', fn() => ContentAdminController::createLesson());
+$router->put('/api/v1/admin/content/lessons/{id}', fn($p) => ContentAdminController::updateLesson($p));
+$router->delete('/api/v1/admin/content/lessons/{id}', fn($p) => ContentAdminController::deleteLesson($p));
+
+// Admin – game configs
+$router->get('/api/v1/admin/games', fn() => ContentAdminController::listGameConfigs());
+$router->put('/api/v1/admin/games/{gameId}', fn($p) => ContentAdminController::updateGameConfig($p));
+
+// Public – game configs (no auth required)
+$router->get('/api/v1/games/config', fn() => ContentAdminController::getPublicGameConfigs());
+
+// Admin – seed demo data
+$router->post('/api/v1/admin/seed-demo', fn() => ContentAdminController::seedDemoData());
 
 // Dispatch
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
