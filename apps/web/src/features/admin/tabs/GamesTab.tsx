@@ -21,20 +21,15 @@ export function GamesTab() {
   const [successMsg, setSuccessMsg] = useState("");
 
   const loadConfigs = useCallback(() => {
-    setLoading(true);
     adminContentApi
       .listGameConfigs()
-      .then((data) => {
-        setConfigs(data);
-        if (data.length > 0) setSelected((prev) => prev ?? data[0].gameId);
-      })
+      .then(setConfigs)
       .catch((e) => setError(e instanceof Error ? e.message : "Load failed"))
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => { loadConfigs(); }, [loadConfigs]);
 
-  // Import: update each game config via its dedicated PUT endpoint
   async function handleImport(items: unknown[], _mode: ImportMode): Promise<number> {
     const cfgs = (items as DbGameConfig[]).filter(
       (c) => typeof c?.gameId === "string" && c.gameId.length > 0,
@@ -62,7 +57,9 @@ export function GamesTab() {
     (a, b) => GAME_ORDER.indexOf(a.gameId) - GAME_ORDER.indexOf(b.gameId),
   );
 
-  const activeConfig = sorted.find((c) => c.gameId === selected);
+  // Derive the active game: explicit selection, or the first card by default.
+  const activeId = selected ?? sorted[0]?.gameId ?? null;
+  const activeConfig = sorted.find((c) => c.gameId === activeId);
 
   return (
     <div className="space-y-4">
@@ -74,7 +71,7 @@ export function GamesTab() {
           data={configs}
           filename="game-configs.json"
           onImport={handleImport}
-          onImportComplete={loadConfigs}
+          onImportComplete={() => { setLoading(true); loadConfigs(); }}
         />
       </div>
 
@@ -86,7 +83,7 @@ export function GamesTab() {
               key={cfg.gameId}
               onClick={() => setSelected(cfg.gameId)}
               className={`rounded-2xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-md ${
-                selected === cfg.gameId
+                activeId === cfg.gameId
                   ? "border-namsaek-400 bg-namsaek-50 dark:border-namsaek-500 dark:bg-namsaek-900"
                   : "border-hanji-200 bg-white dark:border-namsaek-700 dark:bg-namsaek-950"
               }`}

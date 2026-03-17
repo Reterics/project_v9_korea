@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DbGameConfig } from "../adminContentApi";
-import { Field, inp, btnPrimary } from "./editorShared";
+import { Field } from "./editorShared";
+import { inp, btnPrimary } from "./editorStyles";
 
 type Props = {
   config: DbGameConfig;

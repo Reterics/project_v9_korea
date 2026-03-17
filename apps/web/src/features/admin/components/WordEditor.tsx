@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Word, WordCategory, WordLevel } from "@/features/learn/content/wordTypes";
-import { LEVELS, Field, EditorError, inp, btnPrimary, btnGhost } from "./editorShared";
+import { Field, EditorError } from "./editorShared";
+import { LEVELS, inp, btnPrimary, btnGhost } from "./editorStyles";
 
 const CATEGORIES: WordCategory[] = [
   "greetings", "numbers", "food", "verbs", "family", "places", "adjectives",

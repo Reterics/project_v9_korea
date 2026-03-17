@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Search, Plus, Trash2 } from "lucide-react";
-import { btnPrimaryIcon } from "../components/editorShared";
+import { btnPrimaryIcon } from "../components/editorStyles";
 import { api } from "@/features/learn/data/apiClient";
 import { adminContentApi } from "../adminContentApi";
 import { SentenceEditor } from "../components/SentenceEditor";

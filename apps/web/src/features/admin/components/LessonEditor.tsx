@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Plus, Trash2, ChevronDown, ChevronUp, Check } from "lucide-react";
 import type { LessonCategory, LessonLevel } from "@/features/learn/content/lessonTypes";
 import type { AdminLesson, Sentence } from "../adminContentApi";
-import { LEVELS, Field, EditorError, inp, btnPrimary, btnGhost, addBtn } from "./editorShared";
+import { Field, EditorError } from "./editorShared";
+import { LEVELS, inp, btnPrimary, btnGhost, addBtn } from "./editorStyles";
 
 const CATEGORIES: LessonCategory[] = [
   "sentence-pattern", "particles", "question-form", "negative-form",

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import type { Sentence } from "../adminContentApi";
 import type { ContentLevel } from "@/features/learn/content/wordTypes";
-import { LEVELS, Field, EditorError, inp, btnPrimary, btnGhost } from "./editorShared";
+import { Field, EditorError } from "./editorShared";
+import { LEVELS, inp, btnPrimary, btnGhost } from "./editorStyles";
 
 const ROLE_OPTIONS = [
   "subject", "topic", "object", "verb", "adjective",
