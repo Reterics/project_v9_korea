@@ -61,6 +61,15 @@ class ContentController
     public static function listSentences(): void
     {
         $db = Database::connection();
+
+        // Gracefully handle missing table (migration 003 not yet applied)
+        try {
+            $db->query('SELECT 1 FROM sentences LIMIT 1');
+        } catch (\PDOException) {
+            Response::json([]);
+            return;
+        }
+
         $level = $_GET['level'] ?? null;
 
         if ($level) {

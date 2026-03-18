@@ -1,6 +1,5 @@
 import type { Word, WordLevel } from "./wordTypes";
 import type { Sentence } from "./lessonTypes";
-import type { Pattern } from "./grammarTypes";
 import type { StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import a1Data from "./data/a1-words.json";
 import a1PlusData from "./data/a1plus-words.json";
@@ -19,11 +18,6 @@ export function getWord(id: string): Word | undefined {
   return words.find((w) => w.id === id);
 }
 
-export function getPattern(id: string): Pattern | undefined {
-  void id; // TODO: load grammar patterns
-  return undefined;
-}
-
 export function listWords(level?: WordLevel): Word[] {
   if (level) return words.filter((w) => w.level === level);
   return words;
@@ -35,8 +29,4 @@ export function getAllWordRefs(): StudyItemRef[] {
 
 export function listSentences(): Sentence[] {
   return sentences;
-}
-
-export function getSentence(id: string): Sentence | undefined {
-  return sentences.find((s) => s.id === id);
 }

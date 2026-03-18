@@ -2,6 +2,7 @@ import type { ProgressRepository, MasteryData } from "./ProgressRepository";
 import type { ItemProgress } from "@/features/learn/progress/progressTypes";
 import type { GameResult, StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import { api } from "../apiClient";
+import { notifySaveError } from "../saveErrorNotifier";
 
 /**
  * Live-mode progress repository.
@@ -44,7 +45,7 @@ export class ApiProgressRepository implements ProgressRepository {
         durationMs: result.durationMs,
         itemOutcomes: result.itemOutcomes,
       })
-      .catch(console.error);
+      .catch(() => notifySaveError("Failed to save game results. Your progress may not be recorded."));
 
     // Optimistic cache update (mirrors the localStorage logic)
     const now = Date.now();

@@ -1,11 +1,12 @@
-﻿import { useState, useEffect } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { Sun, Moon, Home, BookOpen, BookText, Search, FileText, User, LogOut, Settings, HelpCircle, ShieldCheck } from "lucide-react";
+import { Sun, Moon, Home, BookOpen, BookText, Search, FileText, User, LogOut, Settings, HelpCircle, ShieldCheck, AlertTriangle, X } from "lucide-react";
 import { useData } from "@/features/learn/data/DataProvider";
 import { IS_LIVE } from "@/features/learn/data/types";
 import { BrandLogo, Topbar, TopbarMenu, DropdownMenu, BottomNav, BottomNavItem } from "@reterics/birdie-ui";
 import type { DropdownMenuItem } from "@reterics/birdie-ui";
 import { useAuth } from "@/features/auth/AuthProvider";
+import { onSaveError } from "@/features/learn/data/saveErrorNotifier";
 
 export function AppShell() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
@@ -29,6 +30,7 @@ export function AppShell() {
         </div>
       </main>
       <AppBottomNav />
+      <SaveErrorToast />
     </div>
   );
 }
@@ -176,6 +178,34 @@ function UserMenu() {
       <div className="text-sm font-medium truncate">{auth.user.displayName}</div>
       <div className="text-xs text-hanji-500 dark:text-hanji-400 truncate">{auth.user.email}</div>
     </DropdownMenu>
+  );
+}
+
+function SaveErrorToast() {
+  const [error, setError] = useState<string | null>(null);
+
+  const dismiss = useCallback(() => setError(null), []);
+
+  useEffect(() => onSaveError((msg) => {
+    setError(msg);
+    const t = setTimeout(() => setError(null), 6000);
+    return () => clearTimeout(t);
+  }), []);
+
+  if (!error) return null;
+
+  return (
+    <div className="fixed bottom-20 left-1/2 z-50 w-[min(440px,calc(100vw-24px))] -translate-x-1/2 lg:bottom-6">
+      <div className="flex items-center gap-3 rounded-2xl border border-dancheong-200 bg-dancheong-50 px-4 py-3 shadow-lg dark:border-dancheong-700 dark:bg-dancheong-900/90">
+        <AlertTriangle className="h-5 w-5 shrink-0 text-dancheong-500" />
+        <div className="min-w-0 flex-1 text-sm font-medium text-dancheong-700 dark:text-dancheong-200">
+          {error}
+        </div>
+        <button onClick={dismiss} className="shrink-0 rounded-lg p-1 hover:bg-dancheong-100 dark:hover:bg-dancheong-800/40">
+          <X className="h-4 w-4 text-dancheong-500" />
+        </button>
+      </div>
+    </div>
   );
 }
 

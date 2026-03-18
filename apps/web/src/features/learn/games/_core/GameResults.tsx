@@ -98,6 +98,11 @@ function RefLabel({ itemRef }: { itemRef: StudyItemRef }) {
     const w = content.getWord(itemRef.id);
     if (w) return <>{w.korean} — {w.english}</>;
   }
+  if (itemRef.kind === "sentence") {
+    const baseId = itemRef.id.replace(/_p\d+$/, "");
+    const s = content.listSentences().find((s) => s.id === baseId);
+    if (s) return <>{s.tokens.join(" ")} — {s.english}</>;
+  }
   return <>{itemRef.id}</>;
 }
 

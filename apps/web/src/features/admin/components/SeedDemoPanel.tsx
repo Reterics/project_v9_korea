@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Database, ChevronDown, ChevronUp } from "lucide-react";
 import { api } from "@/features/learn/data/apiClient";
 import a1Words from "@/features/learn/content/data/a1-words.json";
@@ -22,6 +22,16 @@ export function SeedDemoPanel() {
   const [seeding, setSeeding] = useState(false);
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
+  const [dbEmpty, setDbEmpty] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      api.get<unknown[]>("/api/v1/content/words").catch(() => []),
+      api.get<unknown[]>("/api/v1/lessons").catch(() => []),
+    ]).then(([words, lessons]) => {
+      setDbEmpty(words.length === 0 && lessons.length === 0);
+    });
+  }, []);
 
   async function handleSeed() {
     setSeeding(true);
@@ -35,11 +45,13 @@ export function SeedDemoPanel() {
 
       const res = await api.post<SeedResult>("/api/v1/admin/seed-demo", payload);
       const { seeded } = res;
+      const total = seeded.words + seeded.sentences + seeded.lessons;
       setResult(
         `Done — ${seeded.words} word${seeded.words !== 1 ? "s" : ""}, ` +
         `${seeded.sentences} sentence${seeded.sentences !== 1 ? "s" : ""}, ` +
         `${seeded.lessons} lesson${seeded.lessons !== 1 ? "s" : ""} seeded.`,
       );
+      if (total > 0) setDbEmpty(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Seed failed");
     } finally {
@@ -48,6 +60,8 @@ export function SeedDemoPanel() {
   }
 
   const noneSelected = !includeWords && !includeSentences && !includeLessons;
+
+  if (dbEmpty === null || dbEmpty === false) return null;
 
   return (
     <div className="rounded-2xl border border-geum-300 bg-geum-50 dark:border-geum-700 dark:bg-namsaek-900/40">

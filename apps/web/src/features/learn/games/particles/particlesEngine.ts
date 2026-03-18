@@ -78,7 +78,7 @@ function buildCandidates(sentences: SentenceData[]): ParticleCandidate[] {
       promptTokens[tokenIndex] = `${stem}__`;
 
       candidates.push({
-        ref: { kind: "pattern", id: `${sentence.id}_p${tokenIndex}` },
+        ref: { kind: "sentence", id: `${sentence.id}_p${tokenIndex}` },
         prompt: promptTokens.join(" "),
         english: sentence.english,
         hint: sentence.hint,

@@ -132,10 +132,13 @@ export function LessonsTab() {
             <p className="py-8 text-center text-sm text-hanji-500">No lessons found.</p>
           )}
           {filtered.map((l) => (
-            <button
+            <div
               key={l.id}
+              role="button"
+              tabIndex={0}
               onClick={() => openEdit(l)}
-              className={`group flex w-full items-start justify-between px-4 py-3 text-left hover:bg-hanji-50 dark:hover:bg-namsaek-800 ${
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openEdit(l); }}
+              className={`group flex w-full cursor-pointer items-start justify-between px-4 py-3 text-left hover:bg-hanji-50 dark:hover:bg-namsaek-800 ${
                 selected?.id === l.id ? "bg-namsaek-50 dark:bg-namsaek-800" : ""
               }`}
             >
@@ -161,7 +164,7 @@ export function LessonsTab() {
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
-            </button>
+            </div>
           ))}
         </div>
 

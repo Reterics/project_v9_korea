@@ -56,7 +56,6 @@ export function useGameController(
           ctx,
           config,
           getWord: (id: string) => content.getWord(id),
-          getPattern: (id: string) => content.getPattern(id),
           now: () => Date.now(),
           rng: () => Math.random(),
         });

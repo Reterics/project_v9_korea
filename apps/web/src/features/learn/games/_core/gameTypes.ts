@@ -6,7 +6,7 @@ export type GameId =
   | "listening";
 
 export type StudyItemRef = {
-  kind: "word" | "pattern";
+  kind: "word" | "sentence";
   id: string;
 };
 
@@ -80,7 +80,6 @@ export type GameEngine<TQuestion = unknown> = {
       ctx: GameContext;
       config: GameConfig;
       getWord(id: string): import("@/features/learn/content/wordTypes").Word | undefined;
-      getPattern(id: string): import("@/features/learn/content/grammarTypes").Pattern | undefined;
       now(): number;
       rng(): number;
     }

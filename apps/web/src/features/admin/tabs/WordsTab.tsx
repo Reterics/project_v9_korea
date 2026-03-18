@@ -123,10 +123,13 @@ export function WordsTab() {
             <p className="py-8 text-center text-sm text-hanji-500">No words found.</p>
           )}
           {filtered.map((w) => (
-            <button
+            <div
               key={w.id}
+              role="button"
+              tabIndex={0}
               onClick={() => openEdit(w)}
-              className={`group flex w-full items-center justify-between px-4 py-3 text-left hover:bg-hanji-50 dark:hover:bg-namsaek-800 ${
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openEdit(w); }}
+              className={`group flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left hover:bg-hanji-50 dark:hover:bg-namsaek-800 ${
                 selected?.id === w.id ? "bg-namsaek-50 dark:bg-namsaek-800" : ""
               }`}
             >
@@ -147,7 +150,7 @@ export function WordsTab() {
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
               </div>
-            </button>
+            </div>
           ))}
         </div>
 

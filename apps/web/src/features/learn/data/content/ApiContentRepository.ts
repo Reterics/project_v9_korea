@@ -1,9 +1,9 @@
 import type { ContentRepository } from "./ContentRepository";
 import type { Word, WordLevel } from "@/features/learn/content/wordTypes";
 import type { GrammarLesson, LessonProgress, Sentence } from "@/features/learn/content/lessonTypes";
-import type { Pattern } from "@/features/learn/content/grammarTypes";
 import type { StudyItemRef } from "@/features/learn/games/_core/gameTypes";
 import { api } from "../apiClient";
+import { notifySaveError } from "../saveErrorNotifier";
 
 type LessonWithProgress = GrammarLesson & {
   progress?: Omit<LessonProgress, "lessonId">;
@@ -48,11 +48,6 @@ export class ApiContentRepository implements ContentRepository {
     return this.words.find((w) => w.id === id);
   }
 
-  getPattern(_: string): Pattern | undefined {
-    // TODO: API endpoint for patterns
-    return undefined;
-  }
-
   listWords(level?: WordLevel): Word[] {
     if (level) return this.words.filter((w) => w.level === level);
     return this.words;
@@ -79,7 +74,7 @@ export class ApiContentRepository implements ContentRepository {
   }
 
   markLessonViewed(lessonId: string): void {
-    api.post(`/api/v1/lessons/${encodeURIComponent(lessonId)}/progress`, { action: "view" }).catch(console.error);
+    api.post(`/api/v1/lessons/${encodeURIComponent(lessonId)}/progress`, { action: "view" }).catch(() => notifySaveError("Failed to save lesson progress."));
     // Optimistic update
     const existing = this.lessonProgress[lessonId];
     if (!existing || existing.status === "not_started") {
@@ -93,7 +88,7 @@ export class ApiContentRepository implements ContentRepository {
   }
 
   markLessonPracticed(lessonId: string): void {
-    api.post(`/api/v1/lessons/${encodeURIComponent(lessonId)}/progress`, { action: "practice" }).catch(console.error);
+    api.post(`/api/v1/lessons/${encodeURIComponent(lessonId)}/progress`, { action: "practice" }).catch(() => notifySaveError("Failed to save practice progress."));
     // Optimistic update
     const existing = this.lessonProgress[lessonId] ?? {
       lessonId,

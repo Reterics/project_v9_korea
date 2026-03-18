@@ -129,7 +129,7 @@ class LessonController
                 'korean' => $ex['korean'],
                 'englishBreakdown' => json_decode($ex['english_breakdown'], true) ?? [],
                 'koreanBreakdown' => json_decode($ex['korean_breakdown'], true) ?? [],
-                'notes' => $ex['notes'] ? json_decode($ex['notes'], true) : null,
+                'notes' => $ex['notes'] ? json_decode($ex['notes'], true) : [],
             ];
         }
 

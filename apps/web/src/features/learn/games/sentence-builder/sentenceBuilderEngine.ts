@@ -88,7 +88,7 @@ function buildQuestion(index: number, now: number): SentenceBuilderQuestion | nu
     }
   }
   return {
-    ref: { kind: "pattern", id: s.id },
+    ref: { kind: "sentence", id: s.id },
     tokens,
     shuffled,
     english: s.english,

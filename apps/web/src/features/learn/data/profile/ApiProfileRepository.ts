@@ -2,6 +2,7 @@ import type { ProfileRepository } from "./ProfileRepository";
 import type { UserProfile } from "@/features/learn/profile/profileTypes";
 import type { GameResult } from "@/features/learn/games/_core/gameTypes";
 import { api } from "../apiClient";
+import { notifySaveError } from "../saveErrorNotifier";
 
 const XP_PER_CORRECT = 10;
 const XP_PER_GAME = 5;
@@ -36,7 +37,7 @@ export class ApiProfileRepository implements ProfileRepository {
         dailyStreak: profile.dailyStreak,
         streakUpdatedAt: profile.streakUpdatedAt,
       })
-      .catch(console.error);
+      .catch(() => notifySaveError("Failed to save profile. XP and streak may not be recorded."));
   }
 
   awardXp(result: GameResult): UserProfile {
