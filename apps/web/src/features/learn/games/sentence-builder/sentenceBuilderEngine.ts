@@ -17,11 +17,13 @@ type SentenceData = {
   level: string;
 };
 
-type SBState = GameState<SentenceBuilderQuestion>;
+type OutcomeEntry = { ref: StudyItemRef; label: string; correct: boolean; latencyMs: number };
 
-const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
-let activeSentences: SentenceData[] = [];
-let wordGlossByKorean = new Map<string, string>();
+type SBState = GameState<SentenceBuilderQuestion> & {
+  _outcomes: OutcomeEntry[];
+  _sentences: SentenceData[];
+  _glossMap: Map<string, string>;
+};
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -54,12 +56,12 @@ function buildCandidates(token: string, role: GrammarRole): string[] {
   return Array.from(new Set(candidates.filter(Boolean)));
 }
 
-function buildTranslationHint(tokens: Array<{ text: string; role: GrammarRole }>): string {
+function buildTranslationHint(tokens: Array<{ text: string; role: GrammarRole }>, glossMap: Map<string, string>): string {
   const lines: string[] = [];
 
   for (const t of tokens) {
     const gloss = buildCandidates(t.text, t.role)
-      .map((c) => wordGlossByKorean.get(c))
+      .map((c) => glossMap.get(c))
       .find(Boolean);
 
     if (gloss) {
@@ -74,9 +76,9 @@ function buildTranslationHint(tokens: Array<{ text: string; role: GrammarRole }>
   return lines.join("\n");
 }
 
-function buildQuestion(index: number, now: number): SentenceBuilderQuestion | null {
-  if (index >= activeSentences.length) return null;
-  const s = activeSentences[index];
+function buildQuestion(sentences: SentenceData[], glossMap: Map<string, string>, index: number, now: number): SentenceBuilderQuestion | null {
+  if (index >= sentences.length) return null;
+  const s = sentences[index];
   const tokens = s.tokens.map((text, i) => ({ text, role: s.roles[i] }));
   // Shuffle until order differs from correct (if more than 1 token)
   let shuffled = shuffle(s.tokens);
@@ -93,7 +95,7 @@ function buildQuestion(index: number, now: number): SentenceBuilderQuestion | nu
     shuffled,
     english: s.english,
     hint: s.hint,
-    translationHint: buildTranslationHint(tokens),
+    translationHint: buildTranslationHint(tokens, glossMap),
     shownAt: now,
   };
 }
@@ -103,95 +105,105 @@ export const sentenceBuilderEngine: GameEngine<SentenceBuilderQuestion> = {
   title: "Sentence Builder",
 
   async init(ctx: GameContext, config): Promise<SBState> {
-    outcomes.length = 0;
-    wordGlossByKorean = new Map(ctx.words.map((w) => [w.korean, w.english]));
+    const glossMap = new Map(ctx.words.map((w) => [w.korean, w.english]));
     const allSentences = ctx.sentences as SentenceData[];
-    activeSentences = config.lessonSentenceIds?.length
+    const sentences = config.lessonSentenceIds?.length
       ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
       : allSentences;
-    const firstQ = buildQuestion(0, Date.now());
+    const firstQ = buildQuestion(sentences, glossMap, 0, Date.now());
     return {
       status: firstQ ? "in_progress" : "finished",
       questionIndex: 0,
       question: firstQ ?? undefined,
       score: ZERO_SCORE,
       startedAt: Date.now(),
+      _outcomes: [],
+      _sentences: sentences,
+      _glossMap: glossMap,
     };
   },
 
   async reduce(state, action, deps): Promise<SBState> {
+    const s = state as SBState;
     const { config, now } = deps;
-    const totalQ = Math.min(config.totalQuestions, activeSentences.length);
+    const { _sentences: sentences, _glossMap: glossMap, _outcomes: outcomes } = s;
+    const totalQ = Math.min(config.totalQuestions, sentences.length);
 
     switch (action.type) {
       case "START":
-        return state;
+        return s;
 
       case "ANSWER": {
         const { ordered } = action.payload as { ordered: string[] };
-        const q = state.question!;
+        const q = s.question!;
         const correctOrder = q.tokens.map((t) => t.text);
         const isCorrect = ordered.every((t, i) => t === correctOrder[i]);
         const latencyMs = now() - q.shownAt;
+        const label = `${q.tokens.map((t) => t.text).join(" ")} — ${q.english}`;
+        const newOutcomes = [...outcomes, { ref: q.ref, label, correct: isCorrect, latencyMs }];
 
-        outcomes.push({ ref: q.ref, correct: isCorrect, latencyMs });
+        const score = calcScore(s.score, isCorrect);
 
-        const score = calcScore(state.score, isCorrect);
-
-        const nextIndex = state.questionIndex + 1;
+        const nextIndex = s.questionIndex + 1;
         if (nextIndex >= totalQ) {
-          return { ...state, score, status: "finished", finishedAt: now(), question: undefined };
+          return { ...s, score, status: "finished", finishedAt: now(), question: undefined, _outcomes: newOutcomes };
         }
 
-        const nextQ = buildQuestion(nextIndex, now());
+        const nextQ = buildQuestion(sentences, glossMap, nextIndex, now());
         return {
-          ...state,
+          ...s,
           score,
           questionIndex: nextIndex,
           question: nextQ ?? undefined,
+          _outcomes: newOutcomes,
         };
       }
 
       case "SKIP": {
-        const q = state.question;
-        if (q) {
-          outcomes.push({ ref: q.ref, correct: false, latencyMs: now() - q.shownAt });
-        }
-        const nextIndex = state.questionIndex + 1;
+        const q = s.question;
+        const newOutcomes = q
+          ? [...outcomes, { ref: q.ref, label: `${q.tokens.map((t) => t.text).join(" ")} — ${q.english}`, correct: false, latencyMs: now() - q.shownAt }]
+          : outcomes;
+
+        const nextIndex = s.questionIndex + 1;
         if (nextIndex >= totalQ) {
           return {
-            ...state,
-            score: skipScore(state.score),
+            ...s,
+            score: skipScore(s.score),
             status: "finished",
             finishedAt: now(),
             question: undefined,
+            _outcomes: newOutcomes,
           };
         }
-        const nextQ = buildQuestion(nextIndex, now());
+        const nextQ = buildQuestion(sentences, glossMap, nextIndex, now());
         return {
-          ...state,
-          score: skipScore(state.score),
+          ...s,
+          score: skipScore(s.score),
           questionIndex: nextIndex,
           question: nextQ ?? undefined,
+          _outcomes: newOutcomes,
         };
       }
 
       case "FINISH":
-        return { ...state, status: "finished", finishedAt: now() };
+        return { ...s, status: "finished", finishedAt: now() };
 
       default:
-        return state;
+        return s;
     }
   },
 
   buildResult(state): GameResult {
+    const s = state as SBState;
     return {
-      correct: state.score.correct,
-      wrong: state.score.wrong,
-      streakMax: state.score.streakMax,
-      durationMs: (state.finishedAt ?? Date.now()) - (state.startedAt ?? Date.now()),
-      itemOutcomes: outcomes.map((o) => ({
+      correct: s.score.correct,
+      wrong: s.score.wrong,
+      streakMax: s.score.streakMax,
+      durationMs: (s.finishedAt ?? Date.now()) - (s.startedAt ?? Date.now()),
+      itemOutcomes: s._outcomes.map((o) => ({
         ref: o.ref,
+        label: o.label,
         grade: o.correct ? "good" : "fail",
         latencyMs: o.latencyMs,
       })),

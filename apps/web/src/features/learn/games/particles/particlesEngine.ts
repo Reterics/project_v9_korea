@@ -18,10 +18,12 @@ type SentenceData = {
 
 type ParticleCandidate = Omit<ParticleQuestion, "shownAt">;
 
-type ParticlesState = GameState<ParticleQuestion>;
+type OutcomeEntry = { ref: StudyItemRef; label: string; correct: boolean; latencyMs: number };
 
-const outcomes: Array<{ ref: StudyItemRef; correct: boolean; latencyMs: number }> = [];
-let particleBank: ParticleCandidate[] = [];
+type ParticlesState = GameState<ParticleQuestion> & {
+  _outcomes: OutcomeEntry[];
+  _bank: ParticleCandidate[];
+};
 
 const particleChoicesByRole: Record<ParticleRole, string[]> = {
   topic: ["은", "는", "이", "가"],
@@ -93,9 +95,9 @@ function buildCandidates(sentences: SentenceData[]): ParticleCandidate[] {
   return candidates;
 }
 
-function pickQuestion(index: number, now: number): ParticleQuestion | null {
-  if (index >= particleBank.length) return null;
-  const source = particleBank[index];
+function pickQuestion(bank: ParticleCandidate[], index: number, now: number): ParticleQuestion | null {
+  if (index >= bank.length) return null;
+  const source = bank[index];
   return { ...source, shownAt: now };
 }
 
@@ -104,14 +106,13 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
   title: "Missing Particle",
 
   async init(ctx: GameContext, config: GameConfig): Promise<ParticlesState> {
-    outcomes.length = 0;
     const allSentences = ctx.sentences as SentenceData[];
     const sentences = config.lessonSentenceIds?.length
       ? allSentences.filter((s) => config.lessonSentenceIds!.includes(s.id))
       : allSentences;
-    particleBank = buildCandidates(sentences);
-    const total = Math.min(config.totalQuestions, particleBank.length);
-    const first = total > 0 ? pickQuestion(0, Date.now()) : null;
+    const bank = buildCandidates(sentences);
+    const total = Math.min(config.totalQuestions, bank.length);
+    const first = total > 0 ? pickQuestion(bank, 0, Date.now()) : null;
 
     return {
       status: first ? "in_progress" : "finished",
@@ -119,92 +120,104 @@ export const particlesEngine: GameEngine<ParticleQuestion> = {
       question: first ?? undefined,
       score: ZERO_SCORE,
       startedAt: Date.now(),
+      _outcomes: [],
+      _bank: bank,
     };
   },
 
   async reduce(state, action, deps): Promise<ParticlesState> {
+    const s = state as ParticlesState;
     const { config, now } = deps;
-    const total = Math.min(config.totalQuestions, particleBank.length);
+    const bank = s._bank;
+    const outcomes = s._outcomes;
+    const total = Math.min(config.totalQuestions, bank.length);
 
     switch (action.type) {
       case "START":
-        return state;
+        return s;
 
       case "ANSWER": {
         const answer = (action.payload as { value: string }).value;
-        const q = state.question;
-        if (!q) return state;
+        const q = s.question;
+        if (!q) return s;
 
         const isCorrect = answer === q.correctParticle;
         const latencyMs = now() - q.shownAt;
-        outcomes.push({ ref: q.ref, correct: isCorrect, latencyMs });
+        const label = `${q.prompt} — ${q.english}`;
+        const newOutcomes = [...outcomes, { ref: q.ref, label, correct: isCorrect, latencyMs }];
 
-        const score = calcScore(state.score, isCorrect);
+        const score = calcScore(s.score, isCorrect);
 
-        const nextIndex = state.questionIndex + 1;
+        const nextIndex = s.questionIndex + 1;
         if (nextIndex >= total) {
           return {
-            ...state,
+            ...s,
             status: "finished",
             question: undefined,
             score,
             finishedAt: now(),
+            _outcomes: newOutcomes,
           };
         }
 
         return {
-          ...state,
+          ...s,
           questionIndex: nextIndex,
-          question: pickQuestion(nextIndex, now()) ?? undefined,
+          question: pickQuestion(bank, nextIndex, now()) ?? undefined,
           score,
+          _outcomes: newOutcomes,
         };
       }
 
       case "SKIP": {
-        const q = state.question;
-        if (q) {
-          outcomes.push({ ref: q.ref, correct: false, latencyMs: now() - q.shownAt });
-        }
+        const q = s.question;
+        const newOutcomes = q
+          ? [...outcomes, { ref: q.ref, label: `${q.prompt} — ${q.english}`, correct: false, latencyMs: now() - q.shownAt }]
+          : outcomes;
 
-        const nextIndex = state.questionIndex + 1;
-        const score = skipScore(state.score);
+        const nextIndex = s.questionIndex + 1;
+        const score = skipScore(s.score);
 
         if (nextIndex >= total) {
           return {
-            ...state,
+            ...s,
             status: "finished",
             question: undefined,
             score,
             finishedAt: now(),
+            _outcomes: newOutcomes,
           };
         }
 
         return {
-          ...state,
+          ...s,
           questionIndex: nextIndex,
-          question: pickQuestion(nextIndex, now()) ?? undefined,
+          question: pickQuestion(bank, nextIndex, now()) ?? undefined,
           score,
+          _outcomes: newOutcomes,
         };
       }
 
       case "FINISH":
-        return { ...state, status: "finished", question: undefined, finishedAt: now() };
+        return { ...s, status: "finished", question: undefined, finishedAt: now() };
 
       default:
-        return state;
+        return s;
     }
   },
 
   buildResult(state): GameResult {
+    const s = state as ParticlesState;
     return {
-      correct: state.score.correct,
-      wrong: state.score.wrong,
-      streakMax: state.score.streakMax,
-      durationMs: (state.finishedAt ?? Date.now()) - (state.startedAt ?? Date.now()),
-      itemOutcomes: outcomes.map((outcome) => ({
-        ref: outcome.ref,
-        grade: outcome.correct ? "good" : "fail",
-        latencyMs: outcome.latencyMs,
+      correct: s.score.correct,
+      wrong: s.score.wrong,
+      streakMax: s.score.streakMax,
+      durationMs: (s.finishedAt ?? Date.now()) - (s.startedAt ?? Date.now()),
+      itemOutcomes: s._outcomes.map((o) => ({
+        ref: o.ref,
+        label: o.label,
+        grade: o.correct ? "good" : "fail",
+        latencyMs: o.latencyMs,
       })),
     };
   },

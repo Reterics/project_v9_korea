@@ -33,6 +33,7 @@ export type GameResult = {
   durationMs: number;
   itemOutcomes: Array<{
     ref: StudyItemRef;
+    label: string;
     grade: "easy" | "good" | "hard" | "fail";
     latencyMs: number;
   }>;

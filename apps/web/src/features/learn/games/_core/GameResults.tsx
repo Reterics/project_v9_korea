@@ -1,7 +1,6 @@
 import { CheckCircle, XCircle, Timer } from "lucide-react";
 import { BrandLogo, StatChip } from "@reterics/birdie-ui";
-import type { GameResult, StudyItemRef } from "./gameTypes";
-import { useData } from "@/features/learn/data/DataProvider";
+import type { GameResult } from "./gameTypes";
 
 type GameResultsProps = {
   title: string;
@@ -77,10 +76,10 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
                     className="flex items-center justify-between gap-3 rounded-2xl border border-dancheong-100 bg-dancheong-50 px-4 py-3 dark:border-dancheong-800/30 dark:bg-dancheong-900/20"
                   >
                     <div className="text-sm font-semibold">
-                      <RefLabel itemRef={o.ref} />
+                      {o.label || o.ref.id}
                     </div>
                     <div className="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-dancheong-600 shadow-sm dark:bg-namsaek-800 dark:text-dancheong-300">
-                      Review
+                      Missed
                     </div>
                   </div>
                 ))}
@@ -92,17 +91,4 @@ export function GameResults({ title, result, onDone }: GameResultsProps) {
   );
 }
 
-function RefLabel({ itemRef }: { itemRef: StudyItemRef }) {
-  const { content } = useData();
-  if (itemRef.kind === "word") {
-    const w = content.getWord(itemRef.id);
-    if (w) return <>{w.korean} — {w.english}</>;
-  }
-  if (itemRef.kind === "sentence") {
-    const baseId = itemRef.id.replace(/_p\d+$/, "");
-    const s = content.listSentences().find((s) => s.id === baseId);
-    if (s) return <>{s.tokens.join(" ")} — {s.english}</>;
-  }
-  return <>{itemRef.id}</>;
-}
 

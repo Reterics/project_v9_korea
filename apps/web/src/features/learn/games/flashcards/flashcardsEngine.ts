@@ -3,7 +3,7 @@ import { calcScore, skipScore, ZERO_SCORE } from "@/features/learn/games/_core/s
 import type { Word } from "@/features/learn/content/wordTypes";
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
 
-type OutcomeEntry = { ref: StudyItemRef; grade: FlashcardGrade; latencyMs: number };
+type OutcomeEntry = { ref: StudyItemRef; label: string; grade: FlashcardGrade; latencyMs: number };
 
 type FlashcardState = GameState<FlashcardQuestion> & {
   _outcomes: OutcomeEntry[];
@@ -77,7 +77,8 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
 
         const latencyMs = now() - q.shownAt;
         const isCorrect = grade === "easy" || grade === "good";
-        const newOutcomes = [...outcomes, { ref: q.ref, grade, latencyMs }];
+        const label = `${q.korean} — ${q.english}`;
+        const newOutcomes = [...outcomes, { ref: q.ref, label, grade, latencyMs }];
 
         const score = calcScore(s.score, isCorrect);
 
@@ -98,7 +99,7 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
       case "SKIP": {
         const q = s.question;
         const newOutcomes = q
-          ? [...outcomes, { ref: q.ref, grade: "again" as FlashcardGrade, latencyMs: now() - q.shownAt }]
+          ? [...outcomes, { ref: q.ref, label: `${q.korean} — ${q.english}`, grade: "again" as FlashcardGrade, latencyMs: now() - q.shownAt }]
           : outcomes;
 
         const score = skipScore(s.score);
@@ -134,6 +135,7 @@ export const flashcardsEngine: GameEngine<FlashcardQuestion> = {
       durationMs: (s.finishedAt ?? Date.now()) - (s.startedAt ?? Date.now()),
       itemOutcomes: outcomes.map((o) => ({
         ref: o.ref,
+        label: o.label,
         grade: o.grade === "again" ? "fail" : o.grade,
         latencyMs: o.latencyMs,
       })),
