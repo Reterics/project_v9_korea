@@ -1,7 +1,8 @@
 import type { GameState, GameAction } from "@/features/learn/games/_core/gameTypes";
 import type { FlashcardQuestion, FlashcardGrade } from "./flashcardsTypes";
 import { PromptCard, AudioButton } from "@reterics/birdie-ui";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { useGameKeyboard } from "@/features/learn/games/_core/useGameKeyboard";
 
 type Props = {
   state: GameState<FlashcardQuestion>;
@@ -31,32 +32,15 @@ export function FlashcardsScreen({ state, dispatch }: Props) {
     dispatch({ type: "ANSWER", payload: { grade } });
   }, [dispatch]);
 
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-      if (!revealed && (e.key === " " || e.key === "Enter")) {
-        e.preventDefault();
-        setRevealed(true);
-        return;
-      }
-
-      if (revealed && gradeByKey[e.key]) {
-        e.preventDefault();
-        handleGrade(gradeByKey[e.key]);
-        return;
-      }
-
-      if (e.key === "s" || e.key === "S") {
-        e.preventDefault();
-        dispatch({ type: "SKIP" });
-        setRevealed(false);
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [revealed, handleGrade, dispatch]);
+  useGameKeyboard({
+    " ":     () => { if (!revealed) setRevealed(true); },
+    Enter:   () => { if (!revealed) setRevealed(true); },
+    "1":     () => { if (revealed) handleGrade(gradeByKey["1"]); },
+    "2":     () => { if (revealed) handleGrade(gradeByKey["2"]); },
+    "3":     () => { if (revealed) handleGrade(gradeByKey["3"]); },
+    "4":     () => { if (revealed) handleGrade(gradeByKey["4"]); },
+    s:       () => { dispatch({ type: "SKIP" }); setRevealed(false); },
+  });
 
   if (!q) return null;
 

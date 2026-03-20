@@ -2,7 +2,8 @@
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
 import { ROLE_COLORS, ROLE_LABELS } from "@/features/learn/content/roles";
 import { FeedbackToast } from "@reterics/birdie-ui";
-import {useState, useEffect, useCallback, useMemo} from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useGameKeyboard } from "@/features/learn/games/_core/useGameKeyboard";
 
 type Props = {
   state: GameState<SentenceBuilderQuestion>;
@@ -76,42 +77,16 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
   );
 
   // Keyboard: 1-N to select available tokens, Backspace to undo
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      if (!q || showCorrect) return;
-
-      if (e.key === "Backspace" && placed.length > 0) {
-        e.preventDefault();
-        setPlaced((prev) => prev.slice(0, -1));
-        return;
-      }
-
-      const num = parseInt(e.key);
-      if (num >= 1 && num <= available.length) {
-        e.preventDefault();
-        addToken(available[num - 1]);
-      }
-
-      if (e.key === "s" || e.key === "S") {
-        e.preventDefault();
-        dispatch({ type: "SKIP" });
-      }
-
-      if ((e.key === "Enter" || e.key === " ") && showCorrect && feedback === "wrong") {
-        e.preventDefault();
-        continueAfterWrong();
-      }
-
-      if (e.key === "h" || e.key === "H") {
-        e.preventDefault();
-        setShowHint((prev) => !prev);
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [q, placed, available, showCorrect, feedback, addToken, continueAfterWrong, dispatch]);
+  const keyboardHandlers: Record<string, () => void> = {};
+  for (let i = 0; i < available.length; i++) {
+    const token = available[i];
+    keyboardHandlers[String(i + 1)] = () => { if (!showCorrect) addToken(token); };
+  }
+  keyboardHandlers["Backspace"] = () => { if (!showCorrect && placed.length > 0) setPlaced((prev) => prev.slice(0, -1)); };
+  keyboardHandlers["Enter"] = keyboardHandlers[" "] = () => { if (showCorrect && feedback === "wrong") continueAfterWrong(); };
+  keyboardHandlers["s"] = () => { if (!showCorrect) dispatch({ type: "SKIP" }); };
+  keyboardHandlers["h"] = () => setShowHint((prev) => !prev);
+  useGameKeyboard(keyboardHandlers);
 
   // Footer Hint (H) button dispatches this event for Sentence Builder only.
   useEffect(() => {

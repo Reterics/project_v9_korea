@@ -1,6 +1,8 @@
-﻿import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useState } from "react";
 import { ChoiceGrid, PromptCard } from "@reterics/birdie-ui";
 import { hangeulEntries, speakKorean, type HangeulEntry } from "./hangeulData";
+import { useAnswerFeedback } from "@/features/learn/games/_core/useAnswerFeedback";
+import { useGameKeyboard } from "@/features/learn/games/_core/useGameKeyboard";
 
 type PracticeMode = "sound_from_char" | "char_from_sound";
 
@@ -15,12 +17,6 @@ type QuizQuestion = {
 
 const QUIZ_LENGTH = 10;
 
-const KEY_TO_INDEX: Record<string, number> = {
-  "1": 0,
-  "2": 1,
-  "3": 2,
-  "4": 3,
-};
 
 function shuffled<T>(list: T[]): T[] {
   const copy = [...list];
@@ -76,9 +72,6 @@ export function HangeulPracticeGamePage() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
-
   const finished = questionIndex >= QUIZ_LENGTH;
 
   const resetSession = useCallback(
@@ -88,52 +81,33 @@ export function HangeulPracticeGamePage() {
       setQuestionIndex(0);
       setCorrect(0);
       setWrong(0);
-      setSelected(null);
-      setFeedback(null);
     },
     [mode]
   );
 
+  const { feedback, selected, submit } = useAnswerFeedback(() => {
+    setQuestionIndex((prev) => prev + 1);
+    setQuestion(buildQuestion(mode));
+  }, 700);
+
   const answer = useCallback(
     (value: string) => {
       if (finished || feedback) return;
-
       const isCorrect = value === question.correctValue;
       speakKorean(question.correctChar);
-      setSelected(value);
-      setFeedback(isCorrect ? "correct" : "wrong");
-
-      if (isCorrect) {
-        setCorrect((prev) => prev + 1);
-      } else {
-        setWrong((prev) => prev + 1);
-      }
-
-      window.setTimeout(() => {
-        setSelected(null);
-        setFeedback(null);
-        setQuestionIndex((prev) => prev + 1);
-        setQuestion(buildQuestion(mode));
-      }, 700);
+      if (isCorrect) setCorrect((prev) => prev + 1);
+      else setWrong((prev) => prev + 1);
+      submit(value, isCorrect);
     },
-    [feedback, finished, mode, question.correctValue, question.correctChar]
+    [feedback, finished, question.correctValue, question.correctChar, submit]
   );
 
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (finished || feedback) return;
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-      const idx = KEY_TO_INDEX[e.key];
-      if (idx !== undefined && question.choices[idx]) {
-        e.preventDefault();
-        answer(question.choices[idx].value);
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [answer, feedback, finished, question.choices]);
+  useGameKeyboard({
+    "1": () => { if (!finished && !feedback && question.choices[0]) answer(question.choices[0].value); },
+    "2": () => { if (!finished && !feedback && question.choices[1]) answer(question.choices[1].value); },
+    "3": () => { if (!finished && !feedback && question.choices[2]) answer(question.choices[2].value); },
+    "4": () => { if (!finished && !feedback && question.choices[3]) answer(question.choices[3].value); },
+  });
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
