@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 /**
  * Attaches a single keydown listener on window with the standard game guards
@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
  */
 export function useGameKeyboard(handlers: Record<string, () => void>) {
   const ref = useRef(handlers);
-  ref.current = handlers;
+  useLayoutEffect(() => { ref.current = handlers; });
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {

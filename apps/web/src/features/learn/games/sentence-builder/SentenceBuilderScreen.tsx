@@ -18,17 +18,6 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
   const [showHint, setShowHint] = useState(false);
   const [pendingWrongAnswer, setPendingWrongAnswer] = useState<string[] | null>(null);
 
-  // Reset placed tokens when question changes (state-during-render pattern)
-  const [prevQuestionIndex, setPrevQuestionIndex] = useState(state.questionIndex);
-  if (prevQuestionIndex !== state.questionIndex) {
-    setPrevQuestionIndex(state.questionIndex);
-    setPlaced([]);
-    setShowCorrect(false);
-    setFeedback(null);
-    setShowHint(false);
-    setPendingWrongAnswer(null);
-  }
-
   const available = useMemo(() => q
       ? q.shuffled.filter((token) => {
         const placedCount = placed.filter((p) => p === token).length;

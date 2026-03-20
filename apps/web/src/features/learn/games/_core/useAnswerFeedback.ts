@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useLayoutEffect } from "react";
 
 /**
  * Encapsulates the feedback/selected state pattern shared by choice-based game screens:
@@ -11,7 +11,7 @@ export function useAnswerFeedback(onContinue: (value: string) => void, delayMs =
   const [selected, setSelected] = useState<string | null>(null);
 
   const continueRef = useRef(onContinue);
-  continueRef.current = onContinue;
+  useLayoutEffect(() => { continueRef.current = onContinue; });
 
   const submit = useCallback(
     (value: string, isCorrect: boolean) => {

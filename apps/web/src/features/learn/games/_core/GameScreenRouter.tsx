@@ -17,7 +17,7 @@ export function GameScreenRouter({ gameId, state, dispatch }: GameScreenRouterPr
     case "flashcards":
       return <FlashcardsScreen state={state as GameState<FlashcardQuestion>} dispatch={dispatch} />;
     case "sentence_builder":
-      return <SentenceBuilderScreen state={state as GameState<SentenceBuilderQuestion>} dispatch={dispatch} />;
+      return <SentenceBuilderScreen key={state.questionIndex} state={state as GameState<SentenceBuilderQuestion>} dispatch={dispatch} />;
     case "particles":
       return <ParticlesScreen state={state as GameState<ParticleQuestion>} dispatch={dispatch} />;
     case "match":
