@@ -3,32 +3,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ChevronRight, Layers, Target, BookOpen, AlertTriangle, Info } from "lucide-react";
 import { useData } from "@/features/learn/data/DataProvider";
 import type { LessonExample, LessonExplanationBlock } from "@/features/learn/content/lessonTypes";
+import { ROLE_COLORS, GAME_LABELS, GAME_DESC } from "@/features/learn/content/roles";
 import { MagpieTip } from "@reterics/birdie-ui";
-
-const roleColors: Record<string, string> = {
-  subject: "bg-namsaek-50 text-namsaek-700 border-namsaek-200 dark:bg-namsaek-800/50 dark:text-namsaek-200 dark:border-namsaek-700",
-  object: "bg-cheongja-50 text-cheongja-700 border-cheongja-200 dark:bg-cheongja-800/50 dark:text-cheongja-200 dark:border-cheongja-700",
-  verb: "bg-dancheong-50 text-dancheong-700 border-dancheong-200 dark:bg-dancheong-800/50 dark:text-dancheong-200 dark:border-dancheong-700",
-  location: "bg-geum-50 text-geum-700 border-geum-200 dark:bg-geum-800/50 dark:text-geum-200 dark:border-geum-700",
-  topic: "bg-namsaek-50 text-namsaek-700 border-namsaek-200 dark:bg-namsaek-800/50 dark:text-namsaek-200 dark:border-namsaek-700",
-};
 
 const practiceIcons: Record<string, React.ReactNode> = {
   sentence_builder: <Layers className="h-4 w-4" />,
   particles: <Target className="h-4 w-4" />,
   flashcards: <BookOpen className="h-4 w-4" />,
-};
-
-const practiceLabels: Record<string, string> = {
-  sentence_builder: "Sentence Builder",
-  particles: "Particles",
-  flashcards: "Flashcards",
-};
-
-const practiceDesc: Record<string, string> = {
-  sentence_builder: "Build word order",
-  particles: "Fill particles",
-  flashcards: "Review words",
 };
 
 export function GrammarLessonPage() {
@@ -93,7 +74,7 @@ export function GrammarLessonPage() {
                     key={i}
                     className={
                       "rounded-xl border px-3 py-1.5 text-sm font-medium " +
-                      (roleColors[part.toLowerCase()] ?? "bg-hanji-50 text-hanji-700 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-200 dark:border-namsaek-700")
+                      (ROLE_COLORS[part.toLowerCase()] ?? "bg-hanji-50 text-hanji-700 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-200 dark:border-namsaek-700")
                     }
                   >
                     {part}
@@ -109,7 +90,7 @@ export function GrammarLessonPage() {
                     key={i}
                     className={
                       "rounded-xl border px-3 py-1.5 text-sm font-medium " +
-                      (roleColors[part.toLowerCase()] ?? "bg-hanji-50 text-hanji-700 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-200 dark:border-namsaek-700")
+                      (ROLE_COLORS[part.toLowerCase()] ?? "bg-hanji-50 text-hanji-700 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-200 dark:border-namsaek-700")
                     }
                   >
                     {part}
@@ -180,9 +161,9 @@ export function GrammarLessonPage() {
                 {practiceIcons[mode] ?? <BookOpen className="h-4 w-4" />}
               </div>
               <div className="min-w-0">
-                <div className="text-sm font-semibold">{practiceLabels[mode] ?? mode}</div>
+                <div className="text-sm font-semibold">{GAME_LABELS[mode] ?? mode}</div>
                 <div className="text-xs text-hanji-500 dark:text-hanji-400">
-                  {practiceDesc[mode] ?? "Practice"}
+                  {GAME_DESC[mode] ?? "Practice"}
                 </div>
               </div>
               <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-hanji-400 transition group-hover:translate-x-0.5 dark:text-hanji-500" />
@@ -215,7 +196,7 @@ function ExampleCard({ example, featured }: { example: LessonExample; featured?:
             key={i}
             className={
               "rounded-lg border px-2 py-0.5 text-xs font-medium " +
-              (roleColors[role] ?? "bg-hanji-100 text-hanji-600 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-300 dark:border-namsaek-700")
+              (ROLE_COLORS[role] ?? "bg-hanji-100 text-hanji-600 border-hanji-200 dark:bg-namsaek-800 dark:text-hanji-300 dark:border-namsaek-700")
             }
           >
             {role}

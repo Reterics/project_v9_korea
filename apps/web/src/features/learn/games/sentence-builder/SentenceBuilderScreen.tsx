@@ -1,25 +1,12 @@
 ﻿import type { GameState, GameAction } from "@/features/learn/games/_core/gameTypes";
 import type { SentenceBuilderQuestion, GrammarRole } from "./sentenceBuilderTypes";
+import { ROLE_COLORS, ROLE_LABELS } from "@/features/learn/content/roles";
 import { FeedbackToast } from "@reterics/birdie-ui";
 import {useState, useEffect, useCallback, useMemo} from "react";
 
 type Props = {
   state: GameState<SentenceBuilderQuestion>;
   dispatch: (action: GameAction) => void;
-};
-
-const roleColors: Record<GrammarRole, string> = {
-  subject: "border-namsaek-300 bg-namsaek-50 text-namsaek-700 dark:border-namsaek-600 dark:bg-namsaek-800/50 dark:text-namsaek-200",
-  object: "border-cheongja-300 bg-cheongja-50 text-cheongja-700 dark:border-cheongja-600 dark:bg-cheongja-800/50 dark:text-cheongja-200",
-  verb: "border-dancheong-300 bg-dancheong-50 text-dancheong-700 dark:border-dancheong-600 dark:bg-dancheong-800/50 dark:text-dancheong-200",
-  location: "border-geum-300 bg-geum-50 text-geum-700 dark:border-geum-600 dark:bg-geum-800/50 dark:text-geum-200",
-};
-
-const roleLabels: Record<GrammarRole, string> = {
-  subject: "Subject",
-  object: "Object",
-  verb: "Verb",
-  location: "Location",
 };
 
 export function SentenceBuilderScreen({ state, dispatch }: Props) {
@@ -180,7 +167,7 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
               disabled={showCorrect}
               className={
                 "inline-flex h-12 items-center rounded-xl border px-4 text-base font-semibold shadow-sm transition hover:-translate-y-0.5 " +
-                (role ? roleColors[role] : "border-hanji-300 bg-white dark:border-namsaek-700 dark:bg-namsaek-800")
+                (role ? ROLE_COLORS[role] : "border-hanji-300 bg-white dark:border-namsaek-700 dark:bg-namsaek-800")
               }
             >
               {token}
@@ -206,12 +193,12 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
               key={i}
               className={
                 "rounded-xl border px-3 py-2 text-base font-semibold " +
-                roleColors[t.role]
+                ROLE_COLORS[t.role]
               }
             >
               {t.text}
               <span className="ml-1.5 text-[10px] font-normal opacity-60">
-                {roleLabels[t.role]}
+                {ROLE_LABELS[t.role]}
               </span>
             </span>
           ))}
@@ -244,14 +231,14 @@ export function SentenceBuilderScreen({ state, dispatch }: Props) {
 
       {/* Role legend */}
       <div className="flex flex-wrap justify-center gap-3 text-[10px]">
-        {(Object.keys(roleLabels) as GrammarRole[]).map((role) => (
+        {(Object.keys(ROLE_LABELS) as GrammarRole[]).map((role) => (
           <span
             key={role}
             className={
-              "rounded-lg border px-2 py-1 " + roleColors[role]
+              "rounded-lg border px-2 py-1 " + ROLE_COLORS[role]
             }
           >
-            {roleLabels[role]}
+            {ROLE_LABELS[role]}
           </span>
         ))}
       </div>
