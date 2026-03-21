@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "nav-active" | "nav-inactive";
+type ButtonVariant = "primary" | "secondary" | "outline" | "nav-active" | "nav-inactive";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -12,6 +12,8 @@ const variantClasses: Record<ButtonVariant, string> = {
     "bg-namsaek-500 text-hanji-50 px-4 py-3 text-sm font-semibold shadow-sm rounded-xl hover:bg-namsaek-600 transition",
   secondary:
     "border border-hanji-300 bg-white rounded-2xl px-3 py-2 text-xs font-semibold shadow-sm hover:bg-hanji-50 dark:border-namsaek-700 dark:bg-namsaek-800 dark:hover:bg-namsaek-700 transition",
+  outline:
+    "border border-hanji-300 bg-white rounded-xl px-4 py-3 text-sm font-semibold shadow-sm text-namsaek-700 hover:bg-hanji-50 dark:border-namsaek-700 dark:bg-namsaek-800 dark:text-hanji-200 dark:hover:bg-namsaek-700 transition",
   "nav-active":
     "rounded-xl px-3 py-2 bg-namsaek-500 text-hanji-50 text-sm font-medium",
   "nav-inactive":

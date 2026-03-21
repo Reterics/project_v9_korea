@@ -7,7 +7,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'nav-active', 'nav-inactive'],
+      options: ['primary', 'secondary', 'outline', 'nav-active', 'nav-inactive'],
     },
     disabled: { control: 'boolean' },
   },
@@ -22,6 +22,10 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: { variant: 'secondary', children: 'Practice' },
+};
+
+export const Outline: Story = {
+  args: { variant: 'outline', children: 'Cancel' },
 };
 
 export const NavActive: Story = {
@@ -41,6 +45,7 @@ export const AllVariants: Story = {
     <div className="flex flex-wrap items-center gap-3">
       <Button variant="primary">Primary</Button>
       <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
       <Button variant="nav-active">Nav Active</Button>
       <Button variant="nav-inactive">Nav Inactive</Button>
       <Button variant="primary" disabled>Disabled</Button>
