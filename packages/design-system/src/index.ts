@@ -21,6 +21,11 @@ export { StatChip } from "./primitives/StatChip.tsx";
 export { Skeleton } from "./primitives/Skeleton.tsx";
 export { Dialog, DialogHeader, DialogBody, DialogFooter } from "./primitives/Dialog.tsx";
 export { Tooltip } from "./primitives/Tooltip.tsx";
+export { ProgressBar } from "./primitives/ProgressBar.tsx";
+export { Alert } from "./primitives/Alert.tsx";
+export { Spinner } from "./primitives/Spinner.tsx";
+export { Accordion } from "./primitives/Accordion.tsx";
+export { EmptyState } from "./primitives/EmptyState.tsx";
 
 // Components
 export { LessonCard } from "./components/LessonCard.tsx";
