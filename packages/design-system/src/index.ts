@@ -20,6 +20,7 @@ export { Container } from "./primitives/Container.tsx";
 export { StatChip } from "./primitives/StatChip.tsx";
 export { Skeleton } from "./primitives/Skeleton.tsx";
 export { Dialog, DialogHeader, DialogBody, DialogFooter } from "./primitives/Dialog.tsx";
+export { Tooltip } from "./primitives/Tooltip.tsx";
 
 // Components
 export { LessonCard } from "./components/LessonCard.tsx";
