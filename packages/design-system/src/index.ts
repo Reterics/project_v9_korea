@@ -26,6 +26,9 @@ export { Alert } from "./primitives/Alert.tsx";
 export { Spinner } from "./primitives/Spinner.tsx";
 export { Accordion } from "./primitives/Accordion.tsx";
 export { EmptyState } from "./primitives/EmptyState.tsx";
+export { Avatar } from "./primitives/Avatar.tsx";
+export { Pagination } from "./primitives/Pagination.tsx";
+export { Kbd } from "./primitives/Kbd.tsx";
 
 // Components
 export { LessonCard } from "./components/LessonCard.tsx";
@@ -65,6 +68,7 @@ export { SettingsRow } from "./forms/SettingsRow.tsx";
 export { DatePicker } from "./forms/DatePicker.tsx";
 export { Autocomplete } from "./forms/Autocomplete.tsx";
 export { MultiSelect } from "./forms/MultiSelect.tsx";
+export { TagInput } from "./forms/TagInput.tsx";
 
 // Navigation
 export { NavigationItem } from "./navigation/NavigationItem.tsx";
