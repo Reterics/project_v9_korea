@@ -1,11 +1,10 @@
 import { Keyboard, Brain, Flame, MessageCircle } from "lucide-react";
+import { Card, CardHeader, Kbd, PageHeader } from "@reterics/birdie-ui";
 
 export function HelpPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-namsaek-900 dark:text-hanji-100">
-        Help &amp; Support
-      </h1>
+      <PageHeader title="Help & Support" />
       <KeyboardShortcutsSection />
       <HowItWorksSection />
       <FeedbackSection />
@@ -24,15 +23,13 @@ function KeyboardShortcutsSection() {
   ];
 
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<Keyboard className="h-5 w-5" />} title="Keyboard Shortcuts" />
       <div className="grid gap-2">
         {shortcuts.map(({ keys, description }) => (
           <div key={keys} className="flex items-center justify-between text-sm">
             <span className="text-hanji-600 dark:text-hanji-400">{description}</span>
-            <kbd className="rounded-lg border border-hanji-300 bg-hanji-100 px-2 py-0.5 font-mono text-xs text-namsaek-700 dark:border-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-300">
-              {keys}
-            </kbd>
+            <Kbd>{keys}</Kbd>
           </div>
         ))}
       </div>
@@ -42,7 +39,7 @@ function KeyboardShortcutsSection() {
 
 function HowItWorksSection() {
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<Brain className="h-5 w-5" />} title="How It Works" />
       <div className="space-y-4 text-sm text-hanji-700 dark:text-hanji-300">
         <div>
@@ -85,7 +82,7 @@ function HowItWorksSection() {
 
 function FeedbackSection() {
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<MessageCircle className="h-5 w-5" />} title="Feedback" />
       <p className="text-sm text-hanji-600 dark:text-hanji-400">
         Found a bug or have a suggestion? Open an issue on{" "}
@@ -100,24 +97,5 @@ function FeedbackSection() {
         .
       </p>
     </Card>
-  );
-}
-
-/* ---- Shared UI ---- */
-
-function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-hanji-300 bg-white p-5 dark:border-namsaek-700 dark:bg-namsaek-900">
-      {children}
-    </div>
-  );
-}
-
-function CardHeader({ icon, title }: { icon: React.ReactNode; title: string }) {
-  return (
-    <div className="mb-4 flex items-center gap-2 text-namsaek-800 dark:text-hanji-200">
-      {icon}
-      <h2 className="text-lg font-semibold">{title}</h2>
-    </div>
   );
 }

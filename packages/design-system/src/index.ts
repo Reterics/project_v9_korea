@@ -15,6 +15,7 @@ export { LessonStatusIcon } from "./icons/LessonStatusIcon.tsx";
 export { Button } from "./primitives/Button.tsx";
 export { Badge } from "./primitives/Badge.tsx";
 export { Card } from "./primitives/Card.tsx";
+export { CardHeader } from "./primitives/CardHeader.tsx";
 export { Icon } from "./primitives/Icon.tsx";
 export { Container } from "./primitives/Container.tsx";
 export { StatChip } from "./primitives/StatChip.tsx";

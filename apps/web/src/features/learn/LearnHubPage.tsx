@@ -12,6 +12,7 @@ import {
 import {
   ActivityCard,
   BirdIcon,
+  Card,
   DashboardLayout,
   ActivityGrid,
   LessonCard,
@@ -84,7 +85,7 @@ export function LearnHubPage() {
         <>
           {/* Current lesson block */}
           {!currentLesson && (
-            <div className="flex flex-col items-center gap-3 rounded-3xl border border-hanji-300 bg-white p-6 text-center shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+            <Card className="flex flex-col items-center gap-3 text-center">
               <BirdIcon size={40} />
               <div>
                 <div className="text-sm font-semibold text-namsaek-900 dark:text-hanji-100">
@@ -94,7 +95,7 @@ export function LearnHubPage() {
                   Your Korean Birdie is proud. Keep practising to build mastery.
                 </div>
               </div>
-            </div>
+            </Card>
           )}
           {currentLesson && (
             <LessonCard

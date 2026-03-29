@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronRight, Layers, Target, BookOpen, AlertTriangle, Info } from "lucide-react";
+import { ChevronRight, Layers, Target, BookOpen, Info } from "lucide-react";
 import { useData } from "@/features/learn/data/DataProvider";
 import type { LessonExample, LessonExplanationBlock } from "@/features/learn/content/lessonTypes";
 import { ROLE_COLORS, GAME_LABELS, GAME_DESC } from "@/features/learn/content/roles";
-import { MagpieTip } from "@reterics/birdie-ui";
+import { Alert, Button, Card, MagpieTip } from "@reterics/birdie-ui";
 
 const practiceIcons: Record<string, React.ReactNode> = {
   sentence_builder: <Layers className="h-4 w-4" />,
@@ -37,8 +37,7 @@ export function GrammarLessonPage() {
 
   return (
     <div className="space-y-4">
-      {/* Header card — same style as HangeulPracticePage */}
-      <section className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+      <Card>
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="text-xs font-medium text-hanji-500 dark:text-hanji-400">
@@ -48,20 +47,21 @@ export function GrammarLessonPage() {
             <p className="mt-1 text-sm text-namsaek-600 dark:text-hanji-300">{lesson.summary}</p>
           </div>
           {lesson.nextLessonId && (
-            <button
+            <Button
+              size="sm"
+              className="shrink-0 flex items-center gap-1.5 rounded-2xl"
               onClick={() => navigate(`/grammar/${lesson.nextLessonId}`)}
-              className="shrink-0 flex items-center gap-1.5 rounded-2xl bg-namsaek-500 px-4 py-2 text-sm font-semibold text-hanji-50 transition hover:bg-namsaek-600"
             >
               Next lesson
               <ChevronRight className="h-4 w-4" />
-            </button>
+            </Button>
           )}
         </div>
-      </section>
+      </Card>
 
       {/* Pattern comparison */}
       {lesson.pattern && (
-        <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+        <Card>
           <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400 mb-3">
             Word order
           </div>
@@ -99,21 +99,21 @@ export function GrammarLessonPage() {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Intro example card */}
       {introExample && (
-        <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+        <Card>
           <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400 mb-3">
             Example
           </div>
           <ExampleCard example={introExample} featured />
-        </div>
+        </Card>
       )}
 
       {/* Key points */}
-      <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+      <Card>
         <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400 mb-3">
           Key points
         </div>
@@ -122,11 +122,11 @@ export function GrammarLessonPage() {
             <ExplanationBlock key={block.id} block={block} />
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* More examples */}
       {moreExamples.length > 0 && (
-        <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+        <Card>
           <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400 mb-3">
             More examples
           </div>
@@ -135,11 +135,11 @@ export function GrammarLessonPage() {
               <ExampleCard key={ex.id} example={ex} />
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Practice CTAs */}
-      <div className="rounded-3xl border border-hanji-300 bg-white p-5 shadow-sm dark:border-namsaek-700 dark:bg-namsaek-900">
+      <Card>
         <div className="flex items-center justify-between mb-3">
           <div className="text-xs font-semibold text-hanji-500 dark:text-hanji-400">
             Practice this lesson
@@ -170,7 +170,7 @@ export function GrammarLessonPage() {
             </button>
           ))}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
@@ -228,17 +228,9 @@ function ExplanationBlock({ block }: { block: LessonExplanationBlock }) {
 
   if (block.type === "warning") {
     return (
-      <div className="flex gap-3 rounded-2xl border border-geum-200 bg-geum-50 p-3 dark:border-geum-700/50 dark:bg-geum-900/20">
-        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-geum-500 dark:text-geum-400" />
-        <div>
-          {block.title && (
-            <div className="text-xs font-semibold text-geum-700 dark:text-geum-300 mb-0.5">
-              {block.title}
-            </div>
-          )}
-          <div className="text-sm text-geum-700 dark:text-geum-200">{block.content}</div>
-        </div>
-      </div>
+      <Alert variant="warning" size="sm" title={block.title}>
+        {block.content}
+      </Alert>
     );
   }
 

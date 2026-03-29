@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { BookOpen, ChevronRight, CheckCircle2, Circle, Clock } from "lucide-react";
 import { useData } from "@/features/learn/data/DataProvider";
 import type { GrammarLesson, LessonProgress } from "@/features/learn/content/lessonTypes";
+import { Badge, PageHeader } from "@reterics/birdie-ui";
 
 const categoryLabels: Record<string, string> = {
   "sentence-pattern": "Word Order",
@@ -19,12 +20,10 @@ export function GrammarPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold">Grammar</h1>
-        <p className="mt-1 text-sm text-hanji-500 dark:text-hanji-400">
-          Learn Korean patterns through examples, then reinforce with focused practice.
-        </p>
-      </div>
+      <PageHeader
+        title="Grammar"
+        description="Learn Korean patterns through examples, then reinforce with focused practice."
+      />
 
       <div className="space-y-3">
         {lessons.map((lesson, index) => (
@@ -76,19 +75,9 @@ function LessonCard({
               <span className="text-xs font-medium text-hanji-400 dark:text-hanji-500">
                 Lesson {index + 1}
               </span>
-              <span className="rounded-lg bg-namsaek-50 px-2 py-0.5 text-xs font-medium text-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-300">
-                {categoryLabels[lesson.category] ?? lesson.category}
-              </span>
-              {status === "completed" && (
-                <span className="rounded-lg bg-cheongja-50 px-2 py-0.5 text-xs font-medium text-cheongja-600 dark:bg-cheongja-900/40 dark:text-cheongja-400">
-                  Done
-                </span>
-              )}
-              {status === "in_progress" && (
-                <span className="rounded-lg bg-geum-50 px-2 py-0.5 text-xs font-medium text-geum-600 dark:bg-geum-900/40 dark:text-geum-400">
-                  In progress
-                </span>
-              )}
+              <Badge>{categoryLabels[lesson.category] ?? lesson.category}</Badge>
+              {status === "completed" && <Badge variant="success">Done</Badge>}
+              {status === "in_progress" && <Badge variant="warning">In progress</Badge>}
             </div>
             <div className="mt-1 text-sm font-semibold">{lesson.title}</div>
             <div className="mt-1 text-xs text-hanji-500 dark:text-hanji-400">{lesson.summary}</div>

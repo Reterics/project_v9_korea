@@ -3,13 +3,12 @@ import { KeyRound, Trash2, UserPen, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/features/auth/AuthProvider";
 import { validatePassword } from "@/features/auth/authTypes";
 import { IS_LIVE } from "@/features/learn/data/types";
+import { Button, Card, CardHeader, FormField, Input, PageHeader } from "@reterics/birdie-ui";
 
 export function SettingsPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-namsaek-900 dark:text-hanji-100">
-        Settings
-      </h1>
+      <PageHeader title="Settings" />
       {IS_LIVE && <DisplayNameSection />}
       <ThemeSection />
       {IS_LIVE && <ChangePasswordSection />}
@@ -44,25 +43,27 @@ function DisplayNameSection() {
   }
 
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<UserPen className="h-5 w-5" />} title="Display Name" />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <InputField
-          label="Display name"
-          type="text"
-          value={name}
-          onChange={setName}
-          autoComplete="name"
-        />
+        <FormField label="Display name" htmlFor="display-name">
+          <Input
+            id="display-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
+          />
+        </FormField>
         {error && <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>}
         {success && <p className="text-sm text-cheongja-600 dark:text-cheongja-400">{success}</p>}
-        <button
+        <Button
           type="submit"
+          size="sm"
           disabled={loading || !changed || !name.trim()}
-          className="rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-medium text-white hover:bg-namsaek-700 disabled:opacity-50 dark:bg-namsaek-500 dark:hover:bg-namsaek-400"
         >
           {loading ? "Saving..." : "Update Name"}
-        </button>
+        </Button>
       </form>
     </Card>
   );
@@ -79,34 +80,26 @@ function ThemeSection() {
   }
 
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader
         icon={dark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
         title="Theme"
       />
       <div className="flex gap-3">
-        <button
+        <Button
+          variant={!dark ? "nav-active" : "nav-inactive"}
+          size="sm"
           onClick={() => toggle(false)}
-          className={
-            "flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition " +
-            (!dark
-              ? "border-namsaek-500 bg-namsaek-50 text-namsaek-700 dark:border-namsaek-400 dark:bg-namsaek-800 dark:text-hanji-100"
-              : "border-hanji-300 text-hanji-600 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-400 dark:hover:bg-namsaek-800")
-          }
         >
           <Sun className="h-4 w-4" /> Light
-        </button>
-        <button
+        </Button>
+        <Button
+          variant={dark ? "nav-active" : "nav-inactive"}
+          size="sm"
           onClick={() => toggle(true)}
-          className={
-            "flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition " +
-            (dark
-              ? "border-namsaek-500 bg-namsaek-50 text-namsaek-700 dark:border-namsaek-400 dark:bg-namsaek-800 dark:text-hanji-100"
-              : "border-hanji-300 text-hanji-600 hover:bg-hanji-50 dark:border-namsaek-700 dark:text-hanji-400 dark:hover:bg-namsaek-800")
-          }
         >
           <Moon className="h-4 w-4" /> Dark
-        </button>
+        </Button>
       </div>
     </Card>
   );
@@ -142,23 +135,27 @@ function ChangePasswordSection() {
   }
 
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<KeyRound className="h-5 w-5" />} title="Change Password" />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <InputField
-          label="Current password"
-          type="password"
-          value={current}
-          onChange={setCurrent}
-          autoComplete="current-password"
-        />
-        <InputField
-          label="New password"
-          type="password"
-          value={newPw}
-          onChange={setNewPw}
-          autoComplete="new-password"
-        />
+        <FormField label="Current password" htmlFor="current-password">
+          <Input
+            id="current-password"
+            type="password"
+            value={current}
+            onChange={(e) => setCurrent(e.target.value)}
+            autoComplete="current-password"
+          />
+        </FormField>
+        <FormField label="New password" htmlFor="new-password">
+          <Input
+            id="new-password"
+            type="password"
+            value={newPw}
+            onChange={(e) => setNewPw(e.target.value)}
+            autoComplete="new-password"
+          />
+        </FormField>
         {newPw && (
           <ul className="space-y-1 text-xs">
             <Requirement met={validation.minLength}>At least 8 characters</Requirement>
@@ -166,22 +163,24 @@ function ChangePasswordSection() {
             <Requirement met={validation.hasDigit}>Contains a digit</Requirement>
           </ul>
         )}
-        <InputField
-          label="Confirm new password"
-          type="password"
-          value={confirm}
-          onChange={setConfirm}
-          autoComplete="new-password"
-        />
+        <FormField label="Confirm new password" htmlFor="confirm-password">
+          <Input
+            id="confirm-password"
+            type="password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            autoComplete="new-password"
+          />
+        </FormField>
         {error && <p className="text-sm text-dancheong-600 dark:text-dancheong-400">{error}</p>}
         {success && <p className="text-sm text-cheongja-600 dark:text-cheongja-400">{success}</p>}
-        <button
+        <Button
           type="submit"
+          size="sm"
           disabled={loading || !current || !validation.valid || !confirm}
-          className="rounded-xl bg-namsaek-600 px-4 py-2 text-sm font-medium text-white hover:bg-namsaek-700 disabled:opacity-50 dark:bg-namsaek-500 dark:hover:bg-namsaek-400"
         >
           {loading ? "Saving..." : "Change Password"}
-        </button>
+        </Button>
       </form>
     </Card>
   );
@@ -199,7 +198,7 @@ function ClearDataSection() {
   }
 
   return (
-    <Card>
+    <Card variant="section">
       <CardHeader icon={<Trash2 className="h-5 w-5" />} title="Clear Local Data" />
       <p className="mb-4 text-sm text-hanji-600 dark:text-hanji-400">
         Remove all locally stored progress, mastery scores, and profile data from this browser.
@@ -210,62 +209,11 @@ function ClearDataSection() {
           Local data cleared.
         </p>
       ) : (
-        <button
-          onClick={handleClear}
-          className="rounded-xl border border-dancheong-300 px-4 py-2 text-sm font-medium text-dancheong-700 hover:bg-dancheong-50 dark:border-dancheong-700 dark:text-dancheong-400 dark:hover:bg-dancheong-950"
-        >
+        <Button variant="danger" size="sm" onClick={handleClear}>
           Clear All Local Data
-        </button>
+        </Button>
       )}
     </Card>
-  );
-}
-
-/* ---- Shared UI ---- */
-
-function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-hanji-300 bg-white p-5 dark:border-namsaek-700 dark:bg-namsaek-900">
-      {children}
-    </div>
-  );
-}
-
-function CardHeader({ icon, title }: { icon: React.ReactNode; title: string }) {
-  return (
-    <div className="mb-4 flex items-center gap-2 text-namsaek-800 dark:text-hanji-200">
-      {icon}
-      <h2 className="text-lg font-semibold">{title}</h2>
-    </div>
-  );
-}
-
-function InputField({
-  label,
-  type,
-  value,
-  onChange,
-  autoComplete,
-}: {
-  label: string;
-  type: string;
-  value: string;
-  onChange: (v: string) => void;
-  autoComplete?: string;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1 block text-sm font-medium text-hanji-700 dark:text-hanji-300">
-        {label}
-      </span>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        autoComplete={autoComplete}
-        className="w-full rounded-xl border border-hanji-300 bg-hanji-50 px-3 py-2 text-sm text-namsaek-900 outline-none focus:border-namsaek-400 focus:ring-1 focus:ring-namsaek-400 dark:border-namsaek-600 dark:bg-namsaek-800 dark:text-hanji-100 dark:focus:border-namsaek-400"
-      />
-    </label>
   );
 }
 
