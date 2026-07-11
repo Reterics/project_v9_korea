@@ -41,6 +41,8 @@ export { MagpieTip } from "./components/MagpieTip.tsx";
 export { PromptCard } from "./components/PromptCard.tsx";
 export { ChoiceGrid } from "./components/ChoiceGrid.tsx";
 export { FeedbackToast } from "./components/FeedbackToast.tsx";
+export { Toast, ToastProvider, ToastViewport, useToast } from "./components/Toast.tsx";
+export type { ToastItem, ToastVariant } from "./components/Toast.tsx";
 export { ProgressDots } from "./components/ProgressDots.tsx";
 export { AudioButton } from "./components/AudioButton.tsx";
 export { PageHeader } from "./components/PageHeader.tsx";
@@ -70,6 +72,13 @@ export { DatePicker } from "./forms/DatePicker.tsx";
 export { Autocomplete } from "./forms/Autocomplete.tsx";
 export { MultiSelect } from "./forms/MultiSelect.tsx";
 export { TagInput } from "./forms/TagInput.tsx";
+export { Slider } from "./forms/Slider.tsx";
+export { ColorPicker } from "./forms/ColorPicker.tsx";
+export type { ColorSwatch } from "./forms/ColorPicker.tsx";
+export { ToggleGroup } from "./forms/ToggleGroup.tsx";
+export type { ToggleGroupItem } from "./forms/ToggleGroup.tsx";
+export { FileUpload } from "./forms/FileUpload.tsx";
+export type { FileUploadError } from "./forms/FileUpload.tsx";
 
 // Navigation
 export { NavigationItem } from "./navigation/NavigationItem.tsx";
