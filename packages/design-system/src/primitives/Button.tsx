@@ -6,8 +6,14 @@ type ButtonSize = "sm" | "md";
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   children: ReactNode;
 };
+
+const baseClasses = "inline-flex items-center justify-center gap-2";
+const iconClasses = "inline-flex shrink-0 items-center justify-center leading-none [&>svg]:block";
+const labelClasses = "inline-flex items-center leading-none";
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
@@ -34,12 +40,17 @@ export function Button({
   size = "md",
   className = "",
   disabled,
+  leftIcon,
+  rightIcon,
   children,
   ...rest
 }: ButtonProps) {
+  const hasIcon = Boolean(leftIcon || rightIcon);
+
   return (
     <button
       className={
+        (hasIcon ? baseClasses + " " : "") +
         variantClasses[variant] +
         " " + sizeClasses[size] +
         (disabled ? " opacity-50 cursor-not-allowed" : " cursor-pointer") +
@@ -48,7 +59,9 @@ export function Button({
       disabled={disabled}
       {...rest}
     >
-      {children}
+      {leftIcon ? <span className={iconClasses}>{leftIcon}</span> : null}
+      {hasIcon ? <span className={labelClasses}>{children}</span> : children}
+      {rightIcon ? <span className={iconClasses}>{rightIcon}</span> : null}
     </button>
   );
 }

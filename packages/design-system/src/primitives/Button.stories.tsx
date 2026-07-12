@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { Button } from './Button.tsx';
 
 const meta: Meta<typeof Button> = {
@@ -57,6 +58,51 @@ export const Sizes: Story = {
       <Button variant="outline" size="md">Medium Outline</Button>
     </div>
   ),
+};
+
+export const WithIcons: Story = {
+  args: {
+    variant: "outline",
+    size: "sm"
+  },
+
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button
+        variant="primary"
+        leftIcon={<Plus aria-hidden="true" className="-mr-1" size={16} />}
+      >
+        Create
+      </Button>
+      <Button
+        variant="outline"
+        rightIcon={<ChevronRight aria-hidden="true" size={16} />}
+      >
+        Continue
+      </Button>
+      <Button
+        variant="secondary"
+        leftIcon={<ChevronLeft aria-hidden="true" size={16} />}
+        rightIcon={<ChevronRight aria-hidden="true" size={16} />}
+      >
+        Navigate
+      </Button>
+      <Button
+        variant="primary"
+        size="sm"
+        leftIcon={<Plus aria-hidden="true" className="-mr-1" size={14} />}
+      >
+        Small
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        rightIcon={<ChevronRight aria-hidden="true" size={14} />}
+      >
+        Small
+      </Button>
+    </div>
+  )
 };
 
 export const AllVariants: Story = {
