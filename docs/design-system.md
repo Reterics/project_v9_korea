@@ -17,7 +17,7 @@ packages/design-system
 
 Applications consume it via:
 
-import { Button, LessonCard } from "@birdie/ui"
+import { Button, LessonCard } from "@reterics/birdie-ui"
 
 ---
 
@@ -387,11 +387,17 @@ dark:border-namsaek-700 dark:bg-namsaek-900
 
 ---
 
-# Future Expansion
+# Expansion
 
-Potential components:
+Available guidance/product components:
 
-StreakCard, AchievementBadge, GrammarHint, BirdTip
+- MagpieTip
+
+Potential future product-specific additions:
+
+- StreakCard
+- AchievementBadge
+- GrammarHint
 
 ---
 
@@ -407,7 +413,7 @@ Step 2
 
 Replace local imports with:
 
-@birdie/ui
+@reterics/birdie-ui
 
 Step 3
 

@@ -47,3 +47,24 @@ export const WithIcons: Story = {
     return <Tabs tabs={tabs} active={active} onChange={setActive} />;
   },
 };
+
+export const Stacked: Story = {
+  render: () => {
+    const BookIcon = () => (
+      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /></svg>
+    );
+    const tabs = [
+      { id: 'lessons', label: 'Lessons', icon: <BookIcon /> },
+      { id: 'stats', label: 'Statistics', icon: <BookIcon /> },
+      { id: 'review', label: 'Review', icon: <BookIcon /> },
+      { id: 'goals', label: 'Goals', icon: <BookIcon /> },
+      { id: 'more', label: 'More', icon: <BookIcon /> },
+    ];
+    const [active, setActive] = useState('lessons');
+    return (
+      <div className="w-72">
+        <Tabs variant="stacked" tabs={tabs} active={active} onChange={setActive} />
+      </div>
+    );
+  },
+};
